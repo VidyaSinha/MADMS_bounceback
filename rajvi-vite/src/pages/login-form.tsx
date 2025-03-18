@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import React from "react";
 import { cn } from "../lib/utils";
 import { Button } from "../components/ui/button";
@@ -15,13 +16,15 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const location = useLocation();
+  const role = new URLSearchParams(location.search).get("role") || "User";
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card style={{ backgroundColor: "#2E4053", color: "#AAB7B8", width: "300px" }}>
         <CardHeader className="text-center flex flex-col items-center">
           <CardTitle className="text-2xl" style={{ color: "#AAB7B8" }}>Login</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your email below to login to your account {role}
           </CardDescription>
         </CardHeader>
         <CardContent>
