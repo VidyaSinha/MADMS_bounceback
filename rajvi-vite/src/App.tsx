@@ -4,6 +4,7 @@ import { RoleSelection } from "./pages/rolesection";
 import { LoginForm } from "./pages/login-form";
 import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
 import { AppSidebar } from "./components/app-sidebar";
+import { Component } from "./components/chart-bar-label-custom"
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -28,6 +29,7 @@ const App: React.FC = () => {
               </Routes>
             </div>
           </div>
+          <Component></Component>
         </SidebarProvider>
       ) : (
         <div
