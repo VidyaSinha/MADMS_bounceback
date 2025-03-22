@@ -30,7 +30,7 @@ const chartConfig = {
 
 export function Component() {
   return (
-    <Card>
+    <Card className="w-full max-w-sm h-[370px]">
       <CardHeader>
         <CardTitle>Bar Chart - Custom Label</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
