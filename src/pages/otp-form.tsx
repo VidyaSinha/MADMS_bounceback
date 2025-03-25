@@ -33,17 +33,29 @@ export function OtpForm() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <h2>Enter OTP</h2>
-      <Input
-        type="text"
-        placeholder="Enter OTP"
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
-      />
-      <Button onClick={handleOtpSubmit} disabled={loading}>
-        {loading ? "Verifying..." : "Verify OTP"}
-      </Button>
+    <div className="flex justify-center items-center min-h-screen 2E4053">
+      <div className="bg-gray-800 text-white p-8 rounded-2xl shadow-lg w-96">
+        <h2 className="text-2xl font-bold text-center mb-4 text-white-400">
+          OTP Verification
+        </h2>
+        <p className="text-sm text-gray-400 text-center mb-6">
+          Enter the OTP sent to <span className="text-teal-300">{email}</span>
+        </p>
+        <Input
+          type="text"
+          placeholder="Enter OTP"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
+          className="w-full bg-gray-700 text-white border-none focus:ring-2 focus:ring-teal-500"
+        />
+        <Button
+          onClick={handleOtpSubmit}
+          disabled={loading}
+          className="w-full mt-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 rounded-lg"
+        >
+          {loading ? "Verifying..." : "Verify OTP"}
+        </Button>
+      </div>
     </div>
   );
 }
