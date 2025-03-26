@@ -18,8 +18,11 @@ export function OtpForm() {
         email,
         otp,
       });
-
+  
       if (response.data.success) {
+        // Store session token in localStorage
+        localStorage.setItem("session", JSON.stringify({ email, token: response.data.token }));
+  
         alert("OTP verified successfully!");
         navigate("/dashboard"); // Redirect to dashboard
       } else {
@@ -31,7 +34,7 @@ export function OtpForm() {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="flex justify-center items-center min-h-screen 2E4053">
       <div className="bg-gray-800 text-white p-8 rounded-2xl shadow-lg w-96">
