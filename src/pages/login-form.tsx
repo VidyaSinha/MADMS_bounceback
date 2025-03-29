@@ -11,6 +11,7 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import axios from "axios";
 
 export function LoginForm({
   className,
@@ -22,36 +23,44 @@ export function LoginForm({
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Temporary login without backend
-    if (email === "admin@example.com" && password === "12345") {
-      localStorage.setItem("isAuthenticated", "true");
-      navigate("/dashboard"); // Redirect after login
-    } else {
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/auth/login", {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        alert("OTP sent to your email!");
+        navigate(`/otp-form?email=${encodeURIComponent(email)}`); // Redirect to OTP verification page
+      }
+    } catch (error) {
       alert("Invalid email or password!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen">
       <div className={cn("flex flex-col gap-6", className)} {...props}>
         <Card
           style={{
-            backgroundColor: "white",
-            color: "#2E4053",
+            backgroundColor: "#2E4053",
+            color: "#AAB7B8",
             width: "300px",
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)"
           }}
         >
           <CardHeader className="text-center flex flex-col items-center">
-            <CardTitle className="text-2xl" style={{ color: "#2E4053" }}>
+            <CardTitle className="text-2xl" style={{ color: "#AAB7B8" }}>
               Login
             </CardTitle>
-            <CardDescription style={{ color: "#64748b" }}>
+            <CardDescription>
               Enter your email below to login to your account {role}
             </CardDescription>
           </CardHeader>
@@ -59,7 +68,7 @@ export function LoginForm({
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email" style={{ color: "#2E4053" }}>
+                  <Label htmlFor="email" style={{ color: "#AAB7B8" }}>
                     Email
                   </Label>
                   <Input
@@ -69,19 +78,18 @@ export function LoginForm({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="border-border focus:border-madms-charcoal"
-                    style={{ backgroundColor: "white", color: "#2E4053" }}
+                    style={{ backgroundColor: "#AAB7B8", color: "#2E4053" }}
                   />
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
-                    <Label htmlFor="password" style={{ color: "#2E4053" }}>
+                    <Label htmlFor="password" style={{ color: "#AAB7B8" }}>
                       Password
                     </Label>
                     <a
                       href="#"
                       className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                      style={{ color: "#64748b" }}
+                      style={{ color: "#AAB7B8" }}
                     >
                       Forgot your password?
                     </a>
@@ -92,16 +100,16 @@ export function LoginForm({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="border-border focus:border-madms-charcoal"
-                    style={{ backgroundColor: "white", color: "#2E4053" }}
+                    style={{ backgroundColor: "#AAB7B8", color: "#2E4053" }}
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-3/4 mx-auto hover:bg-madms-charcoal/90"
-                  style={{ backgroundColor: "#2E4053", color: "white" }}
+                  className="w-3/4 mx-auto"
+                  style={{ backgroundColor: "#AAB7B8", color: "#2E4053" }}
+                  disabled={loading}
                 >
-                  Login
+                  {loading ? "Processing..." : "Login"}
                 </Button>
               </div>
             </form>

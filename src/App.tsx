@@ -20,6 +20,7 @@ import QoS from "./pages/accreditation/QoS";
 import Criteria from "./pages/criteria/Criteria";
 import SubCriteria from "./pages/criteria/SubCriteria";
 import Criteria4NBA from "./pages/criteria/Criteria4NBA";
+import { OtpForm } from "./pages/otp-form";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,9 @@ const App = () => (
           <Route path="/" element={<RoleSelection />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/otp-form" element={<OtpForm />} />
+
+          
           
           {/* Accreditation Body Routes */}
           <Route path="/dashboard/nba" element={<NBA />} />
