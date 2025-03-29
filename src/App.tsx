@@ -46,7 +46,7 @@ const App = () => (
           <Route path="/dashboard/:body/:criteriaId/:subCriteriaId" element={<SubCriteria />} />
           
           {/* Specific Criteria Pages */}
-          <Route path="/dashboard/nba/criteria4/details" element={<Criteria4NBA />} />
+          <Route path="/dashboard/nba/criteria4" element={<Criteria4NBA />} />
           
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />

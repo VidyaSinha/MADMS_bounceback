@@ -43,24 +43,24 @@ const NBA = () => {
       />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatCard
+        {/* <StatCard
           title="Total Criteria"
           value="9"
           icon={<BarChart3 className="h-5 w-5" />}
           delay={1}
-        />
+        /> */}
         <StatCard
           title="Total Score"
           value="92/100"
           description="Last evaluated: March 2024"
           delay={2}
         />
-        <StatCard
+        {/* <StatCard
           title="Accreditation Status"
           value="Active"
           description="Valid till: December 2025"
           delay={3}
-        />
+        /> */}
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

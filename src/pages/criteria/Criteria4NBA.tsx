@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Eye, Edit2 } from 'lucide-react';
@@ -19,35 +18,39 @@ const Criteria4NBA = () => {
     <MainLayout>
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col space-y-6">
-          <div>
+          <div className="flex justify-between items-center relative z-10">
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={handleBack}
-              className="text-muted-foreground hover:text-foreground mb-2 -ml-2 animate-fadeIn"
+              className="text-muted-foreground hover:text-foreground -ml-2 animate-fadeIn"
             >
               <ChevronLeft className="mr-1 h-4 w-4" />
               Back to Criteria 4
             </Button>
-            
+            <Button 
+                  className="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
+                  size="lg"
+                >
+                  + Add Student Details
+                </Button>
+
+            <Sheet>
+              <SheetTrigger asChild>
+               
+              </SheetTrigger>
+              <SheetContent side="right" className="w-full sm:max-w-md">
+                <StudentDetailsForm />
+              </SheetContent>
+            </Sheet>
+          </div>
+          
+          <div>
             <div className="bg-teal-600 text-white py-4 px-6 rounded-t-md">
               <h1 className="text-2xl font-bold text-center">
                 Criteria 4: Students' Performance
               </h1>
             </div>
-          </div>
-          
-          <div className="flex justify-end mb-2">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button className="bg-teal-600 hover:bg-teal-700 text-white">
-                  Student Basic Details
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-md">
-                <StudentDetailsForm />
-              </SheetContent>
-            </Sheet>
           </div>
           
           <div className="space-y-4">

@@ -36,24 +36,24 @@ const NAAC = () => {
       />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatCard
+        {/* <StatCard
           title="Total Criteria"
           value="7"
           icon={<BookOpenCheck className="h-5 w-5" />}
           delay={1}
-        />
+        /> */}
         <StatCard
-          title="CGPA"
-          value="3.21"
-          description="Grade: A"
+          title=""
+          value="Grade: A+"
+          description=""
           delay={2}
         />
-        <StatCard
+        {/* <StatCard
           title="Accreditation Status"
           value="Active"
           description="Valid till: August 2026"
           delay={3}
-        />
+        /> */}
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
