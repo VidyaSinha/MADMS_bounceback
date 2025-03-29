@@ -21,6 +21,7 @@ import Criteria from "./pages/criteria/Criteria";
 import SubCriteria from "./pages/criteria/SubCriteria";
 import Criteria4NBA from "./pages/criteria/Criteria4NBA";
 import { OtpForm } from "./pages/otp-form";
+import StudentDetailsForm from "./components/forms/StudentDetailsForm";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,8 @@ const App = () => (
           
           {/* Specific Criteria Pages */}
           <Route path="/dashboard/nba/criteria4" element={<Criteria4NBA />} />
+          <Route path="/components/forms/StudentDetailsForm" element={<StudentDetailsForm />} />
+
           
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />

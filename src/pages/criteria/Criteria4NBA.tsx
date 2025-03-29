@@ -31,6 +31,7 @@ const Criteria4NBA = () => {
             <Button 
                   className="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
                   size="lg"
+                  onClick={() => navigate('/components/forms/StudentDetailsForm')}
                 >
                   + Add Student Details
                 </Button>
