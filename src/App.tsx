@@ -52,6 +52,8 @@ const App = () => (
           
           {/* Specific Criteria Pages */}
           <Route path="/dashboard/nba/criteria4" element={<Criteria4NBA />} />
+
+          {/* forms  */}
           <Route path="/components/forms/StudentDetailsForm" element={<StudentDetailsForm />} />
 
           
