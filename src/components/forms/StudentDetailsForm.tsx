@@ -84,7 +84,7 @@ const StudentDetailsForm = () => {
   };
   
   return (
-    <div className="p-4">
+    <div className="max-w-2xl mx-auto max-h-[90vh] p-12">
       <h2 className="text-xl font-semibold mb-6 text-teal-700">Basic Details</h2>
       
       <Form {...form}>
