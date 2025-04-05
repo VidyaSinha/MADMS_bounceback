@@ -29,7 +29,7 @@ const Criteria4NBA = () => {
               Back to Criteria 4
             </Button>
             <Button 
-                  className="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
+                  className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
                   size="lg"
                   onClick={() => navigate('/components/forms/StudentDetailsForm')}
                 >
@@ -47,7 +47,7 @@ const Criteria4NBA = () => {
           </div>
           
           <div>
-            <div className="bg-teal-600 text-white py-4 px-6 rounded-t-md">
+            <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
               <h1 className="text-2xl font-bold text-center">
                 Criteria 4: Students' Performance
               </h1>
@@ -113,7 +113,7 @@ const Criteria4NBA = () => {
                 <SubCriteriaCard 
                   id="4.5.1" 
                   title="Professional Societies/Chapters and Organizing Engineering Events" 
-                  marks={5} 
+                            marks={5} 
                 />
                 <SubCriteriaCard 
                   id="4.5.2" 
