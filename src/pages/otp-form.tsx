@@ -18,13 +18,11 @@ export function OtpForm() {
         email,
         otp,
       });
-  
+
       if (response.data.success) {
-        // Store session token in localStorage
         localStorage.setItem("session", JSON.stringify({ email, token: response.data.token }));
-  
         alert("OTP verified successfully!");
-        navigate("/dashboard"); // Redirect to dashboard
+        navigate("/dashboard");
       } else {
         alert("Invalid OTP!");
       }
@@ -34,27 +32,37 @@ export function OtpForm() {
       setLoading(false);
     }
   };
-  
+
   return (
-    <div className="flex justify-center items-center min-h-screen 2E4053">
-      <div className="bg-gray-800 text-white p-8 rounded-2xl shadow-lg w-96">
-        <h2 className="text-2xl font-bold text-center mb-4 text-white-400">
+    <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: "#ffffff" }}>
+      <div className="p-8 rounded-2xl shadow-lg w-96" style={{ backgroundColor: "#2f4883", color: "#ffffff" }}>
+        <h2 className="text-2xl font-bold text-center mb-4" style={{ color: "#ffffff" }}>
           OTP Verification
         </h2>
-        <p className="text-sm text-gray-400 text-center mb-6">
-          Enter the OTP sent to <span className="text-teal-300">{email}</span>
+        <p className="text-sm text-center mb-6" style={{ color: "#ffffff" }}>
+          Enter the OTP sent to <span style={{ color: "#ffffff" }}>{email}</span>
         </p>
         <Input
           type="text"
           placeholder="Enter OTP"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
-          className="w-full bg-gray-700 text-white border-none focus:ring-2 focus:ring-teal-500"
+          className="w-full"
+          style={{
+            backgroundColor: "#ffffff",
+            color: "#2f4883",
+            border: "none",
+            outline: "none",
+          }}
         />
         <Button
           onClick={handleOtpSubmit}
           disabled={loading}
-          className="w-full mt-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 rounded-lg"
+          className="w-full mt-4 font-semibold py-2 rounded-lg"
+          style={{
+            backgroundColor: "#ffffff",
+            color: "#2f4883",
+          }}
         >
           {loading ? "Verifying..." : "Verify OTP"}
         </Button>
