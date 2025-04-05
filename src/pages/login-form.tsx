@@ -37,7 +37,7 @@ export function LoginForm({
 
       if (response.status === 200) {
         alert("OTP sent to your email!");
-        navigate(`/otp-form?email=${encodeURIComponent(email)}`); // Redirect to OTP verification page
+        navigate(`/otp-form?email=${encodeURIComponent(email)}`); //  verification page
       }
     } catch (error) {
       alert("Invalid email or password!");
@@ -51,13 +51,13 @@ export function LoginForm({
       <div className={cn("flex flex-col gap-6", className)} {...props}>
         <Card
           style={{
-            backgroundColor: "#2E4053",
-            color: "#AAB7B8",
+            backgroundColor: "#2f4883",
+            color: "#ffffff",
             width: "300px",
           }}
         >
           <CardHeader className="text-center flex flex-col items-center">
-            <CardTitle className="text-2xl" style={{ color: "#AAB7B8" }}>
+            <CardTitle className="text-2xl" style={{ color: "#ffffff" }}>
               Login
             </CardTitle>
             <CardDescription>
@@ -68,7 +68,7 @@ export function LoginForm({
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email" style={{ color: "#AAB7B8" }}>
+                  <Label htmlFor="email" style={{ color: "#ffffff" }}>
                     Email
                   </Label>
                   <Input
@@ -78,18 +78,18 @@ export function LoginForm({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    style={{ backgroundColor: "#AAB7B8", color: "#2E4053" }}
+                    style={{ backgroundColor: "#ffffff", color: "#2f4883" }}
                   />
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
-                    <Label htmlFor="password" style={{ color: "#AAB7B8" }}>
+                    <Label htmlFor="password" style={{ color: "#ffffff" }}>
                       Password
                     </Label>
                     <a
                       href="#"
                       className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                      style={{ color: "#AAB7B8" }}
+                      style={{ color: "#ffffff" }}
                     >
                       Forgot your password?
                     </a>
@@ -100,13 +100,13 @@ export function LoginForm({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    style={{ backgroundColor: "#AAB7B8", color: "#2E4053" }}
+                    style={{ backgroundColor: "#ffffff", color: "#2f4883" }}
                   />
                 </div>
                 <Button
                   type="submit"
                   className="w-3/4 mx-auto"
-                  style={{ backgroundColor: "#AAB7B8", color: "#2E4053" }}
+                  style={{ backgroundColor: "#ffffff", color: "#2f4883" }}
                   disabled={loading}
                 >
                   {loading ? "Processing..." : "Login"}
