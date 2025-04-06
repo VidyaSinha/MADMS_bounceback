@@ -165,7 +165,7 @@ interface CriteriaCardProps {
   id: string;
   title: string;
   marks: number;
-  actionNavigate?: string; // 👈 this enables optional navigation
+  actionNavigate?: string; // 
 }
 const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks, actionNavigate }) => (
   <Card className="border rounded-md overflow-hidden">
