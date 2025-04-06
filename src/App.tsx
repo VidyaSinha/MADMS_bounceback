@@ -8,7 +8,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import { RoleSelection } from "./pages/rolesection";
-import MainEnroll from "./pages/subcriteria/MainEnroll";
+
 
 
 
@@ -64,7 +64,7 @@ const App = () => (
 
           {/* Sub criteria*/}
           
-          <Route path="/enrollment" element={<MainEnroll />} />
+          <Route path="/enrollment" element={<EnrollmentPage/>}/>
           <Route path="/successrate" element={<SuccessRatePage/>}/>
           <Route path="/academic2ndyear" element={<Academic2ndyearPage/>}/>
           
