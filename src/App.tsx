@@ -8,7 +8,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import { RoleSelection } from "./pages/rolesection";
-import EnrollmentPage from "./pages/subcriteria/4.1sc";
+import EnrollmentPage from "./pages/subcriteria/EnrollmentPage";
 
 // Accreditation Body Pages
 import NBA from "./pages/accreditation/NBA";

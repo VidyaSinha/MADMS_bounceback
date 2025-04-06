@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
+import EnrollmentPage from '../subcriteria/EnrollmentPage';
 
 const Criteria4NBA = () => {
   const navigate = useNavigate();
@@ -54,11 +55,13 @@ const Criteria4NBA = () => {
             </div>
           </div>
           
+
           <div className="space-y-4">
             <CriteriaCard 
               id="4.1" 
               title="Enrollment Ratio" 
               marks={20} 
+              actionNavigate="/enrollment"
             />
             
             <Card className="border rounded-md overflow-hidden">
@@ -135,23 +138,32 @@ const Criteria4NBA = () => {
 };
 
 // Helper components
-const ActionButtons = () => (
-  <div className="flex space-x-2">
-    <Button 
-    
-    variant="outline" size="sm" className="text-sky-600 hover:bg-sky-50 border-sky-600">
-      <Eye className="h-4 w-4 mr-1" /> See Details
-    </Button>
-    <Button variant="outline" size="sm" className="text-emerald-600 hover:bg-emerald-50 border-emerald-600">
-      <Edit2 className="h-4 w-4 mr-1" /> Edit Marks
-    </Button>
-  </div>
-);
+const ActionButtons = ({ navigateTo }: { navigateTo?: string }) => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="flex space-x-2">
+      <Button
+        variant="outline"
+        size="sm"
+        className="text-sky-600 hover:bg-sky-50 border-sky-600"
+        onClick={() => navigateTo && navigate(navigateTo)}
+      >
+        <Eye className="h-4 w-4 mr-1" />
+        See Details
+      </Button>
+      <Button variant="outline" size="sm" className="text-emerald-600 hover:bg-emerald-50 border-emerald-600">
+        <Edit2 className="h-4 w-4 mr-1" /> Edit Marks
+      </Button>
+    </div>
+  );
+};
 
 interface CriteriaCardProps {
   id: string;
   title: string;
   marks: number;
+  actionNavigate?: string; // 👈 this enables optional navigation
 }
 
 const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks }) => (
