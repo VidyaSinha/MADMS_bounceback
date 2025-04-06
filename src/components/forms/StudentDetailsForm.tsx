@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import { 
   Form, 
   FormControl, 
@@ -36,6 +37,8 @@ type FormValues = z.infer<typeof formSchema>;
 const StudentDetailsForm = () => {
   const [customBatchPeriod, setCustomBatchPeriod] = useState(false);
   const currentYear = new Date().getFullYear();
+  const [isHovered, setIsHovered] = useState(false);
+  
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -85,7 +88,7 @@ const StudentDetailsForm = () => {
   
   return (
     <div className="max-w-2xl mx-auto max-h-[90vh] p-12">
-      <h2 className="text-xl font-semibold mb-6 text-teal-700">Basic Details</h2>
+      <h2 className="text-xl font-semibold mb-6 style={{ color: '2f4883'}}">Basic Details</h2>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -192,9 +195,16 @@ const StudentDetailsForm = () => {
           />
           
           <div className="flex space-x-4 pt-4">
-            <Button type="submit" className="flex-1 bg-teal-600 hover:bg-teal-700 text-white">
+            <Button type="submit" className="flex-1 text-white px-4 py-2 rounded" 
+            style={{
+              backgroundColor: isHovered ? '#263766' : '#2f4883',
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            >
               Submit
             </Button>
+            
             <Button type="button" variant="outline" className="flex-1">
               Cancel
             </Button>

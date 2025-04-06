@@ -137,7 +137,9 @@ const Criteria4NBA = () => {
 // Helper components
 const ActionButtons = () => (
   <div className="flex space-x-2">
-    <Button variant="outline" size="sm" className="text-sky-600 hover:bg-sky-50 border-sky-600">
+    <Button 
+    
+    variant="outline" size="sm" className="text-sky-600 hover:bg-sky-50 border-sky-600">
       <Eye className="h-4 w-4 mr-1" /> See Details
     </Button>
     <Button variant="outline" size="sm" className="text-emerald-600 hover:bg-emerald-50 border-emerald-600">
