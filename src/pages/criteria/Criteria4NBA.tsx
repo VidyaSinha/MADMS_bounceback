@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
 import EnrollmentPage from '../subcriteria/EnrollmentPage';
+import Academic2ndyearPage from '../subcriteria/Academic2ndyearPage';
 
 const Criteria4NBA = () => {
   const navigate = useNavigate();
@@ -93,6 +94,7 @@ const Criteria4NBA = () => {
               id="4.3" 
               title="Academic Performance in Second Year" 
               marks={10} 
+              actionNavigate="/academic2ndyear"
             />
             
             <CriteriaCard 

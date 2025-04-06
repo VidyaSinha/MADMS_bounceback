@@ -8,7 +8,8 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import { RoleSelection } from "./pages/rolesection";
-import EnrollmentPage from "./pages/subcriteria/EnrollmentPage";
+
+
 
 
 // Accreditation Body Pages
@@ -24,8 +25,9 @@ import SubCriteria from "./pages/criteria/SubCriteria";
 import Criteria4NBA from "./pages/criteria/Criteria4NBA";
 import { OtpForm } from "./pages/otp-form";
 import StudentDetailsForm from "./components/forms/StudentDetailsForm";
-
+import EnrollmentPage from "./pages/subcriteria/EnrollmentPage";
 import SuccessRatePage from "./pages/subcriteria/SuccessRatePage";
+import Academic2ndyearPage from "./pages/subcriteria/Academic2ndyearPage";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +66,7 @@ const App = () => (
           
           <Route path="/enrollment" element={<EnrollmentPage/>}/>
           <Route path="/successrate" element={<SuccessRatePage/>}/>
+          <Route path="/academic2ndyear" element={<Academic2ndyearPage/>}/>
           
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />
