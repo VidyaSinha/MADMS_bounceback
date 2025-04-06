@@ -14,11 +14,14 @@ export function OtpForm() {
   const handleOtpSubmit = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:5000/auth/verify-otp", {
+      const response = await axios.post("http://localhost:5000/auth/verify-otp", {
         email,
-        otp,
+        otp
+      }, {
+        withCredentials: true  // ✅ Must be set!
       });
-
+      
+      
       if (response.data.success) {
         localStorage.setItem("session", JSON.stringify({ email, token: response.data.token }));
         alert("OTP verified successfully!");

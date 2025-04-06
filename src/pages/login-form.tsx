@@ -30,11 +30,12 @@ export function LoginForm({
     setLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/auth/login", {
-        email,
-        password,
-      });
-
+      const response = await axios.post(
+        "http://localhost:5000/auth/login",
+        { email, password },
+        { withCredentials: true } // ✅ this goes here
+      );
+      
       if (response.status === 200) {
         alert("OTP sent to your email!");
         navigate(`/otp-form?email=${encodeURIComponent(email)}`); //  verification page
