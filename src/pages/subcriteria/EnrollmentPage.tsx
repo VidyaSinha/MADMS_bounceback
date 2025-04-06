@@ -3,8 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
+import { Button } from 'primereact/button';
 
-const EnrollmentPage: React.FC = () => {
+
+interface Student {
+    name: string;
+    enrollmentNumber: string;
+    marksheet10: string | null;
+    marksheet12: string | null;
+    registrationForm: string | null;
+}
+
+function EnrollmentPage(): JSX.Element {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
@@ -37,6 +50,54 @@ const EnrollmentPage: React.FC = () => {
       marksheet12th: null,
       gujcetResult: null
     });
+  };
+
+  // Add these state declarations here, before the return statement
+  const [students, setStudents] = useState<Student[]>([
+    { 
+        name: 'John Doe', 
+        enrollmentNumber: 'EN001', 
+        marksheet10: null,
+        marksheet12: null,
+        registrationForm: null 
+    },
+    { 
+        name: 'Jane Smith', 
+        enrollmentNumber: 'EN002', 
+        marksheet10: null,
+        marksheet12: null,
+        registrationForm: null 
+    },
+  ]);
+
+  const [globalFilter, setGlobalFilter] = useState<string>('');
+
+  const handleDelete = (rowData: Student): void => {
+    const updatedStudents = students.filter(student => 
+        student.enrollmentNumber !== rowData.enrollmentNumber
+    );
+    setStudents(updatedStudents);
+  };
+
+  const actionBodyTemplate = (rowData: Student): JSX.Element => {
+    return (
+        <div className="flex gap-2">
+            <Button 
+                icon="pi pi-pencil" 
+                rounded 
+                outlined 
+                className="mr-2"
+                style={{ backgroundColor: '#ffffff', color: '#2f4883' }}
+            />
+            <Button 
+                icon="pi pi-trash" 
+                rounded 
+                outlined 
+                severity="danger" 
+                onClick={() => handleDelete(rowData)}
+            />
+        </div>
+    );
   };
 
   return (
@@ -181,6 +242,6 @@ const EnrollmentPage: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+}
 
 export default EnrollmentPage;

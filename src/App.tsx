@@ -28,6 +28,13 @@ import StudentDetailsForm from "./components/forms/StudentDetailsForm";
 import EnrollmentPage from "./pages/subcriteria/EnrollmentPage";
 import SuccessRatePage from "./pages/subcriteria/SuccessRatePage";
 import Academic2ndyearPage from "./pages/subcriteria/Academic2ndyearPage";
+import PlacementPage from "./pages/subcriteria/PlacementPage";
+import societies from "./pages/subcriteria/SocietiesPage";
+import SocietiesPage from "./pages/subcriteria/SocietiesPage";
+import MagazinePage from "./pages/subcriteria/Magazine";
+import AchievementsPage from "./pages/subcriteria/AchievementsPage";
+
+
 
 const queryClient = new QueryClient();
 
@@ -67,6 +74,10 @@ const App = () => (
           <Route path="/enrollment" element={<EnrollmentPage/>}/>
           <Route path="/successrate" element={<SuccessRatePage/>}/>
           <Route path="/academic2ndyear" element={<Academic2ndyearPage/>}/>
+          <Route path="/placement" element={<PlacementPage/>}/>
+          <Route path="/societies" element={<SocietiesPage/>}/>
+          <Route path="/magazine" element={<MagazinePage/>}/>
+          <Route path="/achievements" element={<AchievementsPage/>}/>
           
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />
