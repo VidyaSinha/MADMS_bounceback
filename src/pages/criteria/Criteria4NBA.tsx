@@ -69,7 +69,7 @@ const Criteria4NBA = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-base font-medium text-teal-700">4.2 - Success Rate in Stipulated Period of the Program</h3>
                   <div className="flex items-center gap-4">
-                    <ActionButtons />
+                    <ActionButtons navigateTo="/successrate" />
                     <span className="text-teal-600 font-medium">20 marks</span>
                   </div>
                 </div>
@@ -183,14 +183,15 @@ interface SubCriteriaCardProps {
   id: string;
   title: string;
   marks: number;
+  navigateTo?: string;
 }
 
-const SubCriteriaCard: React.FC<SubCriteriaCardProps> = ({ id, title, marks }) => (
+const SubCriteriaCard: React.FC<SubCriteriaCardProps> = ({ id, title, marks, navigateTo }) => (
   <div className="border-l-2 border-gray-300 pl-4">
     <div className="flex justify-between items-center">
       <h4 className="text-sm font-medium text-gray-700">{id} - {title}</h4>
       <div className="flex items-center gap-4">
-        <ActionButtons />
+        <ActionButtons navigateTo={navigateTo} />
         <span className="text-teal-600 font-medium">{marks} marks</span>
       </div>
     </div>

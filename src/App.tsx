@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import { RoleSelection } from "./pages/rolesection";
 import MainEnroll from "./pages/subcriteria/MainEnroll";
 
+
 // Accreditation Body Pages
 import NBA from "./pages/accreditation/NBA";
 import NAAC from "./pages/accreditation/NAAC";
@@ -24,6 +25,7 @@ import Criteria4NBA from "./pages/criteria/Criteria4NBA";
 import { OtpForm } from "./pages/otp-form";
 import StudentDetailsForm from "./components/forms/StudentDetailsForm";
 
+import SuccessRatePage from "./pages/subcriteria/SuccessRatePage";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +63,7 @@ const App = () => (
           {/* Sub criteria*/}
           
           <Route path="/enrollment" element={<MainEnroll />} />
+          <Route path="/successrate" element={<SuccessRatePage/>}/>
           
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />
