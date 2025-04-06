@@ -33,7 +33,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      
         <Routes>
           <Route path="/" element={<RoleSelection />} />
           <Route path="/login" element={<LoginForm />} />
@@ -67,7 +67,7 @@ const App = () => (
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      
     </TooltipProvider>
   </QueryClientProvider>
 );

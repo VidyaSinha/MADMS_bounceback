@@ -165,14 +165,13 @@ interface CriteriaCardProps {
   marks: number;
   actionNavigate?: string; // 👈 this enables optional navigation
 }
-
-const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks }) => (
+const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks, actionNavigate }) => (
   <Card className="border rounded-md overflow-hidden">
     <div className="p-4">
       <div className="flex justify-between items-center">
         <h3 className="text-base font-medium text-teal-700">{id} - {title}</h3>
         <div className="flex items-center gap-4">
-          <ActionButtons />
+          <ActionButtons navigateTo={actionNavigate} />
           <span className="text-teal-600 font-medium">{marks} marks</span>
         </div>
       </div>
