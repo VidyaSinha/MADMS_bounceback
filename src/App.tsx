@@ -8,7 +8,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import { RoleSelection } from "./pages/rolesection";
-import EnrollmentPage from "./pages/subcriteria/EnrollmentPage";
+import MainEnroll from "./pages/subcriteria/MainEnroll";
 
 // Accreditation Body Pages
 import NBA from "./pages/accreditation/NBA";
@@ -23,6 +23,7 @@ import SubCriteria from "./pages/criteria/SubCriteria";
 import Criteria4NBA from "./pages/criteria/Criteria4NBA";
 import { OtpForm } from "./pages/otp-form";
 import StudentDetailsForm from "./components/forms/StudentDetailsForm";
+
 
 const queryClient = new QueryClient();
 
@@ -59,7 +60,7 @@ const App = () => (
 
           {/* Sub criteria*/}
           
-          <Route path="/enrollment" element={<EnrollmentPage />} />
+          <Route path="/enrollment" element={<MainEnroll />} />
           
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />
