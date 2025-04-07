@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,6 +14,9 @@ const EnrollmentPage: React.FC = () => {
     gujcetResult: null
   });
 
+  const [suggestions, setSuggestions] = useState<{ name: string; enrollment_number: string }[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'application/pdf') {
@@ -26,7 +28,6 @@ const EnrollmentPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
     console.log('Form submitted:', { studentName, ...formData });
     setIsDialogOpen(false);
     setShowDocumentFields(false);
@@ -39,9 +40,40 @@ const EnrollmentPage: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      const trimmed = studentName.trim();
+      if (trimmed === '') {
+        setSuggestions([]);
+        return;
+      }
+  
+      try {
+        const response = await fetch(`http://localhost:5000/student/search?q=${encodeURIComponent(trimmed)}`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+  
+        const data = await response.json();
+  
+        if (Array.isArray(data)) {
+          setSuggestions(data);
+          setShowSuggestions(true);
+        } else {
+          setSuggestions([]);
+        }
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+        setSuggestions([]);
+      }
+    };
+  
+    const timeoutId = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timeoutId);
+  }, [studentName]);
+  
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
-      {/* Add Details Button */}
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setIsDialogOpen(true)}
@@ -51,7 +83,6 @@ const EnrollmentPage: React.FC = () => {
         </button>
       </div>
 
-      {/* Enrollment Ratio Details */}
       <div className="bg-white rounded-xl shadow p-6">
         <h2 className="text-2xl font-semibold text-[#2f4883] mb-4">Enrollment Ratio Details</h2>
         <div className="overflow-x-auto">
@@ -88,25 +119,51 @@ const EnrollmentPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Add Details Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Add Student Details</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
+          <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
+            <div className="space-y-2 relative">
               <Label htmlFor="name">Student Name</Label>
               <Input
                 id="name"
+                name="tudent_name_autofill_bypass"
+                autoComplete="off"
                 value={studentName}
                 onChange={(e) => {
                   setStudentName(e.target.value);
                   if (e.target.value) setShowDocumentFields(true);
                 }}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                onFocus={() => studentName && setShowSuggestions(true)}
                 placeholder="Enter student name"
                 required
               />
+              {showSuggestions && (
+                <ul className="absolute z-50 w-full border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto bg-white shadow">
+  {suggestions.length > 0 ? (
+    suggestions.map((s, index) => (
+      <li
+        key={index}
+        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+        onMouseDown={(e) => {
+          e.preventDefault(); // prevent input blur
+          setStudentName(`${s.name} (${s.enrollment_number})`);
+          setShowSuggestions(false);
+          setShowDocumentFields(true);
+        }}
+      >
+        <div className="text-sm font-medium">{s.name}</div>
+        <div className="text-xs text-gray-500">{s.enrollment_number}</div>
+      </li>
+    ))
+  ) : (
+    <li className="px-4 py-2 text-sm text-gray-500">No students found</li>
+  )}
+</ul>
+              )}
             </div>
 
             {showDocumentFields && (

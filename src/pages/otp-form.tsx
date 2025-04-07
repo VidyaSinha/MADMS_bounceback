@@ -14,7 +14,7 @@ export function OtpForm() {
   const handleOtpSubmit = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/auth/verify-otp", {
+      const response = await axios.post("https://madms-bounceback-backend.onrender.com/auth/verify-otp", {
         email,
         otp
       }, {
