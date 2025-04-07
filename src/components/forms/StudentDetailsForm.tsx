@@ -82,11 +82,11 @@ const StudentDetailsForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const sessionData = localStorage.getItem('session');
-      if (!sessionData) throw new Error('No session found');
+      // const sessionData = localStorage.getItem('session');
+      // if (!sessionData) throw new Error('No session found');
 
-      const session = JSON.parse(sessionData);
-      if (!session?.token) throw new Error('No token found');
+      // const session = JSON.parse(sessionData);
+      // if (!session?.token) throw new Error('No token found');
 
       const payload = {
         name: data.name,
@@ -103,7 +103,7 @@ const StudentDetailsForm = () => {
           withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.token}`,
+            // Authorization: `Bearer ${session.token}`,
           },
         }
       );
