@@ -101,7 +101,7 @@ const StudentDetailsForm = () => {
           title: "Authentication Error",
           description: "Please login again to continue."
         });
-        window.location.href = '/login';
+        // window.location.href = '/login';
         return;
       }
 
