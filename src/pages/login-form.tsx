@@ -30,18 +30,41 @@ export function LoginForm({
     setLoading(true);
 
     try {
+      console.log('Attempting to login with:', { email });
       const response = await axios.post(
-        "http://localhost:5000/auth/login",
+        "https://madms-bounceback-backend.onrender.com/auth/login",
         { email, password },
-        { withCredentials: true } // ✅ this goes here
+        { 
+          withCredentials: true,
+          timeout: 10000, // 10 second timeout
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
       );
+      
+      console.log('Server response:', response.data);
       
       if (response.status === 200) {
         alert("OTP sent to your email!");
-        navigate(`/otp-form?email=${encodeURIComponent(email)}`); //  verification page
+        navigate(`/otp-form?email=${encodeURIComponent(email)}`);
       }
     } catch (error) {
-      alert("Invalid email or password!");
+      console.error('Login error:', error);
+      if (axios.isAxiosError(error)) {
+        if (!error.response) {
+          alert("Network error: Cannot connect to the server. Please try again in a few minutes as the server might be starting up.");
+        } else if (error.response.status === 401) {
+          alert("Invalid email or password! Please check your credentials and try again.");
+        } else if (error.response.status === 429) {
+          alert("Too many attempts. Please wait a few minutes before trying again.");
+        } else {
+          alert(`Server error: ${error.response?.data?.message || 'The server is experiencing issues. Please try again later.'}`);
+          console.log('Full error response:', error.response?.data);
+        }
+      } else {
+        alert("An unexpected error occurred. Please try again later.");
+      }
     } finally {
       setLoading(false);
     }
