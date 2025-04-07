@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { toast } from "@/components/ui/use-toast"; // ✅ Optional toast import (if using shadcn)
+import { toast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -101,7 +101,6 @@ const StudentDetailsForm = () => {
           title: "Authentication Error",
           description: "Please login again to continue."
         });
-        // window.location.href = '/login';
         return;
       }
 
@@ -112,8 +111,7 @@ const StudentDetailsForm = () => {
           "Authorization": `Bearer ${session.token}`
         },
       });
-      
-            
+
       if (response.status === 200) {
         toast({
           title: "Success",
@@ -216,7 +214,7 @@ const StudentDetailsForm = () => {
             control={form.control}
             name="batchPeriod"
             render={({ field }) => (
-              <FormItem key={studentType}> {/* Ensures re-render on type change */}
+              <FormItem key={studentType}>
                 <FormLabel htmlFor="batchPeriod">Batch Period</FormLabel>
                 {customBatchPeriod ? (
                   <FormControl>
