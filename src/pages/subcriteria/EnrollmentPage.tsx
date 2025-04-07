@@ -2,8 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
+import { Button } from 'primereact/button';
 
-const EnrollmentPage: React.FC = () => {
+
+interface Student {
+    name: string;
+    enrollmentNumber: string;
+    marksheet10: string | null;
+    marksheet12: string | null;
+    registrationForm: string | null;
+}
+
+function EnrollmentPage(): JSX.Element {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
@@ -238,6 +251,6 @@ const EnrollmentPage: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+}
 
 export default EnrollmentPage;

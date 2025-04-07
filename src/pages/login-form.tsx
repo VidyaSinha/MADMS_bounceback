@@ -12,6 +12,7 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import axios from "axios";
+import { login } from "../api/auth";
 
 export function LoginForm({
   className,
@@ -38,10 +39,24 @@ export function LoginForm({
       
       if (response.status === 200) {
         alert("OTP sent to your email!");
-        navigate(`/otp-form?email=${encodeURIComponent(email)}`); //  verification page
+        navigate(`/otp-form?email=${encodeURIComponent(email)}`);
       }
     } catch (error) {
-      alert("Invalid email or password!");
+      console.error('Login error:', error);
+      if (axios.isAxiosError(error)) {
+        if (!error.response) {
+          alert("Network error: Cannot connect to the server. Please try again in a few minutes as the server might be starting up.");
+        } else if (error.response.status === 401) {
+          alert("Invalid email or password! Please check your credentials and try again.");
+        } else if (error.response.status === 429) {
+          alert("Too many attempts. Please wait a few minutes before trying again.");
+        } else {
+          alert(`Server error: ${error.response?.data?.message || 'The server is experiencing issues. Please try again later.'}`);
+          console.log('Full error response:', error.response?.data);
+        }
+      } else {
+        alert("An unexpected error occurred. Please try again later.");
+      }
     } finally {
       setLoading(false);
     }

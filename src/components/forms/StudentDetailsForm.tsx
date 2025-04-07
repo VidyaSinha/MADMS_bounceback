@@ -89,10 +89,27 @@ const StudentDetailsForm = () => {
         gr_no: data.grNumber,
       };
 
+      let session;
+      try {
+        const sessionData = localStorage.getItem('session');
+        if (!sessionData) throw new Error('No session found');
+        session = JSON.parse(sessionData);
+        if (!session.token) throw new Error('No token found');
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Authentication Error",
+          description: "Please login again to continue."
+        });
+        window.location.href = '/login';
+        return;
+      }
+
       const response = await axios.post("https://madms-bounceback-backend.onrender.com/submit-form", payload, {
-        withCredentials: true, // ✅ this is mandatory for session cookies
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.token}`
         },
       });
       

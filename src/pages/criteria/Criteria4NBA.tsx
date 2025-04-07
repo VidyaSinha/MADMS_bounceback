@@ -101,6 +101,7 @@ const Criteria4NBA = () => {
               id="4.4" 
               title="Placement, Higher Studies and Entrepreneurship" 
               marks={30} 
+              actionNavigate="/placement"
             />
             
             <Card className="border rounded-md overflow-hidden">
@@ -108,7 +109,7 @@ const Criteria4NBA = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-base font-medium text-teal-700">4.5 - Professional Activities</h3>
                   <div className="flex items-center gap-4">
-                    <ActionButtons />
+                    
                     <span className="text-teal-600 font-medium">20 marks</span>
                   </div>
                 </div>
@@ -118,17 +119,20 @@ const Criteria4NBA = () => {
                 <SubCriteriaCard 
                   id="4.5.1" 
                   title="Professional Societies/Chapters and Organizing Engineering Events" 
-                            marks={5} 
+                  marks={5}
+                  navigateTo="/societies"
                 />
                 <SubCriteriaCard 
                   id="4.5.2" 
                   title="Publication of Technical Magazines and Newsletter" 
-                  marks={5} 
+                  marks={5}
+                  navigateTo="/magazine"
                 />
                 <SubCriteriaCard 
                   id="4.5.3" 
                   title="Participation at Inter-Institution Events by Students of Program of Study" 
-                  marks={10} 
+                  marks={10}
+                  navigateTo="/achievements"
                 />
               </div>
             </Card>
