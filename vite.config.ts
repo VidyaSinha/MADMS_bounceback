@@ -5,11 +5,25 @@ import path from "path";
 export default defineConfig(({ mode }) => ({
   server: {
     port: 8080,
-    host: "localhost"
+    proxy: {
+      '/api': {
+        target: 'https://madms-bounceback-backend.onrender.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   },
   preview: {
     port: 8080,
-    host: "localhost"
+    proxy: {
+      '/api': {
+        target: 'https://madms-bounceback-backend.onrender.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   },
   plugins: [react()],
   resolve: {
