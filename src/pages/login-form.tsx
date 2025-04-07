@@ -32,17 +32,7 @@ export function LoginForm({
 
     try {
       console.log('Attempting to login with:', { email });
-      const response = await axios.post(
-        "/auth/login", // 👈 change this to your API endpoint URL
-        { email, password },
-        { 
-          withCredentials: true,
-          timeout: 10000, // 10 second timeout
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await login(email, password);
       
       console.log('Server response:', response.data);
       
