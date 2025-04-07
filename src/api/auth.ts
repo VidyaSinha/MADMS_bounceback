@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = "/api";
+const API_URL = import.meta.env.PROD 
+  ? "https://madms-bounceback-backend.onrender.com" 
+  : "/api";
 
 export const login = async (email: string, password: string) => {
   return await axios.post(`${API_URL}/auth/login`, { email, password }, {

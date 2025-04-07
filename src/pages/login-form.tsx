@@ -12,6 +12,7 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import axios from "axios";
+import { login } from "../api/auth";
 
 export function LoginForm({
   className,
@@ -32,7 +33,7 @@ export function LoginForm({
     try {
       console.log('Attempting to login with:', { email });
       const response = await axios.post(
-        "https://madms-bounceback-backend.onrender.com/auth/login",
+        "/auth/login", // 👈 change this to your API endpoint URL
         { email, password },
         { 
           withCredentials: true,
