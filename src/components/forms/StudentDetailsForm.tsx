@@ -89,10 +89,21 @@ const StudentDetailsForm = () => {
         gr_no: data.grNumber,
       };
 
+      const session = JSON.parse(localStorage.getItem('session') || '{}');
+      if (!session.token) {
+        toast({
+          variant: "destructive",
+          title: "Authentication Error",
+          description: "Please login again to continue."
+        });
+        return;
+      }
+
       const response = await axios.post("https://madms-bounceback-backend.onrender.com/submit-form", payload, {
-        withCredentials: true, // ✅ this is mandatory for session cookies
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.token}`
         },
       });
       
