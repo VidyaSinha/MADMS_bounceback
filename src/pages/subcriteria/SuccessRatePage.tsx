@@ -95,7 +95,7 @@ const SuccessRatePage: React.FC = () => {
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
       {/* Success Rate Details */}
-      <div className="bg-white rounded-xl shadow p-6">
+      <div className="container mx-auto max-w-5xl bg-white rounded-xl shadow p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-[#2f4883]">Success Rate Details</h2>
           <button
@@ -121,7 +121,7 @@ const SuccessRatePage: React.FC = () => {
         <DataTable
           value={students}
           paginator
-          rows={10}
+          rows={5}
           loading={loading}
           dataKey="id"
           showGridlines
@@ -129,8 +129,7 @@ const SuccessRatePage: React.FC = () => {
           emptyMessage="No students found."
           style={{ backgroundColor: 'white' }}
           globalFilter={globalFilter}
-          filters={filters}
-          filterDisplay="row"
+          filterDisplay="menu"
         >
           <Column 
             field="name" 
