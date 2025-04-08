@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { FilterMatchMode } from 'primereact/api';
 import { Tag } from 'primereact/tag';
 
 interface Student {
@@ -22,12 +21,21 @@ const SuccessRatePage: React.FC = () => {
   const [gradeHistory, setGradeHistory] = useState<File | null>(null);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [students, setStudents] = useState<Student[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    name: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    enrollmentNo: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    hasBacklog: { value: null, matchMode: FilterMatchMode.EQUALS }
-  });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Simulating API call with dummy data
+    setLoading(true);
+    const dummyData: Student[] = [
+      { id: '1', name: 'Chirandu ', enrollmentNo: '2021CS001', hasBacklog: false, backlogSemesters: [], gradeHistory: 'history1.pdf' },
+      { id: '2', name: 'ABLAnari', enrollmentNo: '2021CS002', hasBacklog: true, backlogSemesters: [3, 4], gradeHistory: 'history2.pdf' },
+      { id: '3', name: 'Mike Johnson', enrollmentNo: '2021CS003', hasBacklog: true, backlogSemesters: [2], gradeHistory: 'history3.pdf' },
+    ];
+    setTimeout(() => {
+      setStudents(dummyData);
+      setLoading(false);
+    }, 500);
+  }, []);
 
   const handleSemesterChange = (semester: number) => {
     setSelectedSemesters(prev =>
@@ -56,63 +64,6 @@ const SuccessRatePage: React.FC = () => {
     setShowAdditionalFields(false);
   };
 
-  useEffect(() => {
-    // Fetch students data from backend
-    const fetchStudents = async () => {
-      try {
-        // Replace with actual API call
-        const response = await fetch('/api/students');
-        const data = await response.json();
-        setStudents(data);
-      } catch (error) {
-        console.error('Error fetching students:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStudents();
-  }, []);
-
-  const actionBodyTemplate = (rowData: Student) => {
-    return (
-      <div className="flex gap-2">
-        <Button icon="pi pi-pencil" rounded outlined aria-label="Edit" onClick={() => handleEdit(rowData)} />
-        <Button icon="pi pi-trash" rounded outlined severity="danger" aria-label="Delete" onClick={() => handleDelete(rowData)} />
-      </div>
-    );
-  };
-
-  const backlogTemplate = (rowData: Student) => {
-    return <Tag severity={rowData.hasBacklog ? 'danger' : 'success'} value={rowData.hasBacklog ? 'Yes' : 'No'} />;
-  };
-
-  const semestersTemplate = (rowData: Student) => {
-    return rowData.hasBacklog ? rowData.backlogSemesters.join(', ') : '-';
-  };
-
-  const gradeHistoryTemplate = (rowData: Student) => {
-    return (
-      <Button 
-        icon="pi pi-file-pdf" 
-        rounded 
-        outlined 
-        aria-label="View Grade History"
-        onClick={() => window.open(rowData.gradeHistory, '_blank')} 
-      />
-    );
-  };
-
-  const handleEdit = (student: Student) => {
-    // Implement edit functionality
-    console.log('Edit student:', student);
-  };
-
-  const handleDelete = (student: Student) => {
-    // Implement delete functionality
-    console.log('Delete student:', student);
-  };
-
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
       {/* Success Rate Details */}
@@ -127,56 +78,75 @@ const SuccessRatePage: React.FC = () => {
           </button>
         </div>
 
+        {/* Success Rate Table */}
         <DataTable
           value={students}
           paginator
           rows={10}
           loading={loading}
           dataKey="id"
-          filters={filters}
-          filterDisplay="menu"
-          globalFilterFields={['name', 'enrollmentNo']}
-          emptyMessage="No students found."
+          showGridlines
           className="mt-6"
+          emptyMessage="No students found."
+          style={{ backgroundColor: 'white' }}
         >
-          <Column 
-            field="name" 
-            header="Name" 
-            filter 
-            filterPlaceholder="Search by name" 
-            style={{ minWidth: '12rem' }} 
+          <Column field="name" header="Name" sortable style={{ minWidth: '12rem' }} />
+          <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '12rem' }} />
+          <Column
+            field="hasBacklog"
+            header="Backlog"
+            sortable
+            style={{ minWidth: '8rem' }}
+            body={(rowData: Student) => (
+              <Tag
+                value={rowData.hasBacklog ? 'Yes' : 'No'}
+                severity={rowData.hasBacklog ? 'danger' : 'success'}
+              />
+            )}
           />
-          <Column 
-            field="enrollmentNo" 
-            header="Enrollment No." 
-            filter 
-            filterPlaceholder="Search by enrollment" 
-            style={{ minWidth: '12rem' }} 
+          <Column
+            field="backlogSemesters"
+            header="Semesters of Backlog"
+            style={{ minWidth: '12rem' }}
+            body={(rowData: Student) => (
+              rowData.backlogSemesters.length > 0 ? rowData.backlogSemesters.join(', ') : '-'
+            )}
           />
-          <Column 
-            field="hasBacklog" 
-            header="Backlog" 
-            body={backlogTemplate} 
-            filter 
-            filterMenuStyle={{ width: '14rem' }} 
-            style={{ minWidth: '8rem' }} 
+          <Column
+            field="gradeHistory"
+            header="Grade History"
+            style={{ minWidth: '10rem' }}
+            body={(rowData: Student) => (
+              <Button
+                icon="pi pi-file-pdf"
+                rounded
+                text
+                severity="info"
+                onClick={() => console.log('Download:', rowData.gradeHistory)}
+              />
+            )}
           />
-          <Column 
-            field="backlogSemesters" 
-            header="Semesters of Backlog" 
-            body={semestersTemplate} 
-            style={{ minWidth: '12rem' }} 
-          />
-          <Column 
-            field="gradeHistory" 
-            header="Grade History" 
-            body={gradeHistoryTemplate} 
-            style={{ minWidth: '8rem' }} 
-          />
-          <Column 
-            body={actionBodyTemplate} 
-            exportable={false} 
-            style={{ minWidth: '8rem' }} 
+          <Column
+            header="Actions"
+            style={{ minWidth: '8rem' }}
+            body={(rowData: Student) => (
+              <div className="flex gap-2">
+                <Button
+                  icon="pi pi-pencil"
+                  rounded
+                  text
+                  severity="success"
+                  onClick={() => console.log('Edit:', rowData.id)}
+                />
+                <Button
+                  icon="pi pi-trash"
+                  rounded
+                  text
+                  severity="danger"
+                  onClick={() => console.log('Delete:', rowData.id)}
+                />
+              </div>
+            )}
           />
         </DataTable>
       </div>
