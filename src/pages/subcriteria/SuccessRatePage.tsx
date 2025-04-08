@@ -1,17 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Tag } from 'primereact/tag';
-
-interface Student {
-  id: string;
-  name: string;
-  enrollmentNo: string;
-  hasBacklog: boolean;
-  backlogSemesters: number[];
-  gradeHistory: string;
-}
+import React, { useState } from 'react';
 
 const SuccessRatePage: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -20,31 +7,6 @@ const SuccessRatePage: React.FC = () => {
   const [selectedSemesters, setSelectedSemesters] = useState<number[]>([]);
   const [gradeHistory, setGradeHistory] = useState<File | null>(null);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [globalFilter, setGlobalFilter] = useState('');
-  const [filters, setFilters] = useState({});
-  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
-
-  useEffect(() => {
-    // Simulating API call with dummy data
-    setLoading(true);
-    const dummyData: Student[] = [
-      { id: '1', name: 'Chirandu ', enrollmentNo: '2021CS001', hasBacklog: false, backlogSemesters: [], gradeHistory: 'history1.pdf' },
-      { id: '2', name: 'ABLAnari', enrollmentNo: '2021CS002', hasBacklog: true, backlogSemesters: [3, 4], gradeHistory: 'history2.pdf' },
-      { id: '3', name: 'Mike Johnson', enrollmentNo: '2021CS003', hasBacklog: true, backlogSemesters: [2], gradeHistory: 'history3.pdf' },
-      { id: '3', name: 'Mike Johnson', enrollmentNo: '2021CS003', hasBacklog: true, backlogSemesters: [2], gradeHistory: 'history3.pdf' },
-      { id: '3', name: 'Mike Johnson', enrollmentNo: '2021CS003', hasBacklog: true, backlogSemesters: [2], gradeHistory: 'history3.pdf' },
-      { id: '3', name: 'Mike Johnson', enrollmentNo: '2021CS003', hasBacklog: true, backlogSemesters: [2], gradeHistory: 'history3.pdf' },
-      { id: '3', name: 'Mike Johnson', enrollmentNo: '2021CS003', hasBacklog: true, backlogSemesters: [2], gradeHistory: 'history3.pdf' },
-      { id: '3', name: 'Mike Johnson', enrollmentNo: '2021CS003', hasBacklog: true, backlogSemesters: [2], gradeHistory: 'history3.pdf' },
-      { id: '3', name: 'Mike Johnson', enrollmentNo: '2021CS003', hasBacklog: true, backlogSemesters: [2], gradeHistory: 'history3.pdf' },
-    ];
-    setTimeout(() => {
-      setStudents(dummyData);
-      setLoading(false);
-    }, 500);
-  }, []);
 
   const handleSemesterChange = (semester: number) => {
     setSelectedSemesters(prev =>
@@ -63,31 +25,7 @@ const SuccessRatePage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingStudent) {
-      // Update existing student
-      setStudents(prev => prev.map(student => 
-        student.id === editingStudent.id 
-          ? {
-              ...student,
-              name: studentName,
-              hasBacklog,
-              backlogSemesters: selectedSemesters,
-              gradeHistory: gradeHistory ? URL.createObjectURL(gradeHistory) : student.gradeHistory
-            }
-          : student
-      ));
-    } else {
-      // Add new student
-      const newStudent: Student = {
-        id: String(Date.now()),
-        name: studentName,
-        enrollmentNo: `2024CS${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
-        hasBacklog,
-        backlogSemesters: selectedSemesters,
-        gradeHistory: gradeHistory ? URL.createObjectURL(gradeHistory) : null
-      };
-      setStudents(prev => [...prev, newStudent]);
-    }
+    // Handle form submission here
     setIsDialogOpen(false);
     // Reset form
     setStudentName('');
@@ -95,13 +33,12 @@ const SuccessRatePage: React.FC = () => {
     setSelectedSemesters([]);
     setGradeHistory(null);
     setShowAdditionalFields(false);
-    setEditingStudent(null);
   };
 
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
       {/* Success Rate Details */}
-      <div className="container mx-auto max-w-5xl bg-white rounded-xl shadow p-6">
+      <div className="bg-white rounded-xl shadow p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-[#2f4883]">Success Rate Details</h2>
           <button
@@ -112,115 +49,37 @@ const SuccessRatePage: React.FC = () => {
           </button>
         </div>
 
-        {/* Search Field */}
-        <div className="mb-4">
-          <input
-            type="text"
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder="Search in all fields..."
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883] focus:border-transparent"
-          />
-        </div>
-
         {/* Success Rate Table */}
-        <DataTable
-          value={students}
-          paginator
-          rows={5}
-          loading={loading}
-          dataKey="id"
-          showGridlines
-          className="mt-6"
-          emptyMessage="No students found."
-          style={{ backgroundColor: 'white' }}
-          globalFilter={globalFilter}
-          filterDisplay="menu"
-        >
-          <Column 
-            field="name" 
-            header="Name" 
-            sortable 
-            style={{ minWidth: '12rem' }} 
-            filter 
-            filterPlaceholder="Search by name"
-          />
-          <Column 
-            field="enrollmentNo" 
-            header="Enrollment No." 
-            sortable 
-            style={{ minWidth: '12rem' }} 
-            filter 
-            filterPlaceholder="Search by enrollment"
-          />
-          <Column
-            field="hasBacklog"
-            header="Backlog"
-            sortable
-            style={{ minWidth: '8rem' }}
-            body={(rowData: Student) => (
-              <Tag
-                value={rowData.hasBacklog ? 'Yes' : 'No'}
-                severity={rowData.hasBacklog ? 'danger' : 'success'}
-              />
-            )}
-          />
-          <Column
-            field="backlogSemesters"
-            header="Semesters of Backlog"
-            style={{ minWidth: '12rem' }}
-            body={(rowData: Student) => (
-              rowData.backlogSemesters.length > 0 ? rowData.backlogSemesters.join(', ') : '-'
-            )}
-          />
-          <Column
-            field="gradeHistory"
-            header="Grade History"
-            style={{ minWidth: '10rem' }}
-            body={(rowData: Student) => (
-              <Button
-                icon="pi pi-file-pdf"
-                rounded
-                text
-                severity="info"
-                onClick={() => console.log('Download:', rowData.gradeHistory)}
-              />
-            )}
-          />
-          <Column
-            header="Actions"
-            style={{ minWidth: '8rem' }}
-            body={(rowData: Student) => (
-              <div className="flex gap-2">
-                <Button
-                  icon="pi pi-pencil"
-                  rounded
-                  text
-                  severity="success"
-                  onClick={() => {
-                    setEditingStudent(rowData);
-                    setStudentName(rowData.name);
-                    setHasBacklog(rowData.hasBacklog);
-                    setSelectedSemesters(rowData.backlogSemesters);
-                    setShowAdditionalFields(true);
-                    setIsDialogOpen(true);
-                  }}
-                />
-                <Button
-                  icon="pi pi-trash"
-                  rounded
-                  text
-                  severity="danger"
-                  onClick={() => {
-                    if (confirm('Are you sure you want to delete this student?')) {
-                      setStudents(prev => prev.filter(s => s.id !== rowData.id));
-                    }
-                  }}
-                />
-              </div>
-            )}
-          />
-        </DataTable>
+        <table className="min-w-full text-sm text-left mt-6">
+          <thead className="text-gray-500 border-b">
+            <tr>
+              <th className="py-2 px-4">Academic Year</th>
+              <th className="py-2 px-4">Total Students</th>
+              <th className="py-2 px-4">Students Cleared</th>
+              <th className="py-2 px-4">Success Rate (%)</th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-700">
+            <tr className="border-b">
+              <td className="py-2 px-4">2024-25 (CAY)</td>
+              <td className="py-2 px-4">60</td>
+              <td className="py-2 px-4">58</td>
+              <td className="py-2 px-4">96.67%</td>
+            </tr>
+            <tr className="border-b">
+              <td className="py-2 px-4">2023-24 (CAYm1)</td>
+              <td className="py-2 px-4">60</td>
+              <td className="py-2 px-4">55</td>
+              <td className="py-2 px-4">91.67%</td>
+            </tr>
+            <tr>
+              <td className="py-2 px-4">2022-23 (CAYm2)</td>
+              <td className="py-2 px-4">42</td>
+              <td className="py-2 px-4">38</td>
+              <td className="py-2 px-4">90.48%</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       {/* Add Details Dialog */}
