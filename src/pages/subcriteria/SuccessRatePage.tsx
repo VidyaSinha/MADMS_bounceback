@@ -1,4 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { FilterMatchMode } from 'primereact/api';
+import { Tag } from 'primereact/tag';
+
+interface Student {
+  id: string;
+  name: string;
+  enrollmentNo: string;
+  hasBacklog: boolean;
+  backlogSemesters: number[];
+  gradeHistory: string;
+}
 
 const SuccessRatePage: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -7,6 +21,13 @@ const SuccessRatePage: React.FC = () => {
   const [selectedSemesters, setSelectedSemesters] = useState<number[]>([]);
   const [gradeHistory, setGradeHistory] = useState<File | null>(null);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    enrollmentNo: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    hasBacklog: { value: null, matchMode: FilterMatchMode.EQUALS }
+  });
 
   const handleSemesterChange = (semester: number) => {
     setSelectedSemesters(prev =>
@@ -35,6 +56,63 @@ const SuccessRatePage: React.FC = () => {
     setShowAdditionalFields(false);
   };
 
+  useEffect(() => {
+    // Fetch students data from backend
+    const fetchStudents = async () => {
+      try {
+        // Replace with actual API call
+        const response = await fetch('/api/students');
+        const data = await response.json();
+        setStudents(data);
+      } catch (error) {
+        console.error('Error fetching students:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudents();
+  }, []);
+
+  const actionBodyTemplate = (rowData: Student) => {
+    return (
+      <div className="flex gap-2">
+        <Button icon="pi pi-pencil" rounded outlined aria-label="Edit" onClick={() => handleEdit(rowData)} />
+        <Button icon="pi pi-trash" rounded outlined severity="danger" aria-label="Delete" onClick={() => handleDelete(rowData)} />
+      </div>
+    );
+  };
+
+  const backlogTemplate = (rowData: Student) => {
+    return <Tag severity={rowData.hasBacklog ? 'danger' : 'success'} value={rowData.hasBacklog ? 'Yes' : 'No'} />;
+  };
+
+  const semestersTemplate = (rowData: Student) => {
+    return rowData.hasBacklog ? rowData.backlogSemesters.join(', ') : '-';
+  };
+
+  const gradeHistoryTemplate = (rowData: Student) => {
+    return (
+      <Button 
+        icon="pi pi-file-pdf" 
+        rounded 
+        outlined 
+        aria-label="View Grade History"
+        onClick={() => window.open(rowData.gradeHistory, '_blank')} 
+      />
+    );
+  };
+
+  const handleEdit = (student: Student) => {
+    // Implement edit functionality
+    console.log('Edit student:', student);
+  };
+
+  const handleDelete = (student: Student) => {
+    // Implement delete functionality
+    console.log('Delete student:', student);
+  };
+
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
       {/* Success Rate Details */}
@@ -49,37 +127,58 @@ const SuccessRatePage: React.FC = () => {
           </button>
         </div>
 
-        {/* Success Rate Table */}
-        <table className="min-w-full text-sm text-left mt-6">
-          <thead className="text-gray-500 border-b">
-            <tr>
-              <th className="py-2 px-4">Academic Year</th>
-              <th className="py-2 px-4">Total Students</th>
-              <th className="py-2 px-4">Students Cleared</th>
-              <th className="py-2 px-4">Success Rate (%)</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700">
-            <tr className="border-b">
-              <td className="py-2 px-4">2024-25 (CAY)</td>
-              <td className="py-2 px-4">60</td>
-              <td className="py-2 px-4">58</td>
-              <td className="py-2 px-4">96.67%</td>
-            </tr>
-            <tr className="border-b">
-              <td className="py-2 px-4">2023-24 (CAYm1)</td>
-              <td className="py-2 px-4">60</td>
-              <td className="py-2 px-4">55</td>
-              <td className="py-2 px-4">91.67%</td>
-            </tr>
-            <tr>
-              <td className="py-2 px-4">2022-23 (CAYm2)</td>
-              <td className="py-2 px-4">42</td>
-              <td className="py-2 px-4">38</td>
-              <td className="py-2 px-4">90.48%</td>
-            </tr>
-          </tbody>
-        </table>
+        <DataTable
+          value={students}
+          paginator
+          rows={10}
+          loading={loading}
+          dataKey="id"
+          filters={filters}
+          filterDisplay="menu"
+          globalFilterFields={['name', 'enrollmentNo']}
+          emptyMessage="No students found."
+          className="mt-6"
+        >
+          <Column 
+            field="name" 
+            header="Name" 
+            filter 
+            filterPlaceholder="Search by name" 
+            style={{ minWidth: '12rem' }} 
+          />
+          <Column 
+            field="enrollmentNo" 
+            header="Enrollment No." 
+            filter 
+            filterPlaceholder="Search by enrollment" 
+            style={{ minWidth: '12rem' }} 
+          />
+          <Column 
+            field="hasBacklog" 
+            header="Backlog" 
+            body={backlogTemplate} 
+            filter 
+            filterMenuStyle={{ width: '14rem' }} 
+            style={{ minWidth: '8rem' }} 
+          />
+          <Column 
+            field="backlogSemesters" 
+            header="Semesters of Backlog" 
+            body={semestersTemplate} 
+            style={{ minWidth: '12rem' }} 
+          />
+          <Column 
+            field="gradeHistory" 
+            header="Grade History" 
+            body={gradeHistoryTemplate} 
+            style={{ minWidth: '8rem' }} 
+          />
+          <Column 
+            body={actionBodyTemplate} 
+            exportable={false} 
+            style={{ minWidth: '8rem' }} 
+          />
+        </DataTable>
       </div>
 
       {/* Add Details Dialog */}
