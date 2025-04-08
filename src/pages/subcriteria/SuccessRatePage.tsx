@@ -22,6 +22,9 @@ const SuccessRatePage: React.FC = () => {
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [filters, setFilters] = useState({});
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
 
   useEffect(() => {
     // Simulating API call with dummy data
@@ -54,7 +57,31 @@ const SuccessRatePage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
+    if (editingStudent) {
+      // Update existing student
+      setStudents(prev => prev.map(student => 
+        student.id === editingStudent.id 
+          ? {
+              ...student,
+              name: studentName,
+              hasBacklog,
+              backlogSemesters: selectedSemesters,
+              gradeHistory: gradeHistory ? URL.createObjectURL(gradeHistory) : student.gradeHistory
+            }
+          : student
+      ));
+    } else {
+      // Add new student
+      const newStudent: Student = {
+        id: String(Date.now()),
+        name: studentName,
+        enrollmentNo: `2024CS${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
+        hasBacklog,
+        backlogSemesters: selectedSemesters,
+        gradeHistory: gradeHistory ? URL.createObjectURL(gradeHistory) : null
+      };
+      setStudents(prev => [...prev, newStudent]);
+    }
     setIsDialogOpen(false);
     // Reset form
     setStudentName('');
@@ -62,6 +89,7 @@ const SuccessRatePage: React.FC = () => {
     setSelectedSemesters([]);
     setGradeHistory(null);
     setShowAdditionalFields(false);
+    setEditingStudent(null);
   };
 
   return (
@@ -78,6 +106,17 @@ const SuccessRatePage: React.FC = () => {
           </button>
         </div>
 
+        {/* Search Field */}
+        <div className="mb-4">
+          <input
+            type="text"
+            value={globalFilter}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            placeholder="Search in all fields..."
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883] focus:border-transparent"
+          />
+        </div>
+
         {/* Success Rate Table */}
         <DataTable
           value={students}
@@ -89,9 +128,26 @@ const SuccessRatePage: React.FC = () => {
           className="mt-6"
           emptyMessage="No students found."
           style={{ backgroundColor: 'white' }}
+          globalFilter={globalFilter}
+          filters={filters}
+          filterDisplay="row"
         >
-          <Column field="name" header="Name" sortable style={{ minWidth: '12rem' }} />
-          <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '12rem' }} />
+          <Column 
+            field="name" 
+            header="Name" 
+            sortable 
+            style={{ minWidth: '12rem' }} 
+            filter 
+            filterPlaceholder="Search by name"
+          />
+          <Column 
+            field="enrollmentNo" 
+            header="Enrollment No." 
+            sortable 
+            style={{ minWidth: '12rem' }} 
+            filter 
+            filterPlaceholder="Search by enrollment"
+          />
           <Column
             field="hasBacklog"
             header="Backlog"
@@ -136,14 +192,25 @@ const SuccessRatePage: React.FC = () => {
                   rounded
                   text
                   severity="success"
-                  onClick={() => console.log('Edit:', rowData.id)}
+                  onClick={() => {
+                    setEditingStudent(rowData);
+                    setStudentName(rowData.name);
+                    setHasBacklog(rowData.hasBacklog);
+                    setSelectedSemesters(rowData.backlogSemesters);
+                    setShowAdditionalFields(true);
+                    setIsDialogOpen(true);
+                  }}
                 />
                 <Button
                   icon="pi pi-trash"
                   rounded
                   text
                   severity="danger"
-                  onClick={() => console.log('Delete:', rowData.id)}
+                  onClick={() => {
+                    if (confirm('Are you sure you want to delete this student?')) {
+                      setStudents(prev => prev.filter(s => s.id !== rowData.id));
+                    }
+                  }}
                 />
               </div>
             )}
