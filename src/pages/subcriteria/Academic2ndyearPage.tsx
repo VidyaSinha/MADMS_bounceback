@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -9,6 +10,7 @@ import 'primeicons/primeicons.css';
 interface Student {
   
   name: string;
+  enrollmentNo: string;
   CGPA: string;
   academicyear: string;
   appeared: string;
@@ -32,6 +34,11 @@ const Academic2ndyearPage: React.FC = () => {
     setHasAppeared(null);
     setShowAdditionalFields(false);
   };
+
+   const [info, setinfo] = useState([
+      {name: 'Rajvi', enrollmentNo: '1321', CGPA: '9', academicyear: '2021',appeared:'Yes' },
+     
+    ]);
 
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
@@ -89,6 +96,27 @@ const Academic2ndyearPage: React.FC = () => {
             </tr>
           </tbody>
         </table>
+
+        <DataTable value={info} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
+                  <Column field="name" header="name" sortable style={{ width: '25%' }}></Column>
+                  <Column field="enrollment" header="enrollmentNo" sortable style={{ width: '25%' }}></Column>
+                  <Column field="CGPA" header="CGPA" sortable style={{ width: '25%' }}></Column>
+                  <Column field="academicyear" header="academicyear" sortable style={{ width: '25%' }}></Column>
+                  <Column field="appeared" header="Appeared" sortable style={{ width: '25%' }}></Column>
+                   <Column body={(rowData) => (
+                    <div className="flex gap-2 justify-center">
+                      <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+                      <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+                      </div>
+                    )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+                    <Column body={(rowData) => (
+                                <div className="flex gap-2 justify-center">
+                                  <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+                                  <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+                                  </div>
+                                )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+              </DataTable>
+
       </div>
 
       {/* Add Details Dialog */}

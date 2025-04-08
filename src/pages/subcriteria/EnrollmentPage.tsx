@@ -21,14 +21,6 @@ interface Student {
   HSCform: string;
 }
 
-interface Student {
-    name: string;
-    enrollmentNumber: string;
-    marksheet10: string | null;
-    marksheet12: string | null;
-    registrationForm: string | null;
-}
-
 function EnrollmentPage(): JSX.Element {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -40,8 +32,6 @@ function EnrollmentPage(): JSX.Element {
     {name: 'Diya', enrollmentNo: '5', academicyear: '2014', registrationform: '',SSCform: '', HSCform: '' },
     {name: 'Shyama', enrollmentNo: '6', academicyear: '2008', registrationform: '',SSCform: '', HSCform: '' },
   ]);
-
-  
 
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
