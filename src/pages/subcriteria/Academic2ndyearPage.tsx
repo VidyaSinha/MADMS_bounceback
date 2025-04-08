@@ -1,4 +1,19 @@
 import React, { useState } from 'react';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
+interface Student {
+  
+  name: string;
+  CGPA: string;
+  academicyear: string;
+  appeared: string;
+  
+}
 
 const Academic2ndyearPage: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

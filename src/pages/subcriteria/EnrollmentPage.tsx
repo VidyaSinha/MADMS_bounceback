@@ -6,41 +6,35 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { FilterService } from 'primereact/api';
 
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
+interface Student {
+  
+  name: string;
+  enrollmentNo: string;
+  academicyear: string;
+  registrationform: string;
+  SSCform: string;
+  HSCform: string;
+}
 
 const EnrollmentPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [customers, setCustomers] = useState([]); // Replace with actual data
-  const [filters, setFilters] = useState({});
-  const [loading, setLoading] = useState(false);
 
-  const header = (
-    <div className="flex justify-between items-center">
-      <h2 className="text-xl font-semibold text-[#2f4883]">Customer Details</h2>
-    </div>
-  );
-  
-  useEffect(() => {
-  FilterService.register('custom_activity', (value, filters) => {
-    const [from, to] = filters ?? [null, null];
-    if (from === null && to === null) return true;
-    if (from !== null && to === null) return from <= value;
-    if (from === null && to !== null) return value <= to;
-    return from <= value && value <= to;
-  });
-}, []);
+  const [products, setProducts] = useState([
+    {name: 'Rajvi', enrollmentNo: '1', academicyear: '2023', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Vidya', enrollmentNo: '2', academicyear: '2021', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Dhruvi', enrollmentNo: '3', academicyear: '2029', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Umang', enrollmentNo: '4', academicyear: '2020', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Diya', enrollmentNo: '5', academicyear: '2014', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Shyama', enrollmentNo: '6', academicyear: '2008', registrationform: '',SSCform: '', HSCform: '' },
+  ]);
 
-const countryBodyTemplate = (rowData) => <span>{rowData.country?.name}</span>;
-  const representativeBodyTemplate = (rowData) => <span>{rowData.representative?.name}</span>;
-  const statusBodyTemplate = (rowData) => <span>{rowData.status}</span>;
-  const verifiedBodyTemplate = (rowData) => <span>{rowData.verified ? 'Yes' : 'No'}</span>;
-  const representativeRowFilterTemplate = (options) => <InputText value={options.value} onChange={(e) => options.filterApplyCallback(e.target.value)} />;
-  const activityRowFilterTemplate = (options) => <InputText value={options.value} onChange={(e) => options.filterApplyCallback(e.target.value)} />;
-  const statusRowFilterTemplate = (options) => <InputText value={options.value} onChange={(e) => options.filterApplyCallback(e.target.value)} />;
-  const verifiedRowFilterTemplate = (options) => <InputText value={options.value} onChange={(e) => options.filterApplyCallback(e.target.value)} />;
   
-  
+
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
       <div className="flex justify-end mb-4">
@@ -86,16 +80,27 @@ const countryBodyTemplate = (rowData) => <span>{rowData.country?.name}</span>;
             </tbody>
           </table>
 
-          <DataTable value={customers} paginator rows={10} dataKey="id" filters={filters} filterDisplay="row" loading={loading}
-          globalFilterFields={['name', 'country.name', 'representative.name', 'status']} header={header} emptyMessage="No customers found.">
-      <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-      <Column header="Country" filterField="country.name" style={{ minWidth: '12rem' }} body={countryBodyTemplate} filter filterPlaceholder="Search by country" />
-      <Column header="Agent" filterField="representative" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '14rem' }}
-          body={representativeBodyTemplate} filter filterElement={representativeRowFilterTemplate} />
-      <Column header="Activity(Custom Filter)" field="activity" showFilterMenu={false} showClearButton={false} style={{ minWidth: '14rem' }} filter filterElement={activityRowFilterTemplate} />
-      <Column field="status" header="Status" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-      <Column field="verified" header="Verified" dataType="boolean" style={{ minWidth: '6rem' }} body={verifiedBodyTemplate} filter filterElement={verifiedRowFilterTemplate} />
-  </DataTable>
+          <DataTable value={products} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
+          <Column field="enrollmentNo" header="enrollmentNo" sortable style={{ width: '25%' }}></Column>
+          <Column field="name" header="name" sortable style={{ width: '25%' }}></Column>
+          <Column field="academicyear" header="academicyear" sortable style={{ width: '25%' }}></Column>
+           <Column field="registrationform" header="registrationform" body={(rowData) => (
+                        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                      )} style={{ minWidth: '10rem' }}></Column>
+           <Column field="SSCform" header="SSCform" body={(rowData) => (
+                        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                      )} style={{ minWidth: '10rem' }}></Column>
+           <Column field="HSCform" header="HSCform" body={(rowData) => (
+                        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                      )} style={{ minWidth: '10rem' }}></Column>
+           <Column body={(rowData) => (
+            <div className="flex gap-2 justify-center">
+              <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+              <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+              </div>
+            )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+      </DataTable>
+                
 
         </div>
       </div>
