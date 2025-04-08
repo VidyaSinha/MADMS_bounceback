@@ -2,44 +2,84 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { FilterService } from 'primereact/api';
 
 
-const EnrollmentPage = () => {
+interface Student {
+    name: string;
+    enrollmentNumber: string;
+    marksheet10: string | null;
+    marksheet12: string | null;
+    registrationForm: string | null;
+}
+
+function EnrollmentPage(): JSX.Element {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [customers, setCustomers] = useState([]); // Replace with actual data
-  const [filters, setFilters] = useState({});
-  const [loading, setLoading] = useState(false);
-
-  const header = (
-    <div className="flex justify-between items-center">
-      <h2 className="text-xl font-semibold text-[#2f4883]">Customer Details</h2>
-    </div>
-  );
-  
-  useEffect(() => {
-  FilterService.register('custom_activity', (value, filters) => {
-    const [from, to] = filters ?? [null, null];
-    if (from === null && to === null) return true;
-    if (from !== null && to === null) return from <= value;
-    if (from === null && to !== null) return value <= to;
-    return from <= value && value <= to;
+  const [studentName, setStudentName] = useState('');
+  const [showDocumentFields, setShowDocumentFields] = useState(false);
+  const [formData, setFormData] = useState({
+    registrationForm: null,
+    marksheet10th: null,
+    marksheet12th: null,
+    gujcetResult: null
   });
-}, []);
 
-const countryBodyTemplate = (rowData) => <span>{rowData.country?.name}</span>;
-  const representativeBodyTemplate = (rowData) => <span>{rowData.representative?.name}</span>;
-  const statusBodyTemplate = (rowData) => <span>{rowData.status}</span>;
-  const verifiedBodyTemplate = (rowData) => <span>{rowData.verified ? 'Yes' : 'No'}</span>;
-  const representativeRowFilterTemplate = (options) => <InputText value={options.value} onChange={(e) => options.filterApplyCallback(e.target.value)} />;
-  const activityRowFilterTemplate = (options) => <InputText value={options.value} onChange={(e) => options.filterApplyCallback(e.target.value)} />;
-  const statusRowFilterTemplate = (options) => <InputText value={options.value} onChange={(e) => options.filterApplyCallback(e.target.value)} />;
-  const verifiedRowFilterTemplate = (options) => <InputText value={options.value} onChange={(e) => options.filterApplyCallback(e.target.value)} />;
+  const [suggestions, setSuggestions] = useState<{ name: string; enrollment_number: string }[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const file = event.target.files?.[0];
+    if (file && file.type === 'application/pdf') {
+      setFormData(prev => ({ ...prev, [field]: file }));
+    } else {
+      alert('Please upload PDF files only');
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Form submitted:', { studentName, ...formData });
+    setIsDialogOpen(false);
+    setShowDocumentFields(false);
+    setStudentName('');
+    setFormData({
+      registrationForm: null,
+      marksheet10th: null,
+      marksheet12th: null,
+      gujcetResult: null
+    });
+  };
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      const trimmed = studentName.trim();
+      if (trimmed === '') {
+        setSuggestions([]);
+        return;
+      }
   
+      try {
+        const response = await fetch(`http://madms-bounceback-backend.onrender.com/student/search?q=${encodeURIComponent(trimmed)}`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+  
+        const data = await response.json();
+  
+        if (Array.isArray(data)) {
+          setSuggestions(data);
+          setShowSuggestions(true);
+        } else {
+          setSuggestions([]);
+        }
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+        setSuggestions([]);
+      }
+    };
+  
+    const timeoutId = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timeoutId);
+  }, [studentName]);
   
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
@@ -85,21 +125,128 @@ const countryBodyTemplate = (rowData) => <span>{rowData.country?.name}</span>;
               </tr>
             </tbody>
           </table>
-
-          <DataTable value={customers} paginator rows={10} dataKey="id" filters={filters} filterDisplay="row" loading={loading}
-          globalFilterFields={['name', 'country.name', 'representative.name', 'status']} header={header} emptyMessage="No customers found.">
-      <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-      <Column header="Country" filterField="country.name" style={{ minWidth: '12rem' }} body={countryBodyTemplate} filter filterPlaceholder="Search by country" />
-      <Column header="Agent" filterField="representative" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '14rem' }}
-          body={representativeBodyTemplate} filter filterElement={representativeRowFilterTemplate} />
-      <Column header="Activity(Custom Filter)" field="activity" showFilterMenu={false} showClearButton={false} style={{ minWidth: '14rem' }} filter filterElement={activityRowFilterTemplate} />
-      <Column field="status" header="Status" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-      <Column field="verified" header="Verified" dataType="boolean" style={{ minWidth: '6rem' }} body={verifiedBodyTemplate} filter filterElement={verifiedRowFilterTemplate} />
-  </DataTable>
-
         </div>
       </div>
-      </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Student Details</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
+            <div className="space-y-2 relative">
+              <Label htmlFor="name">Student Name</Label>
+              <Input
+                id="name"
+                name="tudent_name_autofill_bypass"
+                autoComplete="off"
+                value={studentName}
+                onChange={(e) => {
+                  setStudentName(e.target.value);
+                  if (e.target.value) setShowDocumentFields(true);
+                }}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                onFocus={() => studentName && setShowSuggestions(true)}
+                placeholder="Enter student name"
+                required
+              />
+              {showSuggestions && (
+                <ul className="absolute z-50 w-full border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto bg-white shadow">
+  {suggestions.length > 0 ? (
+    suggestions.map((s, index) => (
+      <li
+        key={index}
+        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+        onMouseDown={(e) => {
+          e.preventDefault(); // prevent input blur
+          setStudentName(`${s.name} (${s.enrollment_number})`);
+          setShowSuggestions(false);
+          setShowDocumentFields(true);
+        }}
+      >
+        <div className="text-sm font-medium">{s.name}</div>
+        <div className="text-xs text-gray-500">{s.enrollment_number}</div>
+      </li>
+    ))
+  ) : (
+    <li className="px-4 py-2 text-sm text-gray-500">No students found</li>
+  )}
+</ul>
+              )}
+            </div>
+
+            {showDocumentFields && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="registrationForm">Registration Form (PDF)</Label>
+                  <Input
+                    id="registrationForm"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleFileChange(e, 'registrationForm')}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="marksheet10th">10th Marksheet (PDF)</Label>
+                  <Input
+                    id="marksheet10th"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleFileChange(e, 'marksheet10th')}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="marksheet12th">12th Marksheet (PDF)</Label>
+                  <Input
+                    id="marksheet12th"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleFileChange(e, 'marksheet12th')}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="gujcetResult">GUJCET Result (PDF)</Label>
+                  <Input
+                    id="gujcetResult"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleFileChange(e, 'gujcetResult')}
+                    required
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end space-x-2 pt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDialogOpen(false);
+                  setShowDocumentFields(false);
+                  setStudentName('');
+                }}
+                className="px-4 py-2 border rounded-md hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-[#2f4883] text-white rounded-md hover:bg-[#1a2a4f]"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
+
 export default EnrollmentPage;
