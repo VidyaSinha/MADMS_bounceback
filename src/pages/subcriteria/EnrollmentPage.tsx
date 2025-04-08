@@ -21,7 +21,15 @@ interface Student {
   HSCform: string;
 }
 
-const EnrollmentPage = () => {
+interface Student {
+    name: string;
+    enrollmentNumber: string;
+    marksheet10: string | null;
+    marksheet12: string | null;
+    registrationForm: string | null;
+}
+
+function EnrollmentPage(): JSX.Element {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [products, setProducts] = useState([
@@ -101,10 +109,10 @@ const EnrollmentPage = () => {
             )} exportable={false} style={{ minWidth: '8rem' }}></Column>
       </DataTable>
                 
-
+</div>
         </div>
-      </div>
-      </div>
+      </div>        
   );
 }
+
 export default EnrollmentPage;
