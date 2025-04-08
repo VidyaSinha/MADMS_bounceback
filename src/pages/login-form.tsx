@@ -31,10 +31,11 @@ export function LoginForm({
     setLoading(true);
 
     try {
-      console.log('Attempting to login with:', { email });
-      const response = await login(email, password);
-      
-      console.log('Server response:', response.data);
+      const response = await axios.post(
+        "https://madms-bounceback-backend.onrender.com/auth/login",
+        { email, password },
+        { withCredentials: true } // ✅ this goes here
+      );
       
       if (response.status === 200) {
         alert("OTP sent to your email!");
