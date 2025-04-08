@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
 
 
 interface Student {
@@ -53,6 +49,38 @@ function EnrollmentPage(): JSX.Element {
     });
   };
 
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      const trimmed = studentName.trim();
+      if (trimmed === '') {
+        setSuggestions([]);
+        return;
+      }
+  
+      try {
+        const response = await fetch(`http://localhost:5000/student/search?q=${encodeURIComponent(trimmed)}`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+  
+        const data = await response.json();
+  
+        if (Array.isArray(data)) {
+          setSuggestions(data);
+          setShowSuggestions(true);
+        } else {
+          setSuggestions([]);
+        }
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+        setSuggestions([]);
+      }
+    };
+  
+    const timeoutId = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timeoutId);
+  }, [studentName]);
+  
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
       <div className="flex justify-end mb-4">

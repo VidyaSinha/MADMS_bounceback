@@ -16,14 +16,7 @@ export default defineConfig(({ mode }) => ({
   },
   preview: {
     port: 8080,
-    proxy: {
-      '/api': {
-        target: 'https://madms-bounceback-backend.onrender.com',
-        changeOrigin: true,
-        secure: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
+    host: "localhost"
   },
   plugins: [react()],
   resolve: {

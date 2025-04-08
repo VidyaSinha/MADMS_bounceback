@@ -1,12 +1,15 @@
 import React from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-
-const handleLogout = () => {
-  localStorage.removeItem("session"); // Remove session from localStorage
-  window.location.href = "/login"; // Redirect to login
-};
+import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("session"); // Remove session from localStorage
+    navigate("/login"); // React-router handles navigation safely
+  };
+
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-white/90 backdrop-blur-sm">
       <div className="flex h-16 items-center px-6">
@@ -30,7 +33,6 @@ const Navbar: React.FC = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </header>
