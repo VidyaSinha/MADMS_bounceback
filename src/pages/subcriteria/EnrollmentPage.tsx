@@ -58,7 +58,7 @@ function EnrollmentPage(): JSX.Element {
       }
   
       try {
-        const response = await fetch(`http://madms-bounceback-backend.onrender.com/student/search?q=${encodeURIComponent(trimmed)}`, {
+        const response = await fetch(`https://madms-bounceback-backend.onrender.com/student/search?q=${encodeURIComponent(trimmed)}`, {
           method: 'GET',
           credentials: 'include',
         });
