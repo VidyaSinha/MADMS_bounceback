@@ -44,6 +44,7 @@ type FormValues = z.infer<typeof formSchema>;
 const StudentDetailsForm = () => {
   const [customBatchPeriod, setCustomBatchPeriod] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const currentYear = new Date().getFullYear();
 
   const form = useForm<FormValues>({
@@ -80,30 +81,55 @@ const StudentDetailsForm = () => {
     return options;
   }, [studentType, currentYear]);
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const validTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel',
+      'text/csv',
+    ];
+
+    if (!validTypes.includes(file.type)) {
+      toast({
+        variant: 'destructive',
+        title: 'Invalid File',
+        description: 'Please upload an Excel or CSV file.',
+      });
+      setUploadedFile(null);
+      return;
+    }
+
+    setUploadedFile(file);
+  };
+
   const onSubmit = async (data: FormValues) => {
+    if (!uploadedFile) {
+      toast({
+        variant: 'destructive',
+        title: 'File Required',
+        description: 'Please upload an Excel or CSV file before submitting.',
+      });
+      return;
+    }
+
     try {
-      // const sessionData = localStorage.getItem('session');
-      // if (!sessionData) throw new Error('No session found');
-
-      // const session = JSON.parse(sessionData);
-      // if (!session?.token) throw new Error('No token found');
-
-      const payload = {
-        name: data.name,
-        enrollment_number: data.enrollmentNumber,
-        student_type: data.studentType,
-        batch_period: data.batchPeriod,
-        gr_no: data.grNumber,
-      };
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('enrollment_number', data.enrollmentNumber);
+      formData.append('student_type', data.studentType);
+      formData.append('batch_period', data.batchPeriod);
+      formData.append('gr_no', data.grNumber);
+      formData.append('file', uploadedFile);
 
       const response = await axios.post(
         'https://madms-bounceback-backend.onrender.com/submit-form',
-        payload,
+        formData,
         {
           withCredentials: true,
           headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${session.token}`,
+            'Content-Type': 'multipart/form-data',
           },
         }
       );
@@ -114,6 +140,7 @@ const StudentDetailsForm = () => {
           description: 'Form submitted successfully!',
         });
         form.reset();
+        setUploadedFile(null);
       } else {
         throw new Error('Form submission failed');
       }
@@ -240,6 +267,17 @@ const StudentDetailsForm = () => {
             )}
           />
 
+          {/* File Upload */}
+          <div className="flex flex-col space-y-2">
+            <label className="font-medium text-sm text-gray-700">Upload Excel/CSV</label>
+            <input
+              type="file"
+              accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              onChange={handleFileChange}
+              className="block text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[#2f4883] file:text-white hover:file:bg-[#263766]"
+            />
+          </div>
+
           {/* Submit / Cancel */}
           <div className="flex space-x-4 pt-4">
             <Button
@@ -258,7 +296,10 @@ const StudentDetailsForm = () => {
               type="button"
               variant="outline"
               className="flex-1"
-              onClick={() => form.reset()}
+              onClick={() => {
+                form.reset();
+                setUploadedFile(null);
+              }}
             >
               Cancel
             </Button>
