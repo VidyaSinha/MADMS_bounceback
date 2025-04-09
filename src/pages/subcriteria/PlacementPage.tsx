@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -32,8 +33,11 @@ const PlacementPage = () => {
   const [activeForm, setActiveForm] = useState<'placement' | 'higherStudies' | 'entrepreneurship' | null>(null);
   const [formData, setFormData] = useState<FormData>({ name: '' });
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState<placementTable | null>(null);
+  
 
-  const [tablecontent, setcontent] = useState([
+  const [tablecontent, setcontent] = useState<placementTable[]>([
     {name:'Rajvi',enrollmentNo:'38',lbr:''},
     {name:'Diya',enrollmentNo:'34',lbr:''},
     {name:'Shyama',enrollmentNo:'05',lbr:''},
@@ -222,10 +226,40 @@ const PlacementPage = () => {
                     <Column body={(rowData) => (
                       <div className="flex gap-2 justify-center">
                         <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
-                        <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+                        <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => {
+    setStudentToDelete(rowData);
+    setShowDeleteDialog(true);
+  }} />
                         </div>
                     )} exportable={false} style={{ minWidth: '8rem' }}></Column>
               </DataTable>
+              <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+  <DialogContent className="sm:max-w-[400px] text-center space-y-4">
+    <DialogTitle>Are you sure you want to delete?</DialogTitle>
+    <div className="flex justify-center space-x-4 pt-4">
+      <button
+        onClick={() => {
+          if (studentToDelete) {
+            setcontent(prev => prev.filter(p => p.enrollmentNo !== studentToDelete.enrollmentNo));
+          }
+          setShowDeleteDialog(false);
+          setStudentToDelete(null);
+        }}
+        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+      >
+        Yes
+      </button>
+      <button
+        onClick={() => setShowDeleteDialog(false)}
+        className="px-4 py-2 border rounded-md hover:bg-gray-100"
+      >
+        No
+      </button>
+    </div>
+  </DialogContent>
+</Dialog>
+
+
 
         <div className="text-center mt-4">
           <p>Average Placement [ (P1 + P2 + P3)/3]: 0.96</p>

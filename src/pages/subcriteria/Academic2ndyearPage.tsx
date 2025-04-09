@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+
 
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -20,7 +22,12 @@ interface Student {
 const Academic2ndyearPage: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentName, setStudentName] = useState('');
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [cgpa, setCgpa] = useState('');
+  
+  
+const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
+
   const [hasAppeared, setHasAppeared] = useState<boolean | null>(null);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
 
@@ -105,14 +112,16 @@ const Academic2ndyearPage: React.FC = () => {
                   <Column field="appeared" header="Appeared" sortable style={{ width: '25%' }}></Column>
                    <Column body={(rowData) => (
                     <div className="flex gap-2 justify-center">
-                      <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
-                      <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+
                       </div>
                     )} exportable={false} style={{ minWidth: '8rem' }}></Column>
                     <Column body={(rowData) => (
                                 <div className="flex gap-2 justify-center">
                                   <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
-                                  <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+                                  <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => {
+    setStudentToDelete(rowData);
+    setShowDeleteDialog(true);
+  }} />
                                   </div>
                                 )} exportable={false} style={{ minWidth: '8rem' }}></Column>
               </DataTable>
@@ -138,6 +147,8 @@ const Academic2ndyearPage: React.FC = () => {
                 ×
               </button>
             </div>
+
+            
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Student Name */}
@@ -225,6 +236,33 @@ const Academic2ndyearPage: React.FC = () => {
           </div>
         </div>
       )}
+
+<Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+  <DialogContent className="sm:max-w-[400px] text-center space-y-4">
+    <DialogTitle>Are you sure you want to delete?</DialogTitle>
+    <div className="flex justify-center space-x-4 pt-4">
+      <button
+        onClick={() => {
+          if (studentToDelete) {
+            setinfo(prev => prev.filter(p => p.enrollmentNo !== studentToDelete.enrollmentNo));
+          }
+          setShowDeleteDialog(false);
+          setStudentToDelete(null);
+        }}
+        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+      >
+        Yes
+      </button>
+      <button
+        onClick={() => setShowDeleteDialog(false)}
+        className="px-4 py-2 border rounded-md hover:bg-gray-100"
+      >
+        No
+      </button>
+    </div>
+  </DialogContent>
+</Dialog>
+
     </div>
   );
 };

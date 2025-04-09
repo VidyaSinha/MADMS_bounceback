@@ -31,6 +31,9 @@ const MagazinePage = () => {
   const navigate = useNavigate();
   const [showMagazineForm, setShowMagazineForm] = useState(false);
   const [year, setYear] = useState('');
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+const [studentToDelete, setStudentToDelete] = useState<magazineTable | null>(null);
+
 
    const [magazine, setmagazine] = useState([
       {MagazineFront:'',yearPublished:'2021'},
@@ -119,10 +122,40 @@ const MagazinePage = () => {
               <Column body={(rowData) => (
               <div className="flex gap-2 justify-center">
              <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
-             <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+             <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => {
+    setStudentToDelete(rowData);
+    setShowDeleteDialog(true);
+  }} />
              </div>
              )} exportable={false} style={{ minWidth: '8rem' }}></Column>
             </DataTable>
+
+            <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+  <DialogContent className="sm:max-w-[400px] text-center space-y-4">
+    <DialogTitle>Are you sure you want to delete?</DialogTitle>
+    <div className="flex justify-center space-x-4 pt-4">
+      <button
+        onClick={() => {
+          if (studentToDelete) {
+            setmagazine(prev => prev.filter(p => p.MagazineFront !== studentToDelete.MagazineFront));
+          }
+          setShowDeleteDialog(false);
+          setStudentToDelete(null);
+        }}
+        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+      >
+        Yes
+      </button>
+      <button
+        onClick={() => setShowDeleteDialog(false)}
+        className="px-4 py-2 border rounded-md hover:bg-gray-100"
+      >
+        No
+      </button>
+    </div>
+  </DialogContent>
+</Dialog>
+
 
             <div className="overflow-x-auto">
               {/* Table will be added here for displaying magazine entries */}
