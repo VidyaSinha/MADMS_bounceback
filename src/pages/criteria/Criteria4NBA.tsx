@@ -13,7 +13,7 @@ const Criteria4NBA = () => {
   const navigate = useNavigate();
   
   const handleBack = () => {
-    navigate('/dashboard/nba/criteria4');
+    navigate('/dashboard/nba');
   };
   
   return (
@@ -57,7 +57,7 @@ const Criteria4NBA = () => {
           </div>
           
 
-          <div className="space-y-4">
+          <div className="space-y-4 ">
             <CriteriaCard 
               id="4.1" 
               title="Enrollment Ratio" 
@@ -68,10 +68,10 @@ const Criteria4NBA = () => {
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-teal-700">4.2 - Success Rate in Stipulated Period of the Program</h3>
+                  <h3 className="text-base font-medium text-sky-700">4.2 - Success Rate in Stipulated Period of the Program</h3>
                   <div className="flex items-center gap-4">
                     <ActionButtons navigateTo="/successrate" />
-                    <span className="text-teal-600 font-medium">20 marks</span>
+                    <span className="text-sky-600 font-medium">20 marks</span>
                   </div>
                 </div>
               </div>
@@ -107,10 +107,10 @@ const Criteria4NBA = () => {
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-teal-700">4.5 - Professional Activities</h3>
+                  <h3 className="text-base font-medium text-sky-700">4.5 - Professional Activities</h3>
                   <div className="flex items-center gap-4">
                     
-                    <span className="text-teal-600 font-medium">20 marks</span>
+                    <span className="text-sky-600 font-medium">20 marks</span>
                   </div>
                 </div>
               </div>
@@ -158,7 +158,7 @@ const ActionButtons = ({ navigateTo }: { navigateTo?: string }) => {
         <Eye className="h-4 w-4 mr-1" />
         See Details
       </Button>
-      <Button variant="outline" size="sm" className="text-emerald-600 hover:bg-emerald-50 border-emerald-600">
+      <Button variant="outline" size="sm" className="text-sky-600 hover:bg-sky-50 border-sky-600">
         <Edit2 className="h-4 w-4 mr-1" /> Edit Marks
       </Button>
     </div>

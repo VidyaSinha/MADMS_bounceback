@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 
-const StudentDetailsForm = () => {
+const StudentBulkUpload = () => {
   const [studentsData, setStudentsData] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
 
@@ -35,7 +35,7 @@ const StudentDetailsForm = () => {
         batch_period: item.batch_period || '',
         gr_no: item.gr_no || '',
       }));
-          
+      
       setStudentsData(formattedData);
     };
 
@@ -92,4 +92,4 @@ const StudentDetailsForm = () => {
   );
 };
 
-export default StudentDetailsForm;
+export default StudentBulkUpload;
