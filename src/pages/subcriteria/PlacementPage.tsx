@@ -1,8 +1,14 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 interface FormData {
   name: string;
@@ -15,11 +21,23 @@ interface FormData {
   gstDocument?: File;
 }
 
+interface placementTable {
+  
+  name: string;
+  enrollmentNo: string;
+  lbr: string;
+}
 const PlacementPage = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [activeForm, setActiveForm] = useState<'placement' | 'higherStudies' | 'entrepreneurship' | null>(null);
   const [formData, setFormData] = useState<FormData>({ name: '' });
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+
+  const [tablecontent, setcontent] = useState([
+    {name:'Rajvi',enrollmentNo:'38',lbr:''},
+    {name:'Diya',enrollmentNo:'34',lbr:''},
+    {name:'Shyama',enrollmentNo:'05',lbr:''},
+  ])
 
   const handleNameSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -192,6 +210,23 @@ const PlacementPage = () => {
             </tr>
           </tbody>
         </table>
+
+        <DataTable value={tablecontent} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
+                  <Column field="name" header="name" sortable style={{ width: '25%' }}></Column>
+                  <Column field="enrollmentNo" header="enrollmentNo" sortable style={{ width: '25%' }}></Column>
+              
+                    <Column field="lbr" header="Result/Bill/JoiningLetter" body={(rowData) => (
+                                  <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                                )} style={{ minWidth: '10rem' }}></Column>
+                    
+                    <Column body={(rowData) => (
+                      <div className="flex gap-2 justify-center">
+                        <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+                        <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+                        </div>
+                    )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+              </DataTable>
+
         <div className="text-center mt-4">
           <p>Average Placement [ (P1 + P2 + P3)/3]: 0.96</p>
           <p>Assessment [ 30 * Average Placement]:</p>

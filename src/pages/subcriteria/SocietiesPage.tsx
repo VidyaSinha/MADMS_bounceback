@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
-import { Button } from '@/components/ui/button';
+import { Button } from 'primereact/button';
+import { Button as ShadcnButton} from "@/components/ui/button";
 import { Card } from '@/components/ui/card';
 import {
   Dialog,
@@ -15,12 +16,31 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
+interface societyTable {
+  societyName: string;
+  logo: string;
+  eventName: string;
+  Date: string;
+  reportPDF: string;
+}
 
 const SocietiesPage = () => {
   const navigate = useNavigate();
   const [showSocietyForm, setShowSocietyForm] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [date, setDate] = useState<Date>();
+
+  const [table, settable] = useState([
+    {societyName:'IEEE',logo:'',eventName:'abcdefg',Date:'12/3/46',reportPDF:''},
+    {societyName:'CCDC',logo:'',eventName:'mnbvcxz',Date:'15/3/24',reportPDF:''},
+  ])
 
   const handleBack = () => {
     navigate('/dashboard/nba/criteria4');
@@ -31,7 +51,7 @@ const SocietiesPage = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col space-y-6">
           <div className="flex justify-between items-center">
-            <Button
+            <ShadcnButton
               variant="ghost"
               size="sm"
               onClick={handleBack}
@@ -39,7 +59,7 @@ const SocietiesPage = () => {
             >
               <ChevronLeft className="mr-1 h-4 w-4" />
               Back to Criteria 4
-            </Button>
+            </ShadcnButton>
           </div>
 
           <div>
@@ -55,7 +75,7 @@ const SocietiesPage = () => {
               <h2 className="text-xl font-semibold text-gray-800">Society Details</h2>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="bg-[#2F4883] hover:bg-slate-900">
+                  <Button className="bg-[#2F4883] hoverbg-slate-900 hover:text-white">
                     + Add Details
                   </Button>
                 </DialogTrigger>
@@ -124,13 +144,30 @@ const SocietiesPage = () => {
               </Dialog>
             </div>
 
-            <div className="overflow-x-auto">
+  <DataTable value={table} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
+ <Column field="societyName" header="societyName" sortable style={{ width: '25%' }}></Column>
+ <Column field="logo" header="logo" sortable style={{ width: '25%' }}></Column>
+ <Column field="eventName" header="eventName" sortable style={{ width: '25%' }}></Column>    
+ <Column field="Date" header="Date" sortable style={{ width: '25%' }}></Column>
+ <Column field="reportPDF" header="reportPDF" body={(rowData) => (
+  <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+  )} style={{ minWidth: '10rem' }}></Column>
+                                
+  <Column body={(rowData) => (
+  <div className="flex gap-2 justify-center">
+ <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+ <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+ </div>
+ )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+</DataTable>
+
+<div className="overflow-x-auto">
             
-            </div>
-          </Card>
-        </div>
-      </div>
-    </MainLayout>
+ </div>
+  </Card>
+  </div>
+  </div>
+  </MainLayout>
   );
 };
 
