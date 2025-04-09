@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
-import { Button } from '@/components/ui/button';
+import { Button as ShadcnButton} from '@/components/ui/button';
+import { Button } from 'primereact/button';
 import { Card } from '@/components/ui/card';
 import {
   Dialog,
@@ -13,11 +14,28 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
+interface magazineTable {
+  MagazineFront: string;
+  yearPublished: string;
+ 
+}
 
 const MagazinePage = () => {
   const navigate = useNavigate();
   const [showMagazineForm, setShowMagazineForm] = useState(false);
   const [year, setYear] = useState('');
+
+   const [magazine, setmagazine] = useState([
+      {MagazineFront:'',yearPublished:'2021'},
+      {MagazineFront:'',yearPublished:'2042'},
+    ])
 
   const handleBack = () => {
     navigate('/dashboard/nba/criteria4');
@@ -28,7 +46,7 @@ const MagazinePage = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col space-y-6">
           <div className="flex justify-between items-center">
-            <Button
+            <ShadcnButton
               variant="ghost"
               size="sm"
               onClick={handleBack}
@@ -36,7 +54,7 @@ const MagazinePage = () => {
             >
               <ChevronLeft className="mr-1 h-4 w-4" />
               Back to Criteria 4
-            </Button>
+            </ShadcnButton>
           </div>
 
           <div>
@@ -90,6 +108,21 @@ const MagazinePage = () => {
                 </DialogContent>
               </Dialog>
             </div>
+
+            <DataTable value={magazine} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
+             <Column field="MagazineFront" header="MagazineFront" body={(rowData) => (
+              <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+              )} style={{ minWidth: '10rem' }}></Column>
+              <Column field="yearPublished" header="yearPublished" sortable style={{ width: '25%' }}></Column>
+   
+                                            
+              <Column body={(rowData) => (
+              <div className="flex gap-2 justify-center">
+             <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+             <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+             </div>
+             )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+            </DataTable>
 
             <div className="overflow-x-auto">
               {/* Table will be added here for displaying magazine entries */}

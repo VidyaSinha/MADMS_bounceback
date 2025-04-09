@@ -117,7 +117,7 @@ const StudentDetailsForm = () => {
       } else {
         throw new Error('Form submission failed');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Submission error:', error);
       toast({
         variant: 'destructive',
