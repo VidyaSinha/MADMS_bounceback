@@ -7,11 +7,21 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 
+
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
+interface Student {
+    name: string;
+    enrollmentNumber: string;
+    marksheet10: string | null;
+    marksheet12: string | null;
+    registrationForm: string | null;
+}
+
 interface Students {
+  
   name: string;
   enrollmentNo: string;
   academicyear: string;
@@ -28,7 +38,7 @@ function EnrollmentPage(): JSX.Element {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Record<string, File | null>>({
     registrationForm: null,
     marksheet10th: null,
     marksheet12th: null,
@@ -46,22 +56,11 @@ function EnrollmentPage(): JSX.Element {
 
   const [suggestions, setSuggestions] = useState<{ name: string; enrollment_number: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    const file = event.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      setFormData(prev => ({ ...prev, [field]: file }));
-    } else {
-      alert('Please upload PDF files only');
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', { studentName, ...formData });
-    setIsDialogOpen(false);
-    setShowDocumentFields(false);
+  const resetForm = () => {
     setStudentName('');
+    setShowDocumentFields(false);
     setFormData({
       registrationForm: null,
       marksheet10th: null,
@@ -86,10 +85,11 @@ function EnrollmentPage(): JSX.Element {
   useEffect(() => {
     const fetchSuggestions = async () => {
       const trimmed = studentName.trim();
-      if (trimmed === '') {
+      if (!trimmed) {
         setSuggestions([]);
         return;
       }
+
 
       try {
         const response = await fetch(`https://madms-bounceback-backend.onrender.com/student/search?q=${encodeURIComponent(trimmed)}`, {
@@ -105,11 +105,12 @@ function EnrollmentPage(): JSX.Element {
         } else {
           setSuggestions([]);
         }
-      } catch (error) {
-        console.error('Error fetching suggestions:', error);
+      } catch (err) {
+        console.error('Suggestion fetch error:', err);
         setSuggestions([]);
       }
     };
+
 
     const timeoutId = setTimeout(fetchSuggestions, 300);
     return () => clearTimeout(timeoutId);
@@ -120,7 +121,7 @@ function EnrollmentPage(): JSX.Element {
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setIsDialogOpen(true)}
-          className="bg-[#2f4883] text-white px-4 py-2 rounded-md hover:bg-[#1a2a4f] transition-colors"
+          className="bg-[#2f4883] text-white px-4 py-2 rounded-md hover:bg-[#1a2a4f]"
         >
           Add Details
         </button>
@@ -156,11 +157,12 @@ function EnrollmentPage(): JSX.Element {
 
       {/* Add Student Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Add Student Details</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
+
+          <form  className="space-y-4" autoComplete="off">
             <div className="space-y-2 relative">
               <Label htmlFor="name">Student Name</Label>
               <Input
@@ -171,7 +173,7 @@ function EnrollmentPage(): JSX.Element {
                   setStudentName(e.target.value);
                   if (e.target.value) setShowDocumentFields(true);
                 }}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 onFocus={() => studentName && setShowSuggestions(true)}
                 placeholder="Enter student name"
                 required
@@ -210,7 +212,6 @@ function EnrollmentPage(): JSX.Element {
                       id={field}
                       type="file"
                       accept=".pdf"
-                      onChange={(e) => handleFileChange(e, field)}
                       required
                     />
                   </div>
@@ -223,8 +224,7 @@ function EnrollmentPage(): JSX.Element {
                 type="button"
                 onClick={() => {
                   setIsDialogOpen(false);
-                  setShowDocumentFields(false);
-                  setStudentName('');
+                  resetForm();
                 }}
                 className="px-4 py-2 border rounded-md hover:bg-gray-100"
               >
@@ -232,9 +232,10 @@ function EnrollmentPage(): JSX.Element {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-[#2f4883] text-white rounded-md hover:bg-[#1a2a4f]"
+                disabled={loading}
+                className="px-4 py-2 bg-[#2f4883] text-white rounded-md hover:bg-[#1a2a4f] disabled:opacity-60"
               >
-                Submit
+                {loading ? 'Submitting...' : 'Submit'}
               </button>
             </div>
           </form>
@@ -295,3 +296,4 @@ function EnrollmentPage(): JSX.Element {
 }
 
 export default EnrollmentPage;
+
