@@ -20,13 +20,12 @@ const StudentBulkUpload = () => {
 
       const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet);
 
-      // Map fields according to your backend model
       const formattedData = jsonData.map(item => ({
         name: item.name || '',
         enrollment_number: item.enrollment_number || '',
-        pcm: item.pcm || '',
-        tenth: item['10th'] || '',
-        twelfth: item['12th'] || '',
+        pcm: Number(String(item.pcm).replace(/[^0-9.]/g, '')) || 0,
+        tenth: Number(String(item['10th']).replace(/[^0-9.]/g, '')) || 0,
+        twelfth: Number(String(item['12th']).replace(/[^0-9.]/g, '')) || 0,
         acpc: item.acpc || '',
         student_type: item.student_type || 'Degree',
         admission_quota: item.admission_quota || '',
@@ -35,7 +34,7 @@ const StudentBulkUpload = () => {
         batch_period: item.batch_period || '',
         gr_no: item.gr_no || '',
       }));
-      
+            
       setStudentsData(formattedData);
     };
 
