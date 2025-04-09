@@ -64,7 +64,7 @@ const StudentBulkUpload = () => {
 
   return (
     <div className="p-6 max-w-xl mx-auto bg-white shadow rounded">
-      <h2 className="text-2xl font-bold mb-4">Bulk Student Upload</h2>
+      <h2 className="text-2xl font-bold mb-4">All Student Details Upload</h2>
 
       <input
         type="file"
