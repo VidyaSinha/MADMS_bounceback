@@ -50,8 +50,9 @@ const StudentBulkUpload = () => {
 
     setUploading(true);
     try {
-      const response = await axios.post('https://madms-bounceback-backend.onrender.com/students/bulk', studentsData, {
+      const response = await axios.post('https://madms-bounceback-backend.onrender.com/submit-form', studentsData, {
         withCredentials: true, // important for session handling
+        headers: { 'Content-Type': 'application/json' } // important for session handling
       });
       alert(response.data.message);
     } catch (error: any) {
