@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 
+
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 interface Student {
     name: string;
@@ -11,6 +18,17 @@ interface Student {
     marksheet12: string | null;
     registrationForm: string | null;
 }
+
+interface Students {
+  
+  name: string;
+  enrollmentNo: string;
+  academicyear: string;
+  registrationform: string;
+  SSCform: string;
+  HSCform: string;
+}
+
 
 function EnrollmentPage(): JSX.Element {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -22,6 +40,14 @@ function EnrollmentPage(): JSX.Element {
     marksheet12th: null,
     gujcetResult: null
   });
+  const [products, setProducts] = useState([
+    {name: 'Rajvi', enrollmentNo: '1', academicyear: '2023', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Vidya', enrollmentNo: '2', academicyear: '2021', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Dhruvi', enrollmentNo: '3', academicyear: '2029', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Umang', enrollmentNo: '4', academicyear: '2020', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Diya', enrollmentNo: '5', academicyear: '2014', registrationform: '',SSCform: '', HSCform: '' },
+    {name: 'Shyama', enrollmentNo: '6', academicyear: '2008', registrationform: '',SSCform: '', HSCform: '' },
+  ]);
 
   const [suggestions, setSuggestions] = useState<{ name: string; enrollment_number: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -125,6 +151,28 @@ function EnrollmentPage(): JSX.Element {
               </tr>
             </tbody>
           </table>
+
+          <DataTable value={products} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
+          <Column field="enrollmentNo" header="enrollmentNo" sortable style={{ width: '25%' }}></Column>
+          <Column field="name" header="name" sortable style={{ width: '25%' }}></Column>
+          <Column field="academicyear" header="academicyear" sortable style={{ width: '25%' }}></Column>
+           <Column field="registrationform" header="registrationform" body={(rowData) => (
+                        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                      )} style={{ minWidth: '10rem' }}></Column>
+           <Column field="SSCform" header="SSCform" body={(rowData) => (
+                        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                      )} style={{ minWidth: '10rem' }}></Column>
+           <Column field="HSCform" header="HSCform" body={(rowData) => (
+                        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                      )} style={{ minWidth: '10rem' }}></Column>
+           <Column body={(rowData) => (
+            <div className="flex gap-2 justify-center">
+              <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+              <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => (rowData)} />
+              </div>
+            )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+      </DataTable>
+
         </div>
       </div>
 

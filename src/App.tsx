@@ -54,10 +54,10 @@ const App = () => (
           
           {/* Accreditation Body Routes */}
           <Route path="/dashboard/nba" element={<NBA />} />
-          <Route path="/dashboard/naac" element={<NAAC />} />
+          {/* <Route path="/dashboard/naac" element={<NAAC />} />
           <Route path="/dashboard/nirf" element={<NIRF />} />
           <Route path="/dashboard/coe" element={<COE />} />
-          <Route path="/dashboard/qos" element={<QoS />} />
+          <Route path="/dashboard/qos" element={<QoS />} /> */}
           
           {/* Criteria Routes */}
           <Route path="/dashboard/:body/:criteriaId" element={<Criteria />} />
