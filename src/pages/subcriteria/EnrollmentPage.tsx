@@ -51,6 +51,9 @@ function EnrollmentPage(): JSX.Element {
     e.preventDefault();
   
     if (!studentName || Object.values(formData).some((file) => file === null)) {
+      console.log('Student name:', studentName);
+console.log('Form data:', formData);
+
       alert('Please fill in all fields.');
       return;
     }
