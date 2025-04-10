@@ -9,6 +9,7 @@ interface Student {
   marksheet10: string | null;
   marksheet12: string | null;
   registrationForm: string | null;
+  Gujcetmarksheet: string | null;
 }
 
 function EnrollmentPage(): JSX.Element {
@@ -16,10 +17,10 @@ function EnrollmentPage(): JSX.Element {
   const [studentName, setStudentName] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
   const [formData, setFormData] = useState<Record<string, File | null>>({
-    registrationForm: null,
-    marksheet10th: null,
-    marksheet12th: null,
-    gujcetResult: null
+    registration_form: null,
+    tenth_marksheet: null,
+    twelfth_marksheet: null,
+    gujcet_marksheet: null
   });
 
   const [suggestions, setSuggestions] = useState<{ name: string; enrollment_number: string }[]>([]);
@@ -30,10 +31,10 @@ function EnrollmentPage(): JSX.Element {
     setStudentName('');
     setShowDocumentFields(false);
     setFormData({
-      registrationForm: null,
-      marksheet10th: null,
-      marksheet12th: null,
-      gujcetResult: null
+      registration_form: null,
+      tenth_marksheet: null,
+      twelfth_marksheet: null,
+      gujcet_marksheet: null
     });
   };
 
