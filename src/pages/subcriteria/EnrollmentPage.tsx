@@ -48,29 +48,41 @@ function EnrollmentPage(): JSX.Element {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!studentName || Object.values(formData).some((file) => file === null)) {
       alert('Please fill in all fields.');
       return;
     }
-
+  
     try {
       setLoading(true);
+  
+      // ✨ Extract name and enrollment from the string
+      const nameMatch = studentName.match(/^(.+)\s+\((\d+)\)$/);
+      if (!nameMatch) {
+        alert('Please select a student from the suggestions.');
+        return;
+      }
+  
+      const nameOnly = nameMatch[1]; // "Dhruvi Patel"
+      const enrollmentNumber = nameMatch[2]; // "92200133029"
+  
       const data = new FormData();
-      data.append('studentName', studentName);
-
+      data.append('name', nameOnly); // updated
+      data.append('enrollmentNumber', enrollmentNumber); // NEW field
+  
       Object.entries(formData).forEach(([key, file]) => {
         if (file) data.append(key, file);
       });
-
+  
       const response = await fetch('https://madms-bounceback-backend.onrender.com/upload-documents', {
         method: 'POST',
         body: data,
         credentials: 'include'
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         alert('Documents uploaded successfully!');
         setIsDialogOpen(false);
@@ -85,8 +97,7 @@ function EnrollmentPage(): JSX.Element {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
+    useEffect(() => {
     const fetchSuggestions = async () => {
       const trimmed = studentName.trim();
       if (!trimmed) {
