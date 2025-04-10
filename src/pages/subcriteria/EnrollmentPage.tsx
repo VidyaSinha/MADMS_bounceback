@@ -225,7 +225,7 @@ console.log('Form data:', formData);
 
             {showDocumentFields && (
               <>
-                {['registrationForm', 'marksheet10th', 'marksheet12th', 'gujcetResult'].map((field) => (
+{['registration_form', 'tenth_marksheet', 'twelfth_marksheet', 'gujcet_marksheet'].map((field) => (
                   <div key={field} className="space-y-2">
                     <Label htmlFor={field}>
                       {field
