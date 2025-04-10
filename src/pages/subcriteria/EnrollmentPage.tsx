@@ -64,12 +64,12 @@ function EnrollmentPage(): JSX.Element {
         return;
       }
   
-      const nameOnly = nameMatch[1]; // "Dhruvi Patel"
-      const enrollmentNumber = nameMatch[2]; // "92200133029"
+      const name = nameMatch[1]; // "Dhruvi Patel"
+      const enrollment_umber = nameMatch[2]; // "92200133029"
   
       const data = new FormData();
-      data.append('name', nameOnly); // updated
-      data.append('enrollmentNumber', enrollmentNumber); // NEW field
+      data.append('name', name); // updated
+      data.append('enrollmentNumber', enrollment_umber); // NEW field
   
       Object.entries(formData).forEach(([key, file]) => {
         if (file) data.append(key, file);
