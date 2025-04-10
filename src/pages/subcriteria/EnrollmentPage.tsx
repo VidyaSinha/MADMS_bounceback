@@ -5,11 +5,11 @@ import { Label } from '@/components/ui/label';
 
 interface Student {
   name: string;
-  enrollmentNumber: string;
-  marksheet10: string | null;
-  marksheet12: string | null;
-  registrationForm: string | null;
-  Gujcetmarksheet: string | null;
+  enrollment_number: string;
+  tenth_marksheet: string | null;
+  twelfth_marksheet: string | null;
+  registration_form: string | null;
+  gujcet_marksheet: string | null;
 }
 
 function EnrollmentPage(): JSX.Element {
@@ -225,7 +225,7 @@ console.log('Form data:', formData);
 
             {showDocumentFields && (
               <>
-{['registration_form', 'tenth_marksheet', 'twelfth_marksheet', 'gujcet_marksheet'].map((field) => (
+                  {['registration_form', 'tenth_marksheet', 'twelfth_marksheet', 'gujcet_marksheet'].map((field) => (
                   <div key={field} className="space-y-2">
                     <Label htmlFor={field}>
                       {field
