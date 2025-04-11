@@ -6,10 +6,11 @@ import { useApi } from '@/contexts/ApiContext';
 
 interface Student {
   name: string;
-  enrollmentNumber: string;
-  marksheet10: string | null;
-  marksheet12: string | null;
-  registrationForm: string | null;
+  enrollment_number: string;
+  tenth_marksheet: string | null;
+  twelfth_marksheet: string | null;
+  registration_form: string | null;
+  gujcet_marksheet: string | null;
 }
 
 function EnrollmentPage(): JSX.Element {
@@ -18,10 +19,10 @@ function EnrollmentPage(): JSX.Element {
   const [studentName, setStudentName] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
   const [formData, setFormData] = useState<Record<string, File | null>>({
-    registrationForm: null,
-    marksheet10th: null,
-    marksheet12th: null,
-    gujcetResult: null
+    registration_form: null,
+    tenth_marksheet: null,
+    twelfth_marksheet: null,
+    gujcet_marksheet: null
   });
 
   const [suggestions, setSuggestions] = useState<{ name: string; enrollment_number: string }[]>([]);
@@ -32,10 +33,10 @@ function EnrollmentPage(): JSX.Element {
     setStudentName('');
     setShowDocumentFields(false);
     setFormData({
-      registrationForm: null,
-      marksheet10th: null,
-      marksheet12th: null,
-      gujcetResult: null
+      registration_form: null,
+      tenth_marksheet: null,
+      twelfth_marksheet: null,
+      gujcet_marksheet: null
     });
   };
 
@@ -50,17 +51,32 @@ function EnrollmentPage(): JSX.Element {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!studentName || Object.values(formData).some((file) => file === null)) {
+      console.log('Student name:', studentName);
+console.log('Form data:', formData);
+
       alert('Please fill in all fields.');
       return;
     }
-
+  
     try {
       setLoading(true);
+  
+      // ✨ Extract name and enrollment from the string
+      const nameMatch = studentName.match(/^(.+)\s+\((\d+)\)$/);
+      if (!nameMatch) {
+        alert('Please select a student from the suggestions.');
+        return;
+      }
+  
+      const nameOnly = nameMatch[1]; // "Dhruvi Patel"
+      const enrollmentNumber = nameMatch[2]; // "92200133029"
+  
       const data = new FormData();
-      data.append('studentName', studentName);
-
+      data.append('name', nameOnly); // updated
+      data.append('enrollment_number', enrollmentNumber); // NEW field
+  
       Object.entries(formData).forEach(([key, file]) => {
         if (file) data.append(key, file);
       });
@@ -70,9 +86,9 @@ function EnrollmentPage(): JSX.Element {
         body: data,
         credentials: 'include'
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         alert('Documents uploaded successfully!');
         setIsDialogOpen(false);
@@ -87,8 +103,7 @@ function EnrollmentPage(): JSX.Element {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
+    useEffect(() => {
     const fetchSuggestions = async () => {
       const trimmed = studentName.trim();
       if (!trimmed) {
@@ -212,7 +227,7 @@ function EnrollmentPage(): JSX.Element {
 
             {showDocumentFields && (
               <>
-                {['registrationForm', 'marksheet10th', 'marksheet12th', 'gujcetResult'].map((field) => (
+                  {['registration_form', 'tenth_marksheet', 'twelfth_marksheet', 'gujcet_marksheet'].map((field) => (
                   <div key={field} className="space-y-2">
                     <Label htmlFor={field}>
                       {field
