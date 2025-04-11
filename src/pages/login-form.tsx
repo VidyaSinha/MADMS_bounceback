@@ -13,11 +13,15 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import axios from "axios";
 import { login } from "../api/auth";
+import { useApi } from "@/contexts/ApiContext";
+
+
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const { apiBaseUrl } = useApi();
   const location = useLocation();
   const navigate = useNavigate();
   const role = new URLSearchParams(location.search).get("role") || "User";
@@ -32,11 +36,11 @@ export function LoginForm({
 
     try {
       const response = await axios.post(
-        "https://madms-bounceback-backend.onrender.com/auth/login",
+        `${apiBaseUrl}/auth/login`,
         { email, password },
-        { withCredentials: true } // ✅ this goes here
+        { withCredentials: true }
       );
-      
+
       if (response.status === 200) {
         alert("OTP sent to your email!");
         navigate(`/otp-form?email=${encodeURIComponent(email)}`);

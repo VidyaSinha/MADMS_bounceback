@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useApi } from '@/contexts/ApiContext';
 
 interface Student {
   name: string;
@@ -12,6 +13,7 @@ interface Student {
 }
 
 function EnrollmentPage(): JSX.Element {
+  const { apiBaseUrl } = useApi();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
@@ -63,7 +65,7 @@ function EnrollmentPage(): JSX.Element {
         if (file) data.append(key, file);
       });
 
-      const response = await fetch('https://madms-bounceback-backend.onrender.com/upload-documents', {
+      const response = await fetch(`${apiBaseUrl}/upload-documents`, {
         method: 'POST',
         body: data,
         credentials: 'include'
@@ -96,7 +98,7 @@ function EnrollmentPage(): JSX.Element {
 
       try {
         const res = await fetch(
-          `https://madms-bounceback-backend.onrender.com/student/search?q=${encodeURIComponent(trimmed)}`,
+          `${apiBaseUrl}/student/search?q=${encodeURIComponent(trimmed)}`,
           { credentials: 'include' }
         );
         const data = await res.json();

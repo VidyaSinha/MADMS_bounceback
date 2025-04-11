@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
+import { useApi } from '@/contexts/ApiContext';
 
 const StudentBulkUpload = () => {
+  const { apiBaseUrl } = useApi();
   const [studentsData, setStudentsData] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
 
@@ -34,7 +36,7 @@ const StudentBulkUpload = () => {
         batch_period: item.batch_period || '',
         gr_no: item.gr_no || '',
       }));
-            
+
       setStudentsData(formattedData);
     };
 
@@ -49,7 +51,7 @@ const StudentBulkUpload = () => {
 
     setUploading(true);
     try {
-      const response = await axios.post('https://madms-bounceback-backend.onrender.com/submit-form', studentsData, {
+      const response = await axios.post(`${apiBaseUrl}/submit-form`, studentsData, {
         withCredentials: true, // important for session handling
         headers: { 'Content-Type': 'application/json' } // important for session handling
       });
@@ -64,7 +66,7 @@ const StudentBulkUpload = () => {
 
   return (
     <div className="p-6 max-w-xl mx-auto bg-white shadow rounded">
-      <h2 className="text-2xl font-bold mb-4">Bulk Student Upload</h2>
+      <h2 className="text-2xl font-bold mb-4">All Student Details Upload</h2>
 
       <input
         type="file"

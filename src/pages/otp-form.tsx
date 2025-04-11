@@ -3,8 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import axios from "axios";
+import { useApi } from "@/contexts/ApiContext";
+
+
 
 export function OtpForm() {
+  const { apiBaseUrl } = useApi();
   const navigate = useNavigate();
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email") || "";
@@ -14,14 +18,12 @@ export function OtpForm() {
   const handleOtpSubmit = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("https://madms-bounceback-backend.onrender.com/auth/verify-otp", {
-        email,
-        otp
-      }, {
-        withCredentials: true  // ✅ Must be set!
-      });
-      
-      
+      const response = await axios.post(
+        `${apiBaseUrl}/auth/verify-otp`,
+        { email, otp },
+        { withCredentials: true }
+      );
+
       if (response.data.success) {
         localStorage.setItem("session", JSON.stringify({ email, token: response.data.token }));
         alert("OTP verified successfully!");
