@@ -17,6 +17,7 @@ function EnrollmentPage(): JSX.Element {
   const { apiBaseUrl } = useApi();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentName, setStudentName] = useState('');
+  const [enrollmentNumber, setEnrollmentNumber] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
   const [formData, setFormData] = useState<Record<string, File | null>>({
     registration_form: null,
@@ -210,6 +211,7 @@ console.log('Form data:', formData);
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setStudentName(`${s.name} (${s.enrollment_number})`);
+                          setEnrollmentNumber(s.enrollment_number);
                           setShowSuggestions(false);
                           setShowDocumentFields(true);
                         }}
