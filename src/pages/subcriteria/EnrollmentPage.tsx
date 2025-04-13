@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useApi } from '@/contexts/ApiContext';
 
 interface Student {
   name: string;
@@ -13,8 +14,10 @@ interface Student {
 }
 
 function EnrollmentPage(): JSX.Element {
+  const { apiBaseUrl } = useApi();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentName, setStudentName] = useState('');
+  const [enrollmentNumber, setEnrollmentNumber] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
   const [formData, setFormData] = useState<Record<string, File | null>>({
     registration_form: null,
@@ -78,8 +81,8 @@ console.log('Form data:', formData);
       Object.entries(formData).forEach(([key, file]) => {
         if (file) data.append(key, file);
       });
-  
-      const response = await fetch('https://madms-bounceback-backend.onrender.com/upload-documents', {
+
+      const response = await fetch(`${apiBaseUrl}/upload-documents`, {
         method: 'POST',
         body: data,
         credentials: 'include'
@@ -111,7 +114,7 @@ console.log('Form data:', formData);
 
       try {
         const res = await fetch(
-          `https://madms-bounceback-backend.onrender.com/student/search?q=${encodeURIComponent(trimmed)}`,
+          `${apiBaseUrl}/student/search?q=${encodeURIComponent(trimmed)}`,
           { credentials: 'include' }
         );
         const data = await res.json();
@@ -220,6 +223,7 @@ console.log('Form data:', formData);
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setStudentName(`${s.name} (${s.enrollment_number})`);
+                          setEnrollmentNumber(s.enrollment_number);
                           setShowSuggestions(false);
                           setShowDocumentFields(true);
                         }}

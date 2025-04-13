@@ -7,7 +7,9 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'https://madms-bounceback-backend.onrender.com',
+        target: mode === 'development' 
+          ? 'http://localhost:5000'
+          : 'https://madms-bounceback-backend.onrender.com',
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/api/, '')
@@ -18,7 +20,9 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'https://madms-bounceback-backend.onrender.com',
+        target: mode === 'development' 
+          ? 'http://localhost:5000'
+          : 'https://madms-bounceback-backend.onrender.com',
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/api/, '')
