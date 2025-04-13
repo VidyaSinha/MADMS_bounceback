@@ -4,19 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useApi } from '@/contexts/ApiContext';
 
-interface Student {
-  name: string;
-  enrollment_number: string;
-  tenth_marksheet: string | null;
-  twelfth_marksheet: string | null;
-  registration_form: string | null;
-  gujcet_marksheet: string | null;
-}
-
 function EnrollmentPage(): JSX.Element {
   const { apiBaseUrl } = useApi();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [studentName, setStudentName] = useState('');
   const [enrollmentNumber, setEnrollmentNumber] = useState('');
   const [showDocumentFields, setShowDocumentFields] = useState(false);
   const [formData, setFormData] = useState<Record<string, File | null>>({
@@ -26,12 +16,11 @@ function EnrollmentPage(): JSX.Element {
     gujcet_marksheet: null,
   });
 
-  const [suggestions, setSuggestions] = useState<{ name: string; enrollment_number: string }[]>([]);
+  const [suggestions, setSuggestions] = useState<{ enrollment_number: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const resetForm = () => {
-    setStudentName('');
     setEnrollmentNumber('');
     setShowDocumentFields(false);
     setFormData({
@@ -42,68 +31,69 @@ function EnrollmentPage(): JSX.Element {
     });
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    const file = event.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
+const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    // Check if the file type is PDF
+    if (file.type === 'application/pdf') {
       setFormData((prev) => ({ ...prev, [field]: file }));
     } else {
       alert('Please upload PDF files only');
+      event.target.value = ''; // Clear the file input after wrong file
     }
-  };
+  }
+};
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (!studentName || Object.values(formData).some((file) => file === null)) {
-      alert('Please fill in all fields.');
-      return;
+  // Check if enrollment number is provided and if any field has a null value or missing file
+  if (!enrollmentNumber || Object.values(formData).some((file) => !file || !file.name)) {
+    alert('Please fill in all fields and upload valid files.');
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const data = new FormData();
+    data.append('enrollment_number', enrollmentNumber);
+
+    // Append files to the FormData object
+    Object.entries(formData).forEach(([key, file]) => {
+      if (file) data.append(key, file);
+    });
+
+    // Sending the request to the server
+    const response = await fetch(`${apiBaseUrl}/enrollment/upload-documents`, {
+      method: 'POST',
+      body: data,
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+
+    // Handle the server response
+    if (response.ok) {
+      alert('Documents uploaded successfully!');
+      setIsDialogOpen(false);
+      resetForm();
+    } else {
+      console.error(result);
+      alert(`Upload failed: ${result.message || 'Server error'}`);
     }
-
-    try {
-      setLoading(true);
-      const nameMatch = studentName.match(/^(.+?)\s+\((\d+)\)$/);
-      if (!nameMatch) {
-        alert('Please select a student from suggestions or use the correct format (e.g., "Name (enrollment_number)").');
-        return;
-      }
-
-      const [, name, rawEnrollment] = nameMatch;
-      const cleanEnrollment = rawEnrollment.trim();
-
-      const data = new FormData();
-      data.append('name', name.trim());
-      data.append('enrollment_number', cleanEnrollment);
-
-      Object.entries(formData).forEach(([key, file]) => {
-        if (file) data.append(key, file);
-      });
-
-      const response = await fetch(`${apiBaseUrl}/upload-documents`, {
-        method: 'POST',
-        body: data,
-        credentials: 'include',
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert('Upload successful!');
-        setIsDialogOpen(false);
-        resetForm();
-      } else {
-        alert(`Upload failed: ${result.message || 'Server error'}`);
-      }
-    } catch (error) {
-      console.error('Submission error:', error);
-      alert('An error occurred during submission.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error) {
+    console.error(error);
+    alert('Error uploading documents.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     const fetchSuggestions = async () => {
-      const query = studentName.replace(/\(\d+\)$/, '').trim();
-      if (!query) {
+      const trimmed = enrollmentNumber.trim();
+      if (!trimmed) {
         setSuggestions([]);
         return;
       }
@@ -123,80 +113,98 @@ function EnrollmentPage(): JSX.Element {
 
     const timeoutId = setTimeout(fetchSuggestions, 300);
     return () => clearTimeout(timeoutId);
-  }, [studentName, apiBaseUrl]);
+  }, [enrollmentNumber]);
 
   return (
-    <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
-      <div className="flex justify-end mb-4">
+    <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-semibold text-[#2f4883]">Enrollment Ratio Details</h2>
         <button
           onClick={() => setIsDialogOpen(true)}
-          className="bg-[#2f4883] text-white px-4 py-2 rounded-md hover:bg-[#1a2a4f]"
+          className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
         >
           Add Details
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow p-6">
-        <h2 className="text-2xl font-semibold text-[#2f4883] mb-4">Enrollment Ratio Details</h2>
-        <table className="min-w-full text-sm text-left">
-          <thead className="text-gray-500 border-b">
-            <tr>
-              <th className="py-3 px-4 font-semibold">Academic Year</th>
-              <th className="py-3 px-4 font-semibold">N</th>
-              <th className="py-3 px-4 font-semibold">N1</th>
-              <th className="py-3 px-4 font-semibold">Enrollment Ratio</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700 divide-y divide-gray-200">
-            <tr className="hover:bg-gray-50">
-              <td className="py-3 px-4">2024-25 (CAY)</td>
-              <td className="py-3 px-4">60</td>
-              <td className="py-3 px-4">60</td>
-              <td className="py-3 px-4">100%</td>
-            </tr>
-            {/* Add more rows as needed */}
-          </tbody>
-        </table>
+      <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
+        <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
+          <div className="flex justify-between items-center mb-4">
+            <table className="min-w-full text-sm text-left">
+              <thead className="text-gray-500 border-b">
+                <tr>
+                  <th className="py-3 px-4 font-semibold">Academic Year</th>
+                  <th className="py-3 px-4 font-semibold">N</th>
+                  <th className="py-3 px-4 font-semibold">N1</th>
+                  <th className="py-3 px-4 font-semibold">Enrollment Ratio</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700 divide-y divide-gray-200">
+                <tr className="hover:bg-gray-50">
+                  <td className="py-3 px-4">2024-25 (CAY)</td>
+                  <td className="py-3 px-4">60</td>
+                  <td className="py-3 px-4">60</td>
+                  <td className="py-3 px-4">100%</td>
+                </tr>
+                <tr className="hover:bg-gray-50">
+                  <td className="py-3 px-4">2023-24 (CAYm1)</td>
+                  <td className="py-3 px-4">60</td>
+                  <td className="py-3 px-4">60</td>
+                  <td className="py-3 px-4">100%</td>
+                </tr>
+                <tr className="hover:bg-gray-50">
+                  <td className="py-3 px-4">2022-23 (CAYm2)</td>
+                  <td className="py-3 px-4">60</td>
+                  <td className="py-3 px-4">42</td>
+                  <td className="py-3 px-4">70%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Add Student Details</DialogTitle>
+            <DialogTitle>Add Enrollment Documents</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
             <div className="space-y-2 relative">
-              <Label htmlFor="name">Student Name</Label>
+              <Label htmlFor="enrollment">Enrollment Number</Label>
               <Input
-                id="name"
-                value={studentName}
+                id="enrollment"
+                value={enrollmentNumber}
                 onChange={(e) => {
-                  setStudentName(e.target.value);
-                  setShowDocumentFields(!!e.target.value);
+                  setEnrollmentNumber(e.target.value);
+                  if (e.target.value) setShowDocumentFields(true);
                 }}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                onFocus={() => setShowSuggestions(true)}
-                placeholder="Enter student name"
+                onFocus={() => enrollmentNumber && setShowSuggestions(true)}
+                placeholder="Enter enrollment number"
                 required
               />
               {showSuggestions && suggestions.length > 0 && (
                 <ul className="absolute z-50 w-full border bg-white mt-1 max-h-40 overflow-y-auto rounded-md shadow">
-                  {suggestions.map((s, i) => (
-                    <li
-                      key={i}
-                      className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        setStudentName(`${s.name} (${s.enrollment_number})`);
-                        setEnrollmentNumber(s.enrollment_number);
-                        setShowSuggestions(false);
-                      }}
-                    >
-                      <div className="font-medium">{s.name}</div>
-                      <div className="text-xs text-gray-500">{s.enrollment_number}</div>
-                    </li>
-                  ))}
+                  {suggestions.length > 0 ? (
+                    suggestions.map((s, i) => (
+                      <li
+                        key={i}
+                        className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setEnrollmentNumber(s.enrollment_number);
+                          setShowSuggestions(false);
+                          setShowDocumentFields(true);
+                        }}
+                      >
+                        {s.enrollment_number}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="px-4 py-2 text-sm text-gray-500">No matching records</li>
+                  )}
                 </ul>
               )}
             </div>

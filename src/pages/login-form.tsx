@@ -67,11 +67,12 @@ export function LoginForm({
   };
 
   return (
+    <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: "#A9B7B8" }}>
     <div className="flex justify-center items-center min-h-screen">
       <div className={cn("flex flex-col gap-6", className)} {...props}>
         <Card
           style={{
-            backgroundColor: "#2f4883",
+            backgroundColor: "#2E4054",
             color: "#ffffff",
             width: "300px",
           }}
@@ -80,7 +81,7 @@ export function LoginForm({
             <CardTitle className="text-2xl" style={{ color: "#ffffff" }}>
               Login
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="tetx-2xl" style={{color: "#ffffff"}}>
               Enter your email below to login to your account {role}
             </CardDescription>
           </CardHeader>
@@ -88,7 +89,7 @@ export function LoginForm({
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email" style={{ color: "#ffffff" }}>
+                  <Label htmlFor="email" style={{ color: "ffffff" }}>
                     Email
                   </Label>
                   <Input
@@ -98,7 +99,7 @@ export function LoginForm({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    style={{ backgroundColor: "#ffffff", color: "#2f4883" }}
+                    style={{ backgroundColor: "#ffffff", color: "#2E4054" }}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -120,13 +121,13 @@ export function LoginForm({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    style={{ backgroundColor: "#ffffff", color: "#2f4883" }}
+                    style={{ backgroundColor: "#ffffff", color: "#2E4054" }}
                   />
                 </div>
                 <Button
                   type="submit"
                   className="w-3/4 mx-auto"
-                  style={{ backgroundColor: "#ffffff", color: "#2f4883" }}
+                  style={{ backgroundColor: "#ffffff", color: "#2E4054" }}
                   disabled={loading}
                 >
                   {loading ? "Processing..." : "Login"}
@@ -137,5 +138,6 @@ export function LoginForm({
         </Card>
       </div>
     </div>
+  </div>
   );
 }
