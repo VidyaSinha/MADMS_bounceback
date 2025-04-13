@@ -13,7 +13,7 @@ function EnrollmentPage(): JSX.Element {
     registration_form: null,
     tenth_marksheet: null,
     twelfth_marksheet: null,
-    gujcet_marksheet: null,
+    gujcet_marksheet: null
   });
 
   const [suggestions, setSuggestions] = useState<{ enrollment_number: string }[]>([]);
@@ -27,7 +27,7 @@ function EnrollmentPage(): JSX.Element {
       registration_form: null,
       tenth_marksheet: null,
       twelfth_marksheet: null,
-      gujcet_marksheet: null,
+      gujcet_marksheet: null
     });
   };
 
@@ -65,16 +65,22 @@ const handleSubmit = async (e: React.FormEvent) => {
     });
 
     // Sending the request to the server
-    const response = await fetch(`${apiBaseUrl}/enrollment/upload-documents`, {
+    const response = await fetch(`${apiBaseUrl}/upload-documents`, {
       method: 'POST',
       body: data,
       credentials: 'include',
     });
 
+    // Check if the response is successful
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);  // Handle the error based on the response text
+    }
+
     const result = await response.json();
 
     // Handle the server response
-    if (response.ok) {
+    if (result.message) {
       alert('Documents uploaded successfully!');
       setIsDialogOpen(false);
       resetForm();
@@ -83,8 +89,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       alert(`Upload failed: ${result.message || 'Server error'}`);
     }
   } catch (error) {
-    console.error(error);
-    alert('Error uploading documents.');
+    console.error("Error uploading documents:", error);
+    alert('Error uploading documents: ' + error.message);
   } finally {
     setLoading(false);
   }
@@ -100,20 +106,26 @@ const handleSubmit = async (e: React.FormEvent) => {
 
       try {
         const res = await fetch(
-          `${apiBaseUrl}/student/search?q=${encodeURIComponent(query)}`,
+          `${apiBaseUrl}/student/search?q=${encodeURIComponent(trimmed)}`,
           { credentials: 'include' }
         );
         const data = await res.json();
-        setSuggestions(Array.isArray(data) ? data : []);
+
+        if (Array.isArray(data)) {
+          setSuggestions(data);
+          setShowSuggestions(true);
+        } else {
+          setSuggestions([]);
+        }
       } catch (err) {
-        console.error('Fetch error:', err);
+        console.error('Suggestion fetch error:', err);
         setSuggestions([]);
       }
     };
 
     const timeoutId = setTimeout(fetchSuggestions, 300);
     return () => clearTimeout(timeoutId);
-  }, [enrollmentNumber]);
+  }, [apiBaseUrl,enrollmentNumber]);
 
   return (
     <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
@@ -185,7 +197,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 placeholder="Enter enrollment number"
                 required
               />
-              {showSuggestions && suggestions.length > 0 && (
+              {showSuggestions && (
                 <ul className="absolute z-50 w-full border bg-white mt-1 max-h-40 overflow-y-auto rounded-md shadow">
                   {suggestions.length > 0 ? (
                     suggestions.map((s, i) => (
@@ -223,6 +235,9 @@ const handleSubmit = async (e: React.FormEvent) => {
                       onChange={(e) => handleFileChange(e, field)}
                       required
                     />
+                    {formData[field] && (
+                      <p className="text-xs text-gray-600">{formData[field]?.name}</p>
+                    )}
                   </div>
                 ))}
               </>

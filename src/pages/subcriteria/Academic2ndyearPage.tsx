@@ -1,51 +1,119 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
-
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import { useApi } from '@/contexts/ApiContext';
 
 interface Student {
-  
   name: string;
   enrollmentNo: string;
   CGPA: string;
   academicyear: string;
   appeared: string;
-  
 }
 
 const Academic2ndyearPage: React.FC = () => {
+  const { apiBaseUrl } = useApi();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [cgpa, setCgpa] = useState('');
-  
-  
-const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
-
+  const [academicYear, setAcademicYear] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
+  const [info, setInfo] = useState<Student[]>([]);
   const [hasAppeared, setHasAppeared] = useState<boolean | null>(null);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    setIsDialogOpen(false);
-    // Reset form
+  const resetForm = () => {
     setStudentName('');
     setCgpa('');
+    setAcademicYear('');
     setHasAppeared(null);
     setShowAdditionalFields(false);
   };
 
-   const [info, setinfo] = useState([
-      {name: 'Rajvi', enrollmentNo: '1321', CGPA: '9', academicyear: '2021',appeared:'Yes' },
-     
-    ]);
+  useEffect(() => {
+    const fetchAcademicData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${apiBaseUrl}/academic-performance`, {
+          credentials: 'include'
+        });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Failed to fetch data');
+        }
+        const data = await response.json();
+        setInfo(data);
+      } catch (error) {
+        console.error('Error fetching academic data:', error);
+        alert('Failed to fetch academic data: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAcademicData();
+  }, [apiBaseUrl]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!studentName || !cgpa || !academicYear || hasAppeared === null) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('name', studentName);
+      formData.append('cgpa', cgpa);
+      formData.append('appeared', hasAppeared ? '1' : '0');
+      formData.append('academic_year', academicYear);
+    
+      const response = await fetch(`${apiBaseUrl}/academic-performance`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+    
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to submit data');
+      }
+    
+      const result = await response.json();
+      alert('Academic performance data added successfully!');
+      setIsDialogOpen(false);
+      resetForm();
+      
+      // Refresh the data
+      const updatedResponse = await fetch(`${apiBaseUrl}/academic-performance`, {
+        credentials: 'include'
+      });
+      
+      if (!updatedResponse.ok) {
+        throw new Error('Failed to refresh data');
+      }
+      
+      const newData = await updatedResponse.json();
+      setInfo(newData);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error: ' + (error instanceof Error ? error.message : 'Failed to submit data'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
@@ -56,8 +124,9 @@ const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
           <button
             onClick={() => setIsDialogOpen(true)}
             className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+            disabled={loading}
           >
-            Add Details
+            {loading ? 'Adding...' : 'Add Details'}
           </button>
         </div>
 
@@ -104,15 +173,19 @@ const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
           </tbody>
         </table>
 
-        <DataTable value={info} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
+        <DataTable value={info} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo" loading={loading}>
                   <Column field="name" header="name" sortable style={{ width: '25%' }}></Column>
-                  <Column field="enrollment" header="enrollmentNo" sortable style={{ width: '25%' }}></Column>
+                  <Column field="enrollmentNo" header="enrollmentNo" sortable style={{ width: '25%' }}></Column>
                   <Column field="CGPA" header="CGPA" sortable style={{ width: '25%' }}></Column>
                   <Column field="academicyear" header="academicyear" sortable style={{ width: '25%' }}></Column>
                   <Column field="appeared" header="Appeared" sortable style={{ width: '25%' }}></Column>
                    <Column body={(rowData) => (
                     <div className="flex gap-2 justify-center">
-
+                      <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+                      <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => {
+        setStudentToDelete(rowData);
+        setShowDeleteDialog(true);
+      }} />
                       </div>
                     )} exportable={false} style={{ minWidth: '8rem' }}></Column>
                     <Column body={(rowData) => (
@@ -138,17 +211,13 @@ const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
                 onClick={() => {
                   setIsDialogOpen(false);
                   setShowAdditionalFields(false);
-                  setStudentName('');
-                  setCgpa('');
-                  setHasAppeared(null);
+                  resetForm();
                 }}
                 className="text-gray-500 hover:text-gray-700"
               >
                 ×
               </button>
             </div>
-
-            
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Student Name */}
@@ -174,6 +243,21 @@ const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
 
               {showAdditionalFields && (
                 <>
+                  {/* Academic Year Input */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Academic Year
+                    </label>
+                    <input
+                      type="text"
+                      value={academicYear}
+                      onChange={(e) => setAcademicYear(e.target.value)}
+                      placeholder="e.g. 2023-2024"
+                      className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883] focus:border-transparent"
+                      required
+                    />
+                  </div>
+
                   {/* CGPA Input */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -226,8 +310,9 @@ const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
                     <button
                       type="submit"
                       className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+                      disabled={loading}
                     >
-                      Submit
+                      {loading ? 'Submitting...' : 'Submit'}
                     </button>
                   </div>
                 </>
@@ -242,9 +327,25 @@ const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
     <DialogTitle>Are you sure you want to delete?</DialogTitle>
     <div className="flex justify-center space-x-4 pt-4">
       <button
-        onClick={() => {
+        onClick={async () => {
           if (studentToDelete) {
-            setinfo(prev => prev.filter(p => p.enrollmentNo !== studentToDelete.enrollmentNo));
+            try {
+              const response = await fetch(`${apiBaseUrl}/academic-performance/${studentToDelete.enrollmentNo}`, {
+                method: 'DELETE',
+                credentials: 'include'
+              });
+              
+              if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || 'Failed to delete record');
+              }
+              
+              setInfo(prev => prev.filter(p => p.enrollmentNo !== studentToDelete.enrollmentNo));
+              alert('Record deleted successfully');
+            } catch (error) {
+              console.error('Error deleting record:', error);
+              alert('Failed to delete record: ' + (error instanceof Error ? error.message : 'Unknown error'));
+            }
           }
           setShowDeleteDialog(false);
           setStudentToDelete(null);
