@@ -77,17 +77,19 @@ const PlacementPage = () => {
   );
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
+    <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto space-y-6">
+    <div className="flex justify-between items-center">
       {!showDetails && (
         <Button onClick={() => setShowDetails(true)} className="mb-4">
           Add Details
         </Button>
       )}
+      </div>
 
       <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
         <div className="flex justify-between items-center mb-4">
           <table className="w-full border-collapse border border-gray-300">
-            <thead>
+            <thead >
               <tr className="bg-gray-100">
                 <th className="border border-gray-300 p-2">Item</th>
                 <th className="border border-gray-300 p-2">CAYm1 (2023-24)</th>
