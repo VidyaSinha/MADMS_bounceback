@@ -34,6 +34,7 @@ import societies from "./pages/subcriteria/SocietiesPage";
 import SocietiesPage from "./pages/subcriteria/SocietiesPage";
 import MagazinePage from "./pages/subcriteria/Magazine";
 import AchievementsPage from "./pages/subcriteria/AchievementsPage";
+import StudentFacultyRatioTable from "./pages/subcriteria/StudentFacultyRatioTable";
 
 
 
@@ -81,6 +82,7 @@ const App = () => (
           <Route path="/societies" element={<SocietiesPage/>}/>
           <Route path="/magazine" element={<MagazinePage/>}/>
           <Route path="/achievements" element={<AchievementsPage/>}/>
+          <Route path="/studnetfacultyratio" element={<StudentFacultyRatioTable/>}/>
 
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />
