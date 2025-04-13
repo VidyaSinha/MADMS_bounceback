@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
-
+import StudentFacultyRatioTable from '../subcriteria/StudentFacultyRatioTable';
 
 const Criteria5NBA = () => {
   const navigate = useNavigate();
