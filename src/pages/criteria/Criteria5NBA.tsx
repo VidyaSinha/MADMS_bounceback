@@ -59,7 +59,7 @@ const Criteria5NBA = () => {
           <div className="space-y-4 ">
             <CriteriaCard 
               id="5.1" 
-              title="Enrollment Ratio" 
+              title="Faculty to Student Ratio" 
               marks={20} 
               actionNavigate="/enrollment"
             />
@@ -67,38 +67,25 @@ const Criteria5NBA = () => {
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-sky-700">5.2 - Success Rate in Stipulated Period of the Program</h3>
+                  <h3 className="text-base font-medium text-sky-700">5.2 - Faculty Cardre propotion</h3>
                   <div className="flex items-center gap-4">
                     <ActionButtons navigateTo="/successrate" />
                     <span className="text-sky-600 font-medium">20 marks</span>
                   </div>
                 </div>
               </div>
-              
-              <div className="p-4 space-y-4">
-                <SubCriteriaCard 
-                  id="4.3.1" 
-                  title="Success Rate Without Backlog" 
-                  marks={10} 
-                />
-                <SubCriteriaCard 
-                  id="4.3.2" 
-                  title="Success Rate With Backlog" 
-                  marks={10} 
-                />
-              </div>
             </Card>
             
             <CriteriaCard 
-              id="4.4" 
-              title="Academic Performance in Second Year" 
+              id="5.3" 
+              title="Faculty Qualification" 
               marks={10} 
               actionNavigate="/academic2ndyear"
             />
             
             <CriteriaCard 
-              id="4.5" 
-              title="Placement, Higher Studies and Entrepreneurship" 
+              id="5.4" 
+              title="Faculty Retention" 
               marks={30} 
               actionNavigate="/placement"
             />
@@ -106,7 +93,7 @@ const Criteria5NBA = () => {
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-sky-700">4.6 - Professional Activities</h3>
+                  <h3 className="text-base font-medium text-sky-700">5.5 - fACULTY Completence</h3>
                   <div className="flex items-center gap-4">
                     
                     <span className="text-sky-600 font-medium">20 marks</span>
