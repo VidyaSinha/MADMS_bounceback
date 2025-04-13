@@ -12,7 +12,7 @@ export const ApiProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     // Set API_BASE_URL based on the MODE value
     const baseUrl = import.meta.env.MODE === 'development' 
-      ? 'http://localhost:5000'
+      ? 'http://localhost:8080'
       : 'https://madms-bounceback-backend.onrender.com';
     
     setApiBaseUrl(baseUrl);
