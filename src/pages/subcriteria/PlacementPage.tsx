@@ -166,16 +166,16 @@ const PlacementPage = () => {
 
   return (
     <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
-      <div className="flex justify-between items-center mb-4">
+      
         {!showDetails && (
           <Button onClick={() => setShowDetails(true)} className="mb-4">
             Add Details
           </Button>
         )}
         <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
-         <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
-         <div className="flex justify-between items-center mb-4">
-          <table className="w-full border-collapse border border-gray-300">
+        
+        <div className="flex justify-between items-center mb-4">
+        <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
               <th className="border border-gray-300 p-2">Item</th>
@@ -230,15 +230,15 @@ const PlacementPage = () => {
                       <div className="flex gap-2 justify-center">
                         <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
                         <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => {
-                    setStudentToDelete(rowData);
-                    setShowDeleteDialog(true);
-                  }} />
+    setStudentToDelete(rowData);
+    setShowDeleteDialog(true);
+  }} />
                         </div>
                     )} exportable={false} style={{ minWidth: '8rem' }}></Column>
               </DataTable>
-      </div>
-    </div>
-  </div>
+
+              </div>
+              
               <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
   <DialogContent className="sm:max-w-[400px] text-center space-y-4">
     <DialogTitle>Are you sure you want to delete?</DialogTitle>
