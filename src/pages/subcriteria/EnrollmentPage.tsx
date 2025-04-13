@@ -150,11 +150,8 @@ console.log('Form data:', formData);
   
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
      <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
-      
     {/* <h2 className="text-2xl font-semibold text-[#2f4883] mb-4">Enrollment Ratio Details</h2> */}
       <div className="flex justify-between items-center mb-4">
-       
-        
         <table className="min-w-full text-sm text-left">
           <thead className="text-gray-500 border-b">
             <tr>
