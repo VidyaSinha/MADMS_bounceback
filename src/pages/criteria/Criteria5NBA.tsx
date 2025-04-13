@@ -93,7 +93,7 @@ const Criteria5NBA = () => {
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-sky-700">5.5 - fACULTY Completence</h3>
+                  <h3 className="text-base font-medium text-sky-700">5.5 - Faculty Completence</h3>
                   <div className="flex items-center gap-4">
                     
                     <span className="text-sky-600 font-medium">20 marks</span>

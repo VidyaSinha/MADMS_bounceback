@@ -171,8 +171,7 @@ const [studentToDelete, setStudentToDelete] = useState<societyTable  | null>(nul
     </div>
   </DialogContent>
 </Dialog>
-
-            </div>
+ </div>
 
   <DataTable value={table} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
  <Column field="societyName" header="societyName" sortable style={{ width: '25%' }}></Column>
