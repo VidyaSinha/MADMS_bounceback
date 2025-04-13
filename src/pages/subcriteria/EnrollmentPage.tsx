@@ -65,16 +65,22 @@ const handleSubmit = async (e: React.FormEvent) => {
     });
 
     // Sending the request to the server
-    const response = await fetch(`${apiBaseUrl}/enrollment/upload-documents`, {
+    const response = await fetch(`${apiBaseUrl}/upload-documents`, {
       method: 'POST',
       body: data,
       credentials: 'include',
     });
 
+    // Check if the response is successful
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);  // Handle the error based on the response text
+    }
+
     const result = await response.json();
 
     // Handle the server response
-    if (response.ok) {
+    if (result.message) {
       alert('Documents uploaded successfully!');
       setIsDialogOpen(false);
       resetForm();
@@ -83,8 +89,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       alert(`Upload failed: ${result.message || 'Server error'}`);
     }
   } catch (error) {
-    console.error(error);
-    alert('Error uploading documents.');
+    console.error("Error uploading documents:", error);
+    alert('Error uploading documents: ' + error.message);
   } finally {
     setLoading(false);
   }
@@ -119,7 +125,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     const timeoutId = setTimeout(fetchSuggestions, 300);
     return () => clearTimeout(timeoutId);
-  }, [enrollmentNumber]);
+  }, [apiBaseUrl,enrollmentNumber]);
 
   return (
     <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
