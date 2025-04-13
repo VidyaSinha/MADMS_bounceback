@@ -23,7 +23,7 @@ function EnrollmentPage(): JSX.Element {
     registration_form: null,
     tenth_marksheet: null,
     twelfth_marksheet: null,
-    gujcet_marksheet: null
+    gujcet_marksheet: null,
   });
 
   const [suggestions, setSuggestions] = useState<{ name: string; enrollment_number: string }[]>([]);
@@ -32,12 +32,13 @@ function EnrollmentPage(): JSX.Element {
 
   const resetForm = () => {
     setStudentName('');
+    setEnrollmentNumber('');
     setShowDocumentFields(false);
     setFormData({
       registration_form: null,
       tenth_marksheet: null,
       twelfth_marksheet: null,
-      gujcet_marksheet: null
+      gujcet_marksheet: null,
     });
   };
 
@@ -52,32 +53,27 @@ function EnrollmentPage(): JSX.Element {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    if (!studentName || Object.values(formData).some((file) => file === null)) {
-      console.log('Student name:', studentName);
-console.log('Form data:', formData);
 
+    if (!studentName || Object.values(formData).some((file) => file === null)) {
       alert('Please fill in all fields.');
       return;
     }
-  
+
     try {
       setLoading(true);
-  
-      // ✨ Extract name and enrollment from the string
-      const nameMatch = studentName.match(/^(.+)\s+\((\d+)\)$/);
+      const nameMatch = studentName.match(/^(.+?)\s+\((\d+)\)$/);
       if (!nameMatch) {
-        alert('Please select a student from the suggestions.');
+        alert('Please select a student from suggestions or use the correct format (e.g., "Name (enrollment_number)").');
         return;
       }
-  
-      const nameOnly = nameMatch[1]; // "Dhruvi Patel"
-      const enrollmentNumber = nameMatch[2]; // "92200133029"
-  
+
+      const [, name, rawEnrollment] = nameMatch;
+      const cleanEnrollment = rawEnrollment.trim();
+
       const data = new FormData();
-      data.append('name', nameOnly); // updated
-      data.append('enrollment_number', enrollmentNumber); // NEW field
-  
+      data.append('name', name.trim());
+      data.append('enrollment_number', cleanEnrollment);
+
       Object.entries(formData).forEach(([key, file]) => {
         if (file) data.append(key, file);
       });
@@ -85,55 +81,49 @@ console.log('Form data:', formData);
       const response = await fetch(`${apiBaseUrl}/upload-documents`, {
         method: 'POST',
         body: data,
-        credentials: 'include'
+        credentials: 'include',
       });
-  
+
       const result = await response.json();
-  
       if (response.ok) {
-        alert('Documents uploaded successfully!');
+        alert('Upload successful!');
         setIsDialogOpen(false);
         resetForm();
       } else {
         alert(`Upload failed: ${result.message || 'Server error'}`);
       }
     } catch (error) {
-      console.error(error);
-      alert('Error uploading documents.');
+      console.error('Submission error:', error);
+      alert('An error occurred during submission.');
     } finally {
       setLoading(false);
     }
   };
-    useEffect(() => {
+
+  useEffect(() => {
     const fetchSuggestions = async () => {
-      const trimmed = studentName.trim();
-      if (!trimmed) {
+      const query = studentName.replace(/\(\d+\)$/, '').trim();
+      if (!query) {
         setSuggestions([]);
         return;
       }
 
       try {
         const res = await fetch(
-          `${apiBaseUrl}/student/search?q=${encodeURIComponent(trimmed)}`,
+          `${apiBaseUrl}/student/search?q=${encodeURIComponent(query)}`,
           { credentials: 'include' }
         );
         const data = await res.json();
-
-        if (Array.isArray(data)) {
-          setSuggestions(data);
-          setShowSuggestions(true);
-        } else {
-          setSuggestions([]);
-        }
+        setSuggestions(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error('Suggestion fetch error:', err);
+        console.error('Fetch error:', err);
         setSuggestions([]);
       }
     };
 
     const timeoutId = setTimeout(fetchSuggestions, 300);
     return () => clearTimeout(timeoutId);
-  }, [studentName]);
+  }, [studentName, apiBaseUrl]);
 
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
@@ -164,18 +154,7 @@ console.log('Form data:', formData);
               <td className="py-3 px-4">60</td>
               <td className="py-3 px-4">100%</td>
             </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="py-3 px-4">2023-24 (CAYm1)</td>
-              <td className="py-3 px-4">60</td>
-              <td className="py-3 px-4">60</td>
-              <td className="py-3 px-4">100%</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="py-3 px-4">2022-23 (CAYm2)</td>
-              <td className="py-3 px-4">60</td>
-              <td className="py-3 px-4">42</td>
-              <td className="py-3 px-4">70%</td>
-            </tr>
+            {/* Add more rows as needed */}
           </tbody>
         </table>
       </div>
@@ -194,48 +173,40 @@ console.log('Form data:', formData);
                 value={studentName}
                 onChange={(e) => {
                   setStudentName(e.target.value);
-                  if (e.target.value) setShowDocumentFields(true);
+                  setShowDocumentFields(!!e.target.value);
                 }}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                onFocus={() => studentName && setShowSuggestions(true)}
+                onFocus={() => setShowSuggestions(true)}
                 placeholder="Enter student name"
                 required
               />
-              {showSuggestions && (
+              {showSuggestions && suggestions.length > 0 && (
                 <ul className="absolute z-50 w-full border bg-white mt-1 max-h-40 overflow-y-auto rounded-md shadow">
-                  {suggestions.length > 0 ? (
-                    suggestions.map((s, i) => (
-                      <li
-                        key={i}
-                        className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setStudentName(`${s.name} (${s.enrollment_number})`);
-                          setEnrollmentNumber(s.enrollment_number);
-                          setShowSuggestions(false);
-                          setShowDocumentFields(true);
-                        }}
-                      >
-                        <div className="font-medium">{s.name}</div>
-                        <div className="text-xs text-gray-500">{s.enrollment_number}</div>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="px-4 py-2 text-sm text-gray-500">No students found</li>
-                  )}
+                  {suggestions.map((s, i) => (
+                    <li
+                      key={i}
+                      className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setStudentName(`${s.name} (${s.enrollment_number})`);
+                        setEnrollmentNumber(s.enrollment_number);
+                        setShowSuggestions(false);
+                      }}
+                    >
+                      <div className="font-medium">{s.name}</div>
+                      <div className="text-xs text-gray-500">{s.enrollment_number}</div>
+                    </li>
+                  ))}
                 </ul>
               )}
             </div>
 
             {showDocumentFields && (
               <>
-                  {['registration_form', 'tenth_marksheet', 'twelfth_marksheet', 'gujcet_marksheet'].map((field) => (
+                {['registration_form', 'tenth_marksheet', 'twelfth_marksheet', 'gujcet_marksheet'].map((field) => (
                   <div key={field} className="space-y-2">
                     <Label htmlFor={field}>
-                      {field
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/^./, (str) => str.toUpperCase())}{' '}
-                      (PDF)
+                      {field.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())} (PDF)
                     </Label>
                     <Input
                       id={field}
@@ -244,9 +215,6 @@ console.log('Form data:', formData);
                       onChange={(e) => handleFileChange(e, field)}
                       required
                     />
-                    {formData[field] && (
-                      <p className="text-xs text-gray-600">{formData[field]?.name}</p>
-                    )}
                   </div>
                 ))}
               </>
@@ -279,4 +247,3 @@ console.log('Form data:', formData);
 }
 
 export default EnrollmentPage;
-
