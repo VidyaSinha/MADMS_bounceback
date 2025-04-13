@@ -133,18 +133,25 @@ console.log('Form data:', formData);
   }, [studentName]);
 
   return (
+    <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-2xl font-semibold text-[#2f4883]">Enrollment Ratio Details </h2>
+      <button
+        onClick={() => setIsDialogOpen(true)}
+        className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+      >
+        Add Details
+      </button>
+    </div>
+    
+  
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={() => setIsDialogOpen(true)}
-          className="bg-[#2f4883] text-white px-4 py-2 rounded-md hover:bg-[#1a2a4f]"
-        >
-          Add Details
-        </button>
-      </div>
-
-      <div className="bg-white rounded-xl shadow p-6">
-        <h2 className="text-2xl font-semibold text-[#2f4883] mb-4">Enrollment Ratio Details</h2>
+     <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
+      
+    {/* <h2 className="text-2xl font-semibold text-[#2f4883] mb-4">Enrollment Ratio Details</h2> */}
+      <div className="flex justify-between items-center mb-4">
+       
+        
         <table className="min-w-full text-sm text-left">
           <thead className="text-gray-500 border-b">
             <tr>
@@ -175,7 +182,12 @@ console.log('Form data:', formData);
             </tr>
           </tbody>
         </table>
-      </div>
+    </div>
+    </div>
+    </div>
+  
+
+
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">

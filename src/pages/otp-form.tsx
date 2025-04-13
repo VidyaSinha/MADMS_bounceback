@@ -37,8 +37,8 @@ export function OtpForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: "#ffffff" }}>
-      <div className="p-8 rounded-2xl shadow-lg w-96" style={{ backgroundColor: "#2f4883", color: "#ffffff" }}>
+    <div className="flex justify-center items-center min-h-screen" style={{ backgroundColor: "#A9B7B8" }}>
+      <div className="p-8 rounded-2xl shadow-lg w-96" style={{ backgroundColor: "#2E4054", color: "#A9B7B8" }}>
         <h2 className="text-2xl font-bold text-center mb-4" style={{ color: "#ffffff" }}>
           OTP Verification
         </h2>

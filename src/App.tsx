@@ -9,9 +9,6 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import { RoleSelection } from "./pages/rolesection";
 
-
-
-
 // Accreditation Body Pages
 import NBA from "./pages/accreditation/NBA";
 import NAAC from "./pages/accreditation/NAAC";
@@ -23,6 +20,8 @@ import QoS from "./pages/accreditation/QoS";
 import Criteria from "./pages/criteria/Criteria";
 import SubCriteria from "./pages/criteria/SubCriteria";
 import Criteria4NBA from "./pages/criteria/Criteria4NBA";
+import Criteria5NBA from "./pages/criteria/Criteria5NBA";
+
 import { OtpForm } from "./pages/otp-form";
 import StudentDetailsForm from "./components/forms/StudentDetailsForm";
 import EnrollmentPage from "./pages/subcriteria/EnrollmentPage";
@@ -65,7 +64,8 @@ const App = () => (
           
           {/* Specific Criteria Pages */}
           <Route path="/dashboard/nba/criteria4" element={<Criteria4NBA />} />
-
+          <Route path="dashboard/nba/criteria5" element={<Criteria5NBA/>}/>
+          
           {/* forms  */}
           <Route path="/components/forms/StudentDetailsForm" element={<StudentDetailsForm />} />
 
