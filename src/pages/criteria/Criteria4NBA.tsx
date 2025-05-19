@@ -57,7 +57,7 @@ const Criteria4NBA = () => {
           </div>
           
 
-          <div className="space-y-4 ">
+          <div className="space-y-4 text-[#2F4883] ">
             <CriteriaCard 
               id="4.1" 
               title="Enrollment Ratio" 
