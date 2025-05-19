@@ -68,8 +68,8 @@ const Criteria4NBA = () => {
             
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-[#2f4883]">4.2 - Success Rate in Stipulated Period of the Program</h3>
+                <div className="flex justify-between items-center text-[#2f4883]">
+                  <h3 className="text-base font-medium ">4.2 - Success Rate in Stipulated Period of the Program</h3>
                   <div className="flex items-center gap-4">
                     <ActionButtons navigateTo="/successrate" />
                     <span className="text-[#2f4883] font-medium">20 marks</span>
@@ -91,19 +91,23 @@ const Criteria4NBA = () => {
               </div>
             </Card>
             
+            <div className="text-[#2F4883]">
             <CriteriaCard 
               id="4.3" 
               title="Academic Performance in Second Year" 
               marks={10} 
               actionNavigate="/academic2ndyear"
             />
-            
+            </div>
+
+            <div className="text=[#2f4883]">
             <CriteriaCard 
               id="4.4" 
               title="Placement, Higher Studies and Entrepreneurship" 
               marks={30} 
               actionNavigate="/placement"
             />
+            </div>
             
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
