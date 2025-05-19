@@ -64,19 +64,20 @@ const Criteria4NBA = () => {
               marks={20} 
               actionNavigate="/enrollment"
             />
+            </div>
             
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-sky-700">4.2 - Success Rate in Stipulated Period of the Program</h3>
+                  <h3 className="text-base font-medium text-[#2f4883]">4.2 - Success Rate in Stipulated Period of the Program</h3>
                   <div className="flex items-center gap-4">
                     <ActionButtons navigateTo="/successrate" />
-                    <span className="text-sky-600 font-medium">20 marks</span>
+                    <span className="text-[#2f4883] font-medium">20 marks</span>
                   </div>
                 </div>
               </div>
               
-              <div className="p-4 space-y-4">
+              <div className="p-4 space-y-4 text-[#2f4883]">
                 <SubCriteriaCard 
                   id="4.2.1" 
                   title="Success Rate Without Backlog" 
@@ -136,7 +137,7 @@ const Criteria4NBA = () => {
                 />
               </div>
             </Card>
-          </div>
+          
         </div>
       </div>
     </MainLayout>
