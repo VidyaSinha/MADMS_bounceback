@@ -111,8 +111,6 @@ const SuccessRatePage: React.FC = () => {
     // Reset form
     setStudentName('');
     setEnrollmentNo('');
-    setHasBacklog(false);
-    setSelectedSemesters([]);
     setGradeHistory(null);
     setShowAdditionalFields(false);
   };
@@ -163,8 +161,6 @@ const SuccessRatePage: React.FC = () => {
             <Column selectionMode="multiple" exportable={false} style={{ width: '3rem' }}></Column>
             <Column field="name" header="Name" sortable style={{ minWidth: '14rem' }}></Column>
             <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '14rem' }}></Column>
-            <Column field="hasBacklog" header="Has Backlog" body={(rowData) => rowData.hasBacklog ? 'Yes' : 'No'} sortable style={{ minWidth: '10rem' }}></Column>
-            <Column field="backlogSemesters" header="Backlog Semesters" body={(rowData) => rowData.backlogSemesters.join(', ')} style={{ minWidth: '14rem' }}></Column>
             <Column field="bills" header="Grade History" body={(rowData) => (
               <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
             )} style={{ minWidth: '10rem' }}></Column>
@@ -225,7 +221,7 @@ const SuccessRatePage: React.FC = () => {
                   {/* Grade History Upload */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Grade History
+                      Bills\Offerlatter\SalarySlip
                     </label>
                     <input
                       type="file"
@@ -240,42 +236,7 @@ const SuccessRatePage: React.FC = () => {
                       required
                     />
                   </div>
-
-                  {/* Backlog Status */}
-                  <div>
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={hasBacklog}
-                        onChange={(e) => setHasBacklog(e.target.checked)}
-                        className="form-checkbox h-5 w-5 text-[#2f4883] rounded"
-                      />
-                      <span className="text-gray-700">Has Backlog</span>
-                    </label>
-                  </div>
-
-                  {/* Semester Selection */}
-                  {hasBacklog && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Select Semesters with Backlog
-                      </label>
-                      <div className="grid grid-cols-4 gap-4">
-                        {Array.from({ length: 8 }, (_, i) => i + 1).map((semester) => (
-                          <label key={semester} className="flex items-center space-x-2 cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={selectedSemesters.includes(semester)}
-                              onChange={() => handleSemesterChange(semester)}
-                              className="form-checkbox h-5 w-5 text-[#2f4883] rounded"
-                            />
-                            <span className="text-gray-700">Semester {semester}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
+                  
                   <div className="flex justify-end pt-4">
                     <button
                       type="submit"
