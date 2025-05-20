@@ -1,162 +1,324 @@
-import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+import React, { useState, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { InputText } from 'primereact/inputtext';
+import { Dialog } from 'primereact/dialog';
+import { Toast } from 'primereact/toast';
 
+// Import PrimeReact styles
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
-interface FormData {
-  name: string;
-  companyName?: string;
-  appointmentDate?: string;
-  offerLetter?: File;
-  examName?: string;
-  resultDocument?: File;
-  gstNumber?: string;
-  gstDocument?: File;
-}
-
-interface placementTable {
+interface Student {
+  id: string;
   name: string;
   enrollmentNo: string;
-  lbr: string;
+  bills: string;
 }
 
-const PlacementPage = () => {
-  const [showDetails, setShowDetails] = useState(false);
-  const [activeForm, setActiveForm] = useState<'placement' | 'higherStudies' | 'entrepreneurship' | null>(null);
-  const [formData, setFormData] = useState<FormData>({ name: '' });
-  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [studentToDelete, setStudentToDelete] = useState<placementTable | null>(null);
-  const [tablecontent, setcontent] = useState<placementTable[]>([
-    { name: 'Rajvi', enrollmentNo: '38', lbr: '' },
-    { name: 'Diya', enrollmentNo: '34', lbr: '' },
-    { name: 'Shyama', enrollmentNo: '05', lbr: '' },
-  ]);
+const dummyStudents: Student[] = [
+  { id: '1', name: 'John Doe', enrollmentNo: 'EN001',bills: '' },
+  { id: '2', name: 'Jane Smith', enrollmentNo: 'EN002',bills: '' },
+  { id: '3', name: 'Mike Johnson', enrollmentNo: 'EN003',bills: '' },
+  { id: '4', name: 'Sarah Williams', enrollmentNo: 'EN004',bills: '' },
+  { id: '5', name: 'David Brown', enrollmentNo: 'EN005',bills: '' },
+  { id: '6', name: 'Emily Davis', enrollmentNo: 'EN006',bills: '' },
+  { id: '7', name: 'Alex Wilson', enrollmentNo: 'EN007',bills: '' },
+  { id: '8', name: 'Lisa Anderson', enrollmentNo: 'EN008', bills: '' },
+  { id: '9', name: 'Tom Taylor', enrollmentNo: 'EN009',bills: '' },
+  { id: '10', name: 'Rachel Moore', enrollmentNo: 'EN010',bills: '' }
+];
 
-  const handleNameSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.name.trim()) {
-      setShowAdditionalFields(true);
+const SuccessRatePage: React.FC = () => {
+  const [deleteStudentDialog, setDeleteStudentDialog] = useState(false);
+  const [deleteStudentsDialog, setDeleteStudentsDialog] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [studentName, setStudentName] = useState('');
+  const [enrollmentNo, setEnrollmentNo] = useState('');
+  const [hasBacklog, setHasBacklog] = useState(false);
+  const [selectedSemesters, setSelectedSemesters] = useState<number[]>([]);
+  const [bills, setGradeHistory] = useState<File | null>(null);
+  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+  const [students, setStudents] = useState<Student[]>(dummyStudents);
+  const [selectedStudents, setSelectedStudents] = useState<Student[]>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const dt = useRef<DataTable<Student[]>>(null);
+  const toast = useRef<Toast>(null);
+
+  const handleSemesterChange = (semester: number) => {
+    setSelectedSemesters(prev =>
+      prev.includes(semester)
+        ? prev.filter(s => s !== semester)
+        : [...prev, semester]
+    );
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setGradeHistory(file);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof FormData) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData((prev) => ({ ...prev, [field]: file }));
-    }
+  const hideDeleteStudentDialog = () => {
+    setDeleteStudentDialog(false);
+    setStudentToDelete(null);
+  };
+
+  const hideDeleteStudentsDialog = () => {
+    setDeleteStudentsDialog(false);
+  };
+
+  const confirmDeleteStudent = (student: Student) => {
+    setStudentToDelete(student);
+    setDeleteStudentDialog(true);
+  };
+
+  const confirmDeleteSelected = () => {
+    setDeleteStudentsDialog(true);
+  };
+
+  const deleteStudent = () => {
+    setStudents(students.filter(s => s.id !== studentToDelete?.id));
+    setDeleteStudentDialog(false);
+    setStudentToDelete(null);
+    toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Student deleted successfully', life: 3000 });
+  };
+
+  const deleteSelectedStudents = () => {
+    const remainingStudents = students.filter(s => !selectedStudents.includes(s));
+    setStudents(remainingStudents);
+    setDeleteStudentsDialog(false);
+    setSelectedStudents([]);
+    toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Selected students deleted successfully', life: 3000 });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    const newStudent: Student = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: studentName,
+      enrollmentNo: enrollmentNo,
+      bills: bills ? URL.createObjectURL(bills) : ''
+    };
+    setStudents(prev => [...prev, newStudent]);
+    toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Student added successfully', life: 3000 });
+    setIsDialogOpen(false);
+    // Reset form
+    setStudentName('');
+    setEnrollmentNo('');
+    setHasBacklog(false);
+    setSelectedSemesters([]);
+    setGradeHistory(null);
+    setShowAdditionalFields(false);
   };
 
-  const renderNameForm = () => (
-    <form onSubmit={handleNameSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="name">Student Name</Label>
-        <Input
-          id="name"
-          value={formData.name}
-          onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-          placeholder="Enter student name"
-          required
-        />
-      </div>
-      <Button type="submit">Continue</Button>
-    </form>
-  );
-
   return (
-    <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto space-y-6">
-    <div className="flex justify-between items-center">
-      {!showDetails && (
-        <Button onClick={() => setShowDetails(true)} className="mb-4">
-          Add Details
-        </Button>
-      )}
-      </div>
-
-      <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
+    <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
+      {/* Success Rate Details */}
+      <Toast ref={toast} />
+      <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold text-[#2f4883]">Success Rate Details</h2>
+          <button
+            onClick={() => setIsDialogOpen(true)}
+            className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+          >
+            Add Details
+          </button>
+        </div>
 
-          <DataTable value={tablecontent} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
-            <Column field="name" header="Name" sortable style={{ width: '25%' }} />
-            <Column field="enrollmentNo" header="Enrollment No" sortable style={{ width: '25%' }} />
-            <Column
-              field="lbr"
-              header="Result/Bill/JoiningLetter"
-              body={() => (
-                <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" tooltip="View Document" />
-              )}
-              style={{ minWidth: '10rem' }}
-            />
-            <Column
-              body={(rowData) => (
-                <div className="flex gap-2 justify-center">
-                  <Button icon="pi pi-pencil" rounded outlined className="mr-2" />
-                  <Button
-                    icon="pi pi-trash"
-                    rounded
-                    outlined
-                    severity="danger"
-                    onClick={() => {
-                      setStudentToDelete(rowData);
-                      setShowDeleteDialog(true);
-                    }}
-                  />
-                </div>
-              )}
-              exportable={false}
-              style={{ minWidth: '8rem' }}
-            />
+        <div className="card overflow-hidden">
+          <Toolbar className="mb-4" 
+            left={<div className="flex flex-wrap gap-2">
+              {/* <Button label="New" icon="pi pi-plus" severity="success" onClick={() => setIsDialogOpen(true)} />
+              <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedStudents || !selectedStudents.length} /> */}
+            </div>}
+            right={<span className="p-input-icon-left">
+              {/* <i className="pi pi-search" /> */}
+              <InputText type="search" onInput={(e) => setGlobalFilter((e.target as HTMLInputElement).value)} placeholder="Search..." />
+            </span>}
+          />
+
+          <DataTable
+            ref={dt}
+            value={students}
+            selection={selectedStudents}
+            selectionMode="multiple"
+            onSelectionChange={(e) => setSelectedStudents(e.value)}
+            dataKey="id"
+            paginator
+            rows={10}
+            rowsPerPageOptions={[5, 10, 25]}
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} students"
+            globalFilter={globalFilter}
+            header={<h3 className="text-xl font-semibold text-[#2f4883]">Student Records</h3>}
+            className="p-datatable-sm p-datatable-gridlines"
+          >
+            <Column selectionMode="multiple" exportable={false} style={{ width: '3rem' }}></Column>
+            <Column field="name" header="Name" sortable style={{ minWidth: '14rem' }}></Column>
+            <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '14rem' }}></Column>
+            <Column field="hasBacklog" header="Has Backlog" body={(rowData) => rowData.hasBacklog ? 'Yes' : 'No'} sortable style={{ minWidth: '10rem' }}></Column>
+            <Column field="backlogSemesters" header="Backlog Semesters" body={(rowData) => rowData.backlogSemesters.join(', ')} style={{ minWidth: '14rem' }}></Column>
+            <Column field="bills" header="Grade History" body={(rowData) => (
+              <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+            )} style={{ minWidth: '10rem' }}></Column>
+            <Column body={(rowData) => (
+              <div className="flex gap-2 justify-center">
+                <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+                <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteStudent(rowData)} />
+              </div>
+            )} exportable={false} style={{ minWidth: '8rem' }}></Column>
           </DataTable>
         </div>
+      </div>
 
-        <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-          <DialogContent className="sm:max-w-[400px] text-center space-y-4">
-            <DialogTitle>Are you sure you want to delete?</DialogTitle>
-            <div className="flex justify-center space-x-4 pt-4">
+      {/* Add Details Dialog */}
+      {isDialogOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-xl p-6 w-full max-w-xl mx-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold text-[#2f4883]">Add Student Details</h3>
               <button
                 onClick={() => {
-                  if (studentToDelete) {
-                    setcontent((prev) =>
-                      prev.filter((p) => p.enrollmentNo !== studentToDelete.enrollmentNo)
-                    );
-                  }
-                  setShowDeleteDialog(false);
-                  setStudentToDelete(null);
+                  setIsDialogOpen(false);
+                  setShowAdditionalFields(false);
+                  setStudentName('');
                 }}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                className="text-gray-500 hover:text-gray-700"
               >
-                Yes
-              </button>
-              <button
-                onClick={() => setShowDeleteDialog(false)}
-                className="px-4 py-2 border rounded-md hover:bg-gray-100"
-              >
-                No
+                ×
               </button>
             </div>
-          </DialogContent>
-        </Dialog>
 
-        <div className="text-center mt-4">
-          <p>Average Placement [ (P1 + P2 + P3)/3]: 0.96</p>
-          <p>Assessment [ 30 * Average Placement]: 28.8</p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Student Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Student Name
+                </label>
+                <input
+                  type="text"
+                  value={studentName}
+                  onChange={(e) => {
+                    setStudentName(e.target.value);
+                    if (e.target.value) {
+                      setShowAdditionalFields(true);
+                    } else {
+                      setShowAdditionalFields(false);
+                    }
+                  }}
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883] focus:border-transparent"
+                  required
+                />
+              </div>
+
+
+
+              {showAdditionalFields && (
+                <>
+                  {/* Grade History Upload */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Grade History
+                    </label>
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleFileUpload}
+                      className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded file:border-0
+                        file:text-sm file:font-medium
+                        file:bg-[#2f4883] file:text-white
+                        hover:file:bg-[#25376a]"
+                      required
+                    />
+                  </div>
+
+                  {/* Backlog Status */}
+                  <div>
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={hasBacklog}
+                        onChange={(e) => setHasBacklog(e.target.checked)}
+                        className="form-checkbox h-5 w-5 text-[#2f4883] rounded"
+                      />
+                      <span className="text-gray-700">Has Backlog</span>
+                    </label>
+                  </div>
+
+                  {/* Semester Selection */}
+                  {hasBacklog && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Select Semesters with Backlog
+                      </label>
+                      <div className="grid grid-cols-4 gap-4">
+                        {Array.from({ length: 8 }, (_, i) => i + 1).map((semester) => (
+                          <label key={semester} className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={selectedSemesters.includes(semester)}
+                              onChange={() => handleSemesterChange(semester)}
+                              className="form-checkbox h-5 w-5 text-[#2f4883] rounded"
+                            />
+                            <span className="text-gray-700">Semester {semester}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-end pt-4">
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </>
+              )}
+            </form>
+          </div>
         </div>
-      </div>
+      )}
+          <Dialog visible={deleteStudentDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={
+        <>
+          <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteStudentDialog} />
+          <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteStudent} />
+        </>
+      } onHide={hideDeleteStudentDialog}>
+        <div className="confirmation-content">
+          <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+          {studentToDelete && (
+            <span>
+              Are you sure you want to delete <b>{studentToDelete.name}</b>?
+            </span>
+          )}
+        </div>
+      </Dialog>
+
+      <Dialog visible={deleteStudentsDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={
+        <>
+          <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteStudentsDialog} />
+          <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteSelectedStudents} />
+        </>
+      } onHide={hideDeleteStudentsDialog}>
+        <div className="confirmation-content">
+          <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+          <span>Are you sure you want to delete the selected students?</span>
+        </div>
+      </Dialog>
     </div>
   );
 };
 
-export default PlacementPage;
+export default SuccessRatePage;
