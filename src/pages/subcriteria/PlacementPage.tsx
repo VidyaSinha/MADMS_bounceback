@@ -88,48 +88,6 @@ const PlacementPage = () => {
 
       <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
         <div className="flex justify-between items-center mb-4">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead >
-              <tr className="bg-gray-100">
-                <th className="border border-gray-300 p-2">Item</th>
-                <th className="border border-gray-300 p-2">CAYm1 (2023-24)</th>
-                <th className="border border-gray-300 p-2">CAYm2 (2022-23)</th>
-                <th className="border border-gray-300 p-2">CAYm3 (2021-22)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-300 p-2">Total No of Final Year Students(N)</td>
-                <td className="border border-gray-300 p-2">49</td>
-                <td className="border border-gray-300 p-2">48</td>
-                <td className="border border-gray-300 p-2">42</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-2">No of students placed in companies or government sector(X)</td>
-                <td className="border border-gray-300 p-2">37</td>
-                <td className="border border-gray-300 p-2">31</td>
-                <td className="border border-gray-300 p-2">34</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-2">No of students admitted to higher studies (Y)</td>
-                <td className="border border-gray-300 p-2">06</td>
-                <td className="border border-gray-300 p-2">08</td>
-                <td className="border border-gray-300 p-2">2</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-2">No of students turned entrepreneur (Z)</td>
-                <td className="border border-gray-300 p-2">03</td>
-                <td className="border border-gray-300 p-2">07</td>
-                <td className="border border-gray-300 p-2">5</td>
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-2">Placement Index [ (X+Y+Z)/N]</td>
-                <td className="border border-gray-300 p-2">46</td>
-                <td className="border border-gray-300 p-2">46</td>
-                <td className="border border-gray-300 p-2">41</td>
-              </tr>
-            </tbody>
-          </table>
 
           <DataTable value={tablecontent} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
             <Column field="name" header="Name" sortable style={{ width: '25%' }} />

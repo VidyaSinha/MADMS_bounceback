@@ -14,7 +14,15 @@ function AcademicPerformancePage(): JSX.Element {
   const [suggestions, setSuggestions] = useState<{ enrollment_number: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [performanceData, setPerformanceData] = useState<any[]>([{}]);
+
+  interface AcademicPerformance {
+  enrollment_number: string;
+  academic_year: string;
+  mean_cgpa: number;
+  students_appeared: boolean;
+}
+
+  const [performanceData, setPerformanceData] = useState<AcademicPerformance[]>([]);
 
   // Fetch existing academic performance data
   useEffect(() => {
