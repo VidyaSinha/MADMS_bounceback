@@ -121,7 +121,7 @@ const SuccessRatePage: React.FC = () => {
       <Toast ref={toast} />
       <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-[#2f4883]">Success Rate Details</h2>
+          <h2 className="text-2xl font-semibold text-[#2f4883]">Students Placement Details</h2>
           <button
             onClick={() => setIsDialogOpen(true)}
             className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
@@ -155,7 +155,7 @@ const SuccessRatePage: React.FC = () => {
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} students"
             globalFilter={globalFilter}
-            header={<h3 className="text-xl font-semibold text-[#2f4883]">Student Records</h3>}
+            header={<h3 className="text-xl font-semibold text-[#2f4883]">Placement Record</h3>}
             className="p-datatable-sm p-datatable-gridlines"
           >
             <Column selectionMode="multiple" exportable={false} style={{ width: '3rem' }}></Column>
