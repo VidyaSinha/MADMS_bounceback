@@ -103,17 +103,28 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
             </Shadcnbutton>
           </div>
 
-          <Card className="p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-[#2f4883]">
-                4.5.3 - Participation at Inter-Institution Events
-              </h2>
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="bg-[#2F4883] hover:bg-slate-900">
-                    + Add Details
-                  </Button>
-                </DialogTrigger>
+              <div>
+                <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
+                  <h1 className="text-2xl font-bold text-center">
+                    4.5.3 - Participation at Inter-Institution Events
+                  </h1>
+                </div>
+              </div>
+
+              <Card className="p-6">
+                          <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-xl font-semibold text-gray-800">Magazine Details</h2>
+              
+                            <Dialog>
+                              <div className="flex justify-between items-center mb-4">
+                              <h2 className="text-2xl font-semibold text-[#2f4883]">Society Details</h2>
+                              <button
+                                onClick={() => setIsDialogOpen(true)}
+                                className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+                              >
+                                Add Details
+                              </button>
+                              </div>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>
