@@ -125,10 +125,13 @@ const SocietiesPage = () => {
       setReportFile(null);
 
       alert('Society added successfully!');
-    } catch (error: any) {
-      console.error('Error:', error);
-      alert(`Submission failed: ${error.message}`);
-    }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+     console.error(error.message); // ✅ safe
+     } else {
+     console.error("An unexpected error occurred");
+     }
+  }
   };
 
   const logoBodyTemplate = (rowData: societyTable) => {
@@ -196,7 +199,7 @@ const SocietiesPage = () => {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="bg-[#2F4883] hover:bg-slate-900 hover:text-white">
+                  <Button className="bg-[#2F4883] text-[#ffffff]">
                     + Add Details
                   </Button>
                 </DialogTrigger>
