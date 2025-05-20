@@ -161,8 +161,8 @@ const SuccessRatePage: React.FC = () => {
             <Column selectionMode="multiple" exportable={false} style={{ width: '3rem' }}></Column>
             <Column field="name" header="Name" sortable style={{ minWidth: '14rem' }}></Column>
             <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '14rem' }}></Column>
-            <Column field="bills" header="Grade History" body={(rowData) => (
-              <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+            <Column field="bills" header="Bills\Offer Latter" body={(rowData) => (
+              <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Bills\Offer Latter" />
             )} style={{ minWidth: '10rem' }}></Column>
             <Column body={(rowData) => (
               <div className="flex gap-2 justify-center">
@@ -236,7 +236,7 @@ const SuccessRatePage: React.FC = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="flex justify-end pt-4">
                     <button
                       type="submit"
