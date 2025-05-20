@@ -32,7 +32,7 @@ const dummyStudents: Student[] = [
   { id: '10', name: 'Rachel Moore', enrollmentNo: 'EN010',bills: '' }
 ];
 
-const SuccessRatePage: React.FC = () => {
+const PlacementPage: React.FC = () => {
   const [deleteStudentDialog, setDeleteStudentDialog] = useState(false);
   const [deleteStudentsDialog, setDeleteStudentsDialog] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
@@ -282,4 +282,4 @@ const SuccessRatePage: React.FC = () => {
   );
 };
 
-export default SuccessRatePage;
+export default PlacementPage;
