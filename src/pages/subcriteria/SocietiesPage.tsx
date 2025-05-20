@@ -58,7 +58,7 @@ const SocietiesPage = () => {
   const [eventDate, setEventDate] = useState<string>('');
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [reportFile, setReportFile] = useState<File | null>(null);
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState<societyTable | null>(null);
 
@@ -193,9 +193,15 @@ const SocietiesPage = () => {
             </div>
           </div>
 
-          <Card className="p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-800">Society Details</h2>
+          <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold text-[#2f4883]">Society Details</h2>
+          <button
+            onClick={() => setIsDialogOpen(true)}
+            className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+          >
+            Add Details
+          </button>
+          </div>
 
               <Dialog>
                 <DialogTrigger asChild>
@@ -328,9 +334,8 @@ const SocietiesPage = () => {
                 style={{ width: '80px' }}
               ></Column>
             </DataTable>
-          </Card>
+          
         </div>
-      </div>
     </MainLayout>
   );
 };

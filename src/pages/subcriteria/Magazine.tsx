@@ -39,6 +39,7 @@ const MagazinePage = () => {
   const [magazines, setMagazines] = useState<Magazine[]>([]);
   const [year, setYear] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const fetchMagazines = async () => {
     try {
@@ -57,6 +58,7 @@ const MagazinePage = () => {
 
   useEffect(() => {
     fetchMagazines();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiBaseUrl]);
 
   const handleBack = () => {
@@ -118,11 +120,15 @@ const MagazinePage = () => {
               <h2 className="text-xl font-semibold text-gray-800">Magazine Details</h2>
 
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="bg-[#2F4883] hover:bg-slate-900">
-                    + Add Details
-                  </Button>
-                </DialogTrigger>
+                <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold text-[#2f4883]">Society Details</h2>
+                <button
+                  onClick={() => setIsDialogOpen(true)}
+                  className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+                >
+                  Add Details
+                </button>
+                </div>
 
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>

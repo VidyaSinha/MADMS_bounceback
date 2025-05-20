@@ -105,7 +105,7 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
 
           <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-teal-700">
+              <h2 className="text-2xl font-bold text-[#2f4883]">
                 4.5.3 - Participation at Inter-Institution Events
               </h2>
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
