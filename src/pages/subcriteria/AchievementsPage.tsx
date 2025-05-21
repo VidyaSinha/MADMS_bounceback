@@ -115,9 +115,8 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
                           <div className="flex justify-between items-center mb-6">
                             <h2 className="text-xl font-semibold text-gray-800">Magazine Details</h2>
               
-                            <Dialog>
+                            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                               <div className="flex justify-between items-center mb-4">
-                              <h2 className="text-2xl font-semibold text-[#2f4883]">Society Details</h2>
                               <button
                                 onClick={() => setIsDialogOpen(true)}
                                 className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
@@ -125,14 +124,14 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
                                 Add Details
                               </button>
                               </div>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>
-                      {showAdditionalFields
-                        ? 'Enter Event Details'
-                        : 'Enter Student Name'}
-                    </DialogTitle>
-                  </DialogHeader>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {showAdditionalFields
+                                    ? 'Enter Event Details'
+                                    : 'Enter Student Name'}
+                                </DialogTitle>
+                              </DialogHeader>
                   <Form {...form}>
                     <form
                       onSubmit={form.handleSubmit(onSubmit)}
