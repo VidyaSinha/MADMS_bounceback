@@ -116,14 +116,15 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
                             <h2 className="text-xl font-semibold text-gray-800">Magazine Details</h2>
               
                             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                              <div className="flex justify-between items-center mb-4">
+                               <DialogTrigger asChild>
                               <button
                                 onClick={() => setIsDialogOpen(true)}
                                 className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
                               >
                                 Add Details
                               </button>
-                              </div>
+                              </DialogTrigger>
+                              
                             <DialogContent>
                               <DialogHeader>
                                 <DialogTitle>
