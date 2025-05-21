@@ -193,10 +193,7 @@ const SocietiesPage = () => {
             </div>
           </div>
 
-         
-
-              <Dialog>
-                 <div className="flex justify-between items-center mb-4">
+         <div className="flex justify-between items-center mb-4">
                   <h2 className="text-2xl font-semibold text-[#2f4883]">Society Details</h2>
                   <button
                     onClick={() => setIsDialogOpen(true)}
@@ -205,6 +202,8 @@ const SocietiesPage = () => {
                   Add Details
                   </button>
                   </div>
+
+              <Dialog>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
                     <DialogTitle>Add Society Details</DialogTitle>
