@@ -85,6 +85,7 @@ const MagazinePage = () => {
         
       setYear('');
       setSelectedFile(null);
+      setIsDialogOpen(false); 
       fetchMagazines();
     } catch (error) {
       console.error('Error submitting magazine:', error);
@@ -119,15 +120,15 @@ const MagazinePage = () => {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-gray-800">Magazine Details</h2>
 
-              <Dialog>
-                <div className="flex justify-between items-center mb-4">
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
                 <ShadcnButton
-                  onClick={() => setIsDialogOpen(true)}
                   className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
                 >
                   Add Details
                 </ShadcnButton>
-                </div>
+              </DialogTrigger>
+
 
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
