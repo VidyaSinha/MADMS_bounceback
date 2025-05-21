@@ -204,11 +204,6 @@ const SocietiesPage = () => {
           </div>
 
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="bg-[#2F4883] text-[#ffffff]">
-                    + Add Details
-                  </Button>
-                </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
                     <DialogTitle>Add Society Details</DialogTitle>
