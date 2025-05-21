@@ -77,6 +77,7 @@ export function LoginForm({
             width: "300px",
           }}
         >
+        <h1 className="text-[#2E4054]"> Marwadi Accreditation and Data Management System</h1>
           <CardHeader className="text-center flex flex-col items-center">
             <CardTitle className="text-2xl" style={{ color: "#ffffff" }}>
               Login
