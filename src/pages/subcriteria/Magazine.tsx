@@ -120,7 +120,7 @@ const MagazinePage = () => {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-gray-800">Magazine Details</h2>
 
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <Dialog>
               <DialogTrigger asChild>
                 <ShadcnButton
                   className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
