@@ -6,6 +6,7 @@ import { Button } from 'primereact/button';
 import { Button as ShadcnButton } from "@/components/ui/button";
 import { Card } from '@/components/ui/card';
 import { useApi } from '@/contexts/ApiContext';
+import { useEffect } from 'react';
 
 import {
   Dialog,
@@ -58,7 +59,7 @@ const SocietiesPage = () => {
   const [eventDate, setEventDate] = useState<string>('');
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [reportFile, setReportFile] = useState<File | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState<societyTable | null>(null);
 
@@ -74,6 +75,46 @@ const SocietiesPage = () => {
       reader.onerror = (error) => reject(error);
     });
   };
+
+  useEffect(() => {
+  const fetchSocietyEvents = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/fetch/societies`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch societies: ${errorText}`);
+      }
+
+      const data = await response.json();
+
+      // Transform backend response to match `societyTable` format
+      const formattedData: societyTable[] = data.map((item) => ({
+        societyName: item.society_name,
+        eventName: item.event_name,
+        Date: new Date(item.event_date).toLocaleDateString('en-GB'), // dd/mm/yyyy
+        logo: item.society_logo || '',
+        reportPDF: item.upload_report || '',
+      }));
+
+      settable(formattedData);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error('Error:', error);
+          alert(`Submission failed: ${error.message}`);
+        } else {
+          console.error('Unknown error:', error);
+          alert('An unknown error occurred.');
+        }
+      }
+  };
+
+  fetchSocietyEvents();
+}, [apiBaseUrl]);
+
 
   const handleSubmit = async () => {
     if (!societyName || !eventName || !eventDate || !logoFile || !reportFile) {
@@ -127,11 +168,13 @@ const SocietiesPage = () => {
       alert('Society added successfully!');
     } catch (error: unknown) {
       if (error instanceof Error) {
-     console.error(error.message); // ✅ safe
-     } else {
-     console.error("An unexpected error occurred");
-     }
-  }
+        console.error('Fetch error:', error);
+        alert(`Failed to fetch society data: ${error.message}`);
+      } else {
+        console.error('Unknown error:', error);
+        alert('Failed to fetch society data due to an unknown error.');
+      }
+}
   };
 
   const logoBodyTemplate = (rowData: societyTable) => {
@@ -193,17 +236,16 @@ const SocietiesPage = () => {
             </div>
           </div>
 
-         <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-2xl font-semibold text-[#2f4883]">Society Details</h2>
-                  <button
-                    onClick={() => setIsDialogOpen(true)}
-                    className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
-                  >
-                  Add Details
-                  </button>
-                  </div>
+          <Card className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-gray-800">Society Details</h2>
 
               <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="bg-[#2F4883] hover:bg-slate-900 hover:text-white">
+                    + Add Details
+                  </Button>
+                </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
                     <DialogTitle>Add Society Details</DialogTitle>
@@ -329,8 +371,9 @@ const SocietiesPage = () => {
                 style={{ width: '80px' }}
               ></Column>
             </DataTable>
-          
+          </Card>
         </div>
+      </div>
     </MainLayout>
   );
 };
