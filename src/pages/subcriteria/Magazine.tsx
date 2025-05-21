@@ -121,13 +121,12 @@ const MagazinePage = () => {
 
               <Dialog>
                 <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-semibold text-[#2f4883]">Society Details</h2>
-                <button
+                <ShadcnButton
                   onClick={() => setIsDialogOpen(true)}
                   className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
                 >
                   Add Details
-                </button>
+                </ShadcnButton>
                 </div>
 
                 <DialogContent className="sm:max-w-[425px]">
