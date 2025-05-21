@@ -242,9 +242,9 @@ const SocietiesPage = () => {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="bg-[#2F4883] hover:bg-slate-900 hover:text-white">
+                  <ShadcnButton className="bg-[#2F4883] hover:bg-slate-900 hover:text-white">
                     + Add Details
-                  </Button>
+                  </ShadcnButton>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
