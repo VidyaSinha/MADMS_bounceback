@@ -61,7 +61,7 @@ const Criteria5NBA = () => {
               id="5.1" 
               title="Faculty to Student Ratio" 
               marks={20} 
-              actionNavigate="/studnetfacultyratio"
+              actionNavigate="/faculty-cadre-proportion"
             />
             
             <Card className="border rounded-md overflow-hidden">
@@ -69,7 +69,7 @@ const Criteria5NBA = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-base font-medium text-sky-700">5.2 - Faculty Cardre propotion</h3>
                   <div className="flex items-center gap-4">
-                    <ActionButtons navigateTo="/successrate" />
+                    <ActionButtons navigateTo="/faculty-cadre-proportion" />
                     <span className="text-sky-600 font-medium">20 marks</span>
                   </div>
                 </div>
