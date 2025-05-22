@@ -182,14 +182,25 @@ const handleSubmit = async (e: React.FormEvent) => {
                   header={<h3 className="text-xl font-semibold text-[#2f4883]">Student Records</h3>}
                   className="p-datatable-sm p-datatable-gridlines"
                 >
-                  <Column selectionMode="multiple" exportable={false} style={{ width: '3rem' }}></Column>
-                  <Column field="name" header="Name" sortable style={{ minWidth: '14rem' }}></Column>
+                  
                   <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '14rem' }}></Column>
-                  <Column field="hasBacklog" header="Has Backlog" body={(rowData) => rowData.hasBacklog ? 'Yes' : 'No'} sortable style={{ minWidth: '10rem' }}></Column>
-                  <Column field="backlogSemesters" header="Backlog Semesters" body={(rowData) => rowData.backlogSemesters.join(', ')} style={{ minWidth: '14rem' }}></Column>
-                  <Column field="gradeHistory" header="Grade History" body={(rowData) => (
+
+                  <Column field="registrationform" header="Registration Form" body={(rowData) => (
                     <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
                   )} style={{ minWidth: '10rem' }}></Column>
+
+                  <Column field="tenthmarksheet" header="10th Marksheet" body={(rowData) => (
+                    <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                  )} style={{ minWidth: '10rem' }}></Column>
+
+                  <Column field="twelfth_marksheet" header="12th Marksheet " body={(rowData) => (
+                    <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                  )} style={{ minWidth: '10rem' }}></Column>
+
+                  <Column field="gujcet_marksheet" header="Gujcet" body={(rowData) => (
+                    <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                  )} style={{ minWidth: '10rem' }}></Column>
+
                   <Column body={(rowData) => (
                     <div className="flex gap-2 justify-center">
                       <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
