@@ -1,8 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useApi } from '@/contexts/ApiContext';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+
+interface Student {
+  enrollmentNo: number;
+  registrationform: string;
+  tenthmarksheet: string;
+  twelthmarksheet: string;
+  gujcetmarksheet: string;
+}
+
+const dummyStudents: Student[] = [
+  { enrollmentNo : 1, registrationform: '', tenthmarksheet: '', twelthmarksheet: '', gujcetmarksheet: ''},
+  { enrollmentNo : 2, registrationform: '', tenthmarksheet: '', twelthmarksheet: '', gujcetmarksheet: ''},
+  { enrollmentNo : 3, registrationform: '', tenthmarksheet: '', twelthmarksheet: '', gujcetmarksheet: ''},
+  { enrollmentNo : 4, registrationform: '', tenthmarksheet: '', twelthmarksheet: '', gujcetmarksheet: ''}
+];
 
 function EnrollmentPage(): JSX.Element {
   const { apiBaseUrl } = useApi();
@@ -19,6 +37,11 @@ function EnrollmentPage(): JSX.Element {
   const [suggestions, setSuggestions] = useState<{ enrollment_number: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [students, setStudents] = useState<Student[]>(dummyStudents);
+  const [selectedStudents, setSelectedStudents] = useState<Student[]>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const dt = useRef<DataTable<Student[]>>(null);
+
 
   const resetForm = () => {
     setEnrollmentNumber('');
@@ -127,6 +150,10 @@ const handleSubmit = async (e: React.FormEvent) => {
     return () => clearTimeout(timeoutId);
   }, [apiBaseUrl,enrollmentNumber]);
 
+  function confirmDeleteStudent(rowData: unknown): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-4">
@@ -139,42 +166,37 @@ const handleSubmit = async (e: React.FormEvent) => {
         </button>
       </div>
 
-      <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
-        <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
-          <div className="flex justify-between items-center mb-4">
-            <table className="min-w-full text-sm text-left">
-              <thead className="text-gray-500 border-b">
-                <tr>
-                  <th className="py-3 px-4 font-semibold">Academic Year</th>
-                  <th className="py-3 px-4 font-semibold">N</th>
-                  <th className="py-3 px-4 font-semibold">N1</th>
-                  <th className="py-3 px-4 font-semibold">Enrollment Ratio</th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-700 divide-y divide-gray-200">
-                <tr className="hover:bg-gray-50">
-                  <td className="py-3 px-4">2024-25 (CAY)</td>
-                  <td className="py-3 px-4">60</td>
-                  <td className="py-3 px-4">60</td>
-                  <td className="py-3 px-4">100%</td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="py-3 px-4">2023-24 (CAYm1)</td>
-                  <td className="py-3 px-4">60</td>
-                  <td className="py-3 px-4">60</td>
-                  <td className="py-3 px-4">100%</td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="py-3 px-4">2022-23 (CAYm2)</td>
-                  <td className="py-3 px-4">60</td>
-                  <td className="py-3 px-4">42</td>
-                  <td className="py-3 px-4">70%</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <DataTable
+                  ref={dt}
+                  value={students}
+                  selection={selectedStudents}
+                  selectionMode="multiple"
+                  onSelectionChange={(e) => setSelectedStudents(e.value)}
+                  dataKey="id"
+                  paginator
+                  rows={10}
+                  rowsPerPageOptions={[5, 10, 25]}
+                  paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} students"
+                  globalFilter={globalFilter}
+                  header={<h3 className="text-xl font-semibold text-[#2f4883]">Student Records</h3>}
+                  className="p-datatable-sm p-datatable-gridlines"
+                >
+                  <Column selectionMode="multiple" exportable={false} style={{ width: '3rem' }}></Column>
+                  <Column field="name" header="Name" sortable style={{ minWidth: '14rem' }}></Column>
+                  <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '14rem' }}></Column>
+                  <Column field="hasBacklog" header="Has Backlog" body={(rowData) => rowData.hasBacklog ? 'Yes' : 'No'} sortable style={{ minWidth: '10rem' }}></Column>
+                  <Column field="backlogSemesters" header="Backlog Semesters" body={(rowData) => rowData.backlogSemesters.join(', ')} style={{ minWidth: '14rem' }}></Column>
+                  <Column field="gradeHistory" header="Grade History" body={(rowData) => (
+                    <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
+                  )} style={{ minWidth: '10rem' }}></Column>
+                  <Column body={(rowData) => (
+                    <div className="flex gap-2 justify-center">
+                      <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+                      <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteStudent(rowData)} />
+                    </div>
+                  )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+                </DataTable>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
