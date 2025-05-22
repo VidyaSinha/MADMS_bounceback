@@ -203,7 +203,7 @@ const SubCriteriaCard: React.FC<SubCriteriaCardProps> = ({ id, title, marks, nav
       <h4 className="text-sm font-medium text-gray-700">{id} - {title}</h4>
       <div className="flex items-center gap-4">
         <ActionButtons navigateTo={navigateTo} />
-        <span className="text-[#2F4883] font-medium">{marks} marks</span>
+        <span className="text-[#2F4884] font-medium">{marks} marks</span>
       </div>
     </div>
   </div>
