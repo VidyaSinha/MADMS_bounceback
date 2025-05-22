@@ -2,13 +2,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LoginForm } from "./pages/login-form";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import { RoleSelection } from "./pages/rolesection";
 import { ApiProvider } from "./contexts/ApiContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 
 // Accreditation Body Pages
@@ -36,59 +37,126 @@ import MagazinePage from "./pages/subcriteria/Magazine";
 import AchievementsPage from "./pages/subcriteria/AchievementsPage";
 import StudentFacultyRatioTable from "./pages/subcriteria/StudentFacultyRatioTable";
 
+const ProtectedRoute = ({ children, requireAdmin = false }: { children: React.ReactNode, requireAdmin?: boolean }) => {
+  const { isAuthenticated, isAdmin } = useAuth();
 
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  if (requireAdmin && !isAdmin) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  return <>{children}</>;
+};
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ApiProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
           <Routes>
             <Route path="/" element={<RoleSelection />} />
             <Route path="/login" element={<LoginForm />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/otp-form" element={<OtpForm />} />
 
+            {/* Protected Routes */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
 
+            {/* Admin Only Routes */}
+            <Route path="/dashboard/nba" element={
+              <ProtectedRoute requireAdmin>
+                <NBA />
+              </ProtectedRoute>
+            } />
 
-          {/* Accreditation Body Routes */}
-          <Route path="/dashboard/nba" element={<NBA />} />
-          {/* <Route path="/dashboard/naac" element={<NAAC />} />
-          <Route path="/dashboard/nirf" element={<NIRF />} />
-          <Route path="/dashboard/coe" element={<COE />} />
-          <Route path="/dashboard/qos" element={<QoS />} /> */}
+            {/* Protected Criteria Routes */}
+            <Route path="/dashboard/:body/:criteriaId" element={
+              <ProtectedRoute>
+                <Criteria />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard/:body/:criteriaId/:subCriteriaId" element={
+              <ProtectedRoute>
+                <SubCriteria />
+              </ProtectedRoute>
+            } />
 
-          {/* Criteria Routes */}
-          <Route path="/dashboard/:body/:criteriaId" element={<Criteria />} />
-          <Route path="/dashboard/:body/:criteriaId/:subCriteriaId" element={<SubCriteria />} />
+            {/* Protected Specific Criteria Pages */}
+            <Route path="/dashboard/nba/criteria4" element={
+              <ProtectedRoute>
+                <Criteria4NBA />
+              </ProtectedRoute>
+            } />
+            <Route path="dashboard/nba/criteria5" element={
+              <ProtectedRoute>
+                <Criteria5NBA/>
+              </ProtectedRoute>
+            } />
+            
+            {/* Protected Forms */}
+            <Route path="/components/forms/StudentDetailsForm" element={
+              <ProtectedRoute>
+                <StudentDetailsForm />
+              </ProtectedRoute>
+            } />
 
-          {/* Specific Criteria Pages */}
-          <Route path="/dashboard/nba/criteria4" element={<Criteria4NBA />} />
-          <Route path="dashboard/nba/criteria5" element={<Criteria5NBA/>}/>
-          
-          {/* forms  */}
-          <Route path="/components/forms/StudentDetailsForm" element={<StudentDetailsForm />} />
+            {/* Protected Sub criteria routes */}
+            <Route path="/enrollment" element={
+              <ProtectedRoute>
+                <EnrollmentPage/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/successrate" element={
+              <ProtectedRoute>
+                <SuccessRatePage/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/academic2ndyear" element={
+              <ProtectedRoute>
+                <Academic2ndyearPage/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/placement" element={
+              <ProtectedRoute>
+                <PlacementPage/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/societies" element={
+              <ProtectedRoute>
+                <SocietiesPage/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/magazine" element={
+              <ProtectedRoute>
+                <MagazinePage/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/achievements" element={
+              <ProtectedRoute>
+                <AchievementsPage/>
+              </ProtectedRoute>
+            }/>
+            <Route path="/studnetfacultyratio" element={
+              <ProtectedRoute>
+                <StudentFacultyRatioTable/>
+              </ProtectedRoute>
+            }/>
 
-          {/* Sub criteria*/}
-
-          <Route path="/enrollment" element={<EnrollmentPage/>}/>
-          <Route path="/successrate" element={<SuccessRatePage/>}/>
-          <Route path="/academic2ndyear" element={<Academic2ndyearPage/>}/>
-          <Route path="/placement" element={<PlacementPage/>}/>
-          <Route path="/societies" element={<SocietiesPage/>}/>
-          <Route path="/magazine" element={<MagazinePage/>}/>
-          <Route path="/achievements" element={<AchievementsPage/>}/>
-          <Route path="/studnetfacultyratio" element={<StudentFacultyRatioTable/>}/>
-
-          {/* Catch-All Route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-
-      </TooltipProvider>
+            {/* Catch-All Route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
+      </AuthProvider>
     </ApiProvider>
   </QueryClientProvider>
 );
