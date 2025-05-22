@@ -5,7 +5,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
+import FacultyDetailForm from '@/components/forms/FacultyDetailForm';
 import StudentFacultyRatioTable from '../subcriteria/StudentFacultyRatioTable';
 
 const Criteria5NBA = () => {
@@ -42,7 +42,7 @@ const Criteria5NBA = () => {
                
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:max-w-md">
-                <StudentDetailsForm />
+                <FacultyDetailForm />
               </SheetContent>
             </Sheet>
           </div>
