@@ -32,7 +32,7 @@ const Criteria5NBA = () => {
             <Button 
                   className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
                   size="lg"
-                  onClick={() => navigate('/components/forms/StudentDetailsForm')}
+                  onClick={() => navigate('/components/forms/FacultyDetailForm')}
                 >
                   + Add faculty Details
                 </Button>
