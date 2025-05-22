@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Eye, Edit2 } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
@@ -6,16 +6,32 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
-import EnrollmentPage from '../subcriteria/EnrollmentPage';
-import Academic2ndyearPage from '../subcriteria/Academic2ndyearPage';
 
 const Criteria4NBA = () => {
   const navigate = useNavigate();
-  
+  const [marksData, setMarksData] = useState<Record<string, number>>({
+    '4.1': 20,
+    '4.2.1': 10,
+    '4.2.2': 10,
+    '4.3': 10,
+    '4.4': 30,
+    '4.5.1': 5,
+    '4.5.2': 5,
+    '4.5.3': 10,
+  });
+
   const handleBack = () => {
     navigate('/dashboard/nba');
   };
-  
+
+  const handleEditMarks = (id: string) => {
+    const currentMarks = marksData[id];
+    const newMarks = prompt(`Enter new marks for ${id}`, currentMarks.toString());
+    if (newMarks !== null && !isNaN(Number(newMarks))) {
+      setMarksData(prev => ({ ...prev, [id]: Number(newMarks) }));
+    }
+  };
+
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-6">
@@ -31,140 +47,137 @@ const Criteria4NBA = () => {
               Back to Criteria 4
             </Button>
             <Button 
-                  className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
-                  size="lg"
-                  onClick={() => navigate('/components/forms/StudentDetailsForm')}
-                >
-                  + Add Student Details
-                </Button>
+              className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
+              size="lg"
+              onClick={() => navigate('/components/forms/StudentDetailsForm')}
+            >
+              + Add Student Details
+            </Button>
 
             <Sheet>
-              <SheetTrigger asChild>
-               
-              </SheetTrigger>
+              <SheetTrigger asChild />
               <SheetContent side="right" className="w-full sm:max-w-md">
                 <StudentDetailsForm />
               </SheetContent>
             </Sheet>
           </div>
-          
-          <div>
-            <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
-              <h1 className="text-2xl font-bold text-center">
-                Criteria 4: Students' Performance
-              </h1>
-            </div>
-          </div>
-          
 
-          <div className="space-y-4 text-[#2F4883] ">
+          <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
+            <h1 className="text-2xl font-bold text-center">
+              Criteria 4: Students' Performance
+            </h1>
+          </div>
+
+          <div className="space-y-4 text-[#2F4883]">
             <CriteriaCard 
               id="4.1" 
               title="Enrollment Ratio" 
-              marks={20} 
+              marks={marksData['4.1']} 
               actionNavigate="/enrollment"
+              onEditMarks={handleEditMarks}
             />
-            </div>
-            
-            <Card className="border rounded-md overflow-hidden">
-              <div className="border-b p-4">
-                <div className="flex justify-between items-center text-[#2f4883]">
-                  <h3 className="text-base font-medium ">4.2 - Success Rate in Stipulated Period of the Program</h3>
-                  <div className="flex items-center gap-4">
-                    <ActionButtons navigateTo="/successrate" />
-                    <span className="text-[#2f4883] font-medium">20 marks</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-4 space-y-4 text-[#2f4883]">
-                <SubCriteriaCard 
-                  id="4.2.1" 
-                  title="Success Rate Without Backlog" 
-                  marks={10} 
-                />
-                <SubCriteriaCard 
-                  id="4.2.2" 
-                  title="Success Rate With Backlog" 
-                  marks={10} 
-                />
-              </div>
-            </Card>
-            
-            <div className="text-[#2F4883]">
-            <CriteriaCard 
-              id="4.3" 
-              title="Academic Performance in Second Year" 
-              marks={10} 
-              actionNavigate="/academic2ndyear"
-            />
-            </div>
+          </div>
 
-            <div className="text=[#2f4883]">
-            <CriteriaCard 
-              id="4.4" 
-              title="Placement, Higher Studies and Entrepreneurship" 
-              marks={30} 
-              actionNavigate="/placement"
-            />
+          <Card className="border rounded-md overflow-hidden">
+            <div className="border-b p-4">
+              <div className="flex justify-between items-center text-[#2f4883]">
+                <h3 className="text-base font-medium">4.2 - Success Rate in Stipulated Period of the Program</h3>
+                <span className="text-[#2f4883] font-medium">20 marks</span>
+              </div>
             </div>
-            
-            <Card className="border rounded-md overflow-hidden">
-              <div className="border-b p-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-[#2F4883]">4.5 - Professional Activities</h3>
-                  <div className="flex items-center gap-4">
-                    
-                    <span className="text-[#2F4883] font-medium">20 marks</span>
-                  </div>
-                </div>
+            <div className="p-4 space-y-4 text-[#2f4883]">
+              <SubCriteriaCard 
+                id="4.2.1" 
+                title="Success Rate Without Backlog" 
+                marks={marksData['4.2.1']} 
+                onEditMarks={handleEditMarks}
+              />
+              <SubCriteriaCard 
+                id="4.2.2" 
+                title="Success Rate With Backlog" 
+                marks={marksData['4.2.2']} 
+                onEditMarks={handleEditMarks}
+              />
+            </div>
+          </Card>
+
+          <CriteriaCard 
+            id="4.3" 
+            title="Academic Performance in Second Year" 
+            marks={marksData['4.3']} 
+            actionNavigate="/academic2ndyear"
+            onEditMarks={handleEditMarks}
+          />
+
+          <CriteriaCard 
+            id="4.4" 
+            title="Placement, Higher Studies and Entrepreneurship" 
+            marks={marksData['4.4']} 
+            actionNavigate="/placement"
+            onEditMarks={handleEditMarks}
+          />
+
+          <Card className="border rounded-md overflow-hidden">
+            <div className="border-b p-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-base font-medium text-[#2F4883]">4.5 - Professional Activities</h3>
+                <span className="text-[#2F4883] font-medium">20 marks</span>
               </div>
-              
-              <div className="p-4 space-y-4">
-                <SubCriteriaCard 
-                  id="4.5.1" 
-                  title="Professional Societies/Chapters and Organizing Engineering Events" 
-                  marks={5}
-                  navigateTo="/societies"
-                />
-                <SubCriteriaCard 
-                  id="4.5.2" 
-                  title="Publication of Technical Magazines and Newsletter" 
-                  marks={5}
-                  navigateTo="/magazine"
-                />
-                <SubCriteriaCard 
-                  id="4.5.3" 
-                  title="Participation at Inter-Institution Events by Students of Program of Study" 
-                  marks={10}
-                  navigateTo="/achievements"
-                />
-              </div>
-            </Card>
-          
+            </div>
+            <div className="p-4 space-y-4">
+              <SubCriteriaCard 
+                id="4.5.1" 
+                title="Professional Societies/Chapters and Organizing Engineering Events" 
+                marks={marksData['4.5.1']}
+                navigateTo="/societies"
+                onEditMarks={handleEditMarks}
+              />
+              <SubCriteriaCard 
+                id="4.5.2" 
+                title="Publication of Technical Magazines and Newsletter" 
+                marks={marksData['4.5.2']}
+                navigateTo="/magazine"
+                onEditMarks={handleEditMarks}
+              />
+              <SubCriteriaCard 
+                id="4.5.3" 
+                title="Participation at Inter-Institution Events by Students of Program of Study" 
+                marks={marksData['4.5.3']}
+                navigateTo="/achievements"
+                onEditMarks={handleEditMarks}
+              />
+            </div>
+          </Card>
         </div>
       </div>
     </MainLayout>
   );
 };
 
-// Helper components
-const ActionButtons = ({ navigateTo }: { navigateTo?: string }) => {
+const ActionButtons = ({ navigateTo, onEdit }: { navigateTo?: string; onEdit?: () => void }) => {
   const navigate = useNavigate();
 
   return (
     <div className="flex space-x-2">
+      {navigateTo && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-[#2F4883] hover:bg-sky-50 border-[#2F4883]"
+          onClick={() => navigate(navigateTo)}
+        >
+          <Eye className="h-4 w-4 mr-1" />
+          See Details
+        </Button>
+      )}
       <Button
         variant="outline"
         size="sm"
-        className="text-[#2F4883] hover:bg-sky-50 border-[#2F4883]"
-        onClick={() => navigateTo && navigate(navigateTo)}
+        className="text-[#2F4883] hover:bg-sky-50 border-[#2f4883]"
+        onClick={onEdit}
       >
-        <Eye className="h-4 w-4 mr-1" />
-        See Details
-      </Button>
-      <Button variant="outline" size="sm" className="text-[#2F4883] hover:bg-sky-50 border-[#2f4883]">
-        <Edit2 className="h-4 w-4 mr-1" /> Edit Marks
+        <Edit2 className="h-4 w-4 mr-1" />
+        Edit Marks
       </Button>
     </div>
   );
@@ -174,16 +187,17 @@ interface CriteriaCardProps {
   id: string;
   title: string;
   marks: number;
-  actionNavigate?: string; // 
+  actionNavigate?: string;
+  onEditMarks: (id: string) => void;
 }
-const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks, actionNavigate }) => (
+const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks, actionNavigate, onEditMarks }) => (
   <Card className="border rounded-md overflow-hidden">
     <div className="p-4">
       <div className="flex justify-between items-center">
         <h3 className="text-base font-medium text-[#2F4883]">{id} - {title}</h3>
         <div className="flex items-center gap-4">
-          <ActionButtons navigateTo={actionNavigate} />
-          <span className="text-[##2F4883]">{marks} marks</span>
+          <ActionButtons navigateTo={actionNavigate} onEdit={() => onEditMarks(id)} />
+          <span className="text-[#2F4883]">{marks} marks</span>
         </div>
       </div>
     </div>
@@ -195,14 +209,14 @@ interface SubCriteriaCardProps {
   title: string;
   marks: number;
   navigateTo?: string;
+  onEditMarks: (id: string) => void;
 }
-
-const SubCriteriaCard: React.FC<SubCriteriaCardProps> = ({ id, title, marks, navigateTo }) => (
+const SubCriteriaCard: React.FC<SubCriteriaCardProps> = ({ id, title, marks, navigateTo, onEditMarks }) => (
   <div className="border-l-2 border-gray-300 pl-4">
     <div className="flex justify-between items-center">
       <h4 className="text-sm font-medium text-gray-700">{id} - {title}</h4>
       <div className="flex items-center gap-4">
-        <ActionButtons navigateTo={navigateTo} />
+        <ActionButtons navigateTo={navigateTo} onEdit={() => onEditMarks(id)} />
         <span className="text-[#2F4883] font-medium">{marks} marks</span>
       </div>
     </div>
