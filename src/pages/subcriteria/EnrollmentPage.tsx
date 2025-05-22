@@ -193,11 +193,11 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
                   )} style={{ minWidth: '10rem' }}></Column>
 
-                  <Column field="twelfth_marksheet" header="12th Marksheet " body={(rowData) => (
+                  <Column field="twelthmarksheet" header="12thMarksheet " body={(rowData) => (
                     <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
                   )} style={{ minWidth: '10rem' }}></Column>
 
-                  <Column field="gujcet_marksheet" header="Gujcet" body={(rowData) => (
+                  <Column field="gujcetmarksheet" header="Gujcet" body={(rowData) => (
                     <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
                   )} style={{ minWidth: '10rem' }}></Column>
 
