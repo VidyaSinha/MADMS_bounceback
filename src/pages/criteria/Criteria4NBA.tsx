@@ -6,16 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
-import EnrollmentPage from '../subcriteria/EnrollmentPage';
-import Academic2ndyearPage from '../subcriteria/Academic2ndyearPage';
 
 const Criteria4NBA = () => {
   const navigate = useNavigate();
-  
+  const [customMarks, setCustomMarks] = React.useState<{ [key: string]: number }>({});
+
   const handleBack = () => {
     navigate('/dashboard/nba');
   };
-  
+
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-6">
@@ -31,124 +30,109 @@ const Criteria4NBA = () => {
               Back to Criteria 4
             </Button>
             <Button 
-                  className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
-                  size="lg"
-                  onClick={() => navigate('/components/forms/StudentDetailsForm')}
-                >
-                  + Add Student Details
-                </Button>
-
+              className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
+              size="lg"
+              onClick={() => navigate('/components/forms/StudentDetailsForm')}
+            >
+              + Add Student Details
+            </Button>
             <Sheet>
-              <SheetTrigger asChild>
-               
-              </SheetTrigger>
+              <SheetTrigger asChild></SheetTrigger>
               <SheetContent side="right" className="w-full sm:max-w-md">
                 <StudentDetailsForm />
               </SheetContent>
             </Sheet>
           </div>
-          
-          <div>
-            <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
-              <h1 className="text-2xl font-bold text-center">
-                Criteria 4: Students' Performance
-              </h1>
-            </div>
-          </div>
-          
 
-          <div className="space-y-4 text-[#2F4883] ">
+          <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
+            <h1 className="text-2xl font-bold text-center">
+              Criteria 4: Students' Performance
+            </h1>
+          </div>
+
+          <div className="space-y-4 text-[#2F4883]">
             <CriteriaCard 
               id="4.1" 
               title="Enrollment Ratio" 
               marks={20} 
               actionNavigate="/enrollment"
+              customMarks={customMarks}
+              setCustomMarks={setCustomMarks}
             />
-            </div>
-            
-            <Card className="border rounded-md overflow-hidden">
-              <div className="border-b p-4">
-                <div className="flex justify-between items-center text-[#2f4883]">
-                  <h3 className="text-base font-medium ">4.2 - Success Rate in Stipulated Period of the Program</h3>
-                  <div className="flex items-center gap-4">
-                    <ActionButtons navigateTo="/successrate" />
-                    <span className="text-[#2f4883] font-medium">20 marks</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-4 space-y-4 text-[#2f4883]">
-                <SubCriteriaCard 
-                  id="4.2.1" 
-                  title="Success Rate Without Backlog" 
-                  marks={10} 
-                />
-                <SubCriteriaCard 
-                  id="4.2.2" 
-                  title="Success Rate With Backlog" 
-                  marks={10} 
-                />
-              </div>
-            </Card>
-            
-            <div className="text-[#2F4883]">
-            <CriteriaCard 
-              id="4.3" 
-              title="Academic Performance in Second Year" 
-              marks={10} 
-              actionNavigate="/academic2ndyear"
-            />
-            </div>
+          </div>
 
-            <div className="text=[#2f4883]">
-            <CriteriaCard 
-              id="4.4" 
-              title="Placement, Higher Studies and Entrepreneurship" 
-              marks={30} 
-              actionNavigate="/placement"
-            />
-            </div>
-            
-            <Card className="border rounded-md overflow-hidden">
-              <div className="border-b p-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-[#2F4883]">4.5 - Professional Activities</h3>
-                  <div className="flex items-center gap-4">
-                    
-                    <span className="text-[#2F4883] font-medium">20 marks</span>
-                  </div>
+          <Card className="border rounded-md overflow-hidden">
+            <div className="border-b p-4">
+              <div className="flex justify-between items-center text-[#2f4883]">
+                <h3 className="text-base font-medium">4.2 - Success Rate in Stipulated Period of the Program</h3>
+                <div className="flex items-center gap-4">
+                  <ActionButtons navigateTo="/successrate" />
+                  <span className="text-[#2f4883] font-medium">20 marks</span>
                 </div>
               </div>
-              
-              <div className="p-4 space-y-4">
-                <SubCriteriaCard 
-                  id="4.5.1" 
-                  title="Professional Societies/Chapters and Organizing Engineering Events" 
-                  marks={5}
-                  navigateTo="/societies"
-                />
-                <SubCriteriaCard 
-                  id="4.5.2" 
-                  title="Publication of Technical Magazines and Newsletter" 
-                  marks={5}
-                  navigateTo="/magazine"
-                />
-                <SubCriteriaCard 
-                  id="4.5.3" 
-                  title="Participation at Inter-Institution Events by Students of Program of Study" 
-                  marks={10}
-                  navigateTo="/achievements"
-                />
+            </div>
+            <div className="p-4 space-y-4 text-[#2f4883]">
+              <SubCriteriaCard id="4.2.1" title="Success Rate Without Backlog" marks={10} />
+              <SubCriteriaCard id="4.2.2" title="Success Rate With Backlog" marks={10} />
+            </div>
+          </Card>
+
+          <CriteriaCard 
+            id="4.3" 
+            title="Academic Performance in Second Year" 
+            marks={10} 
+            actionNavigate="/academic2ndyear"
+            customMarks={customMarks}
+            setCustomMarks={setCustomMarks}
+          />
+
+          <CriteriaCard 
+            id="4.4" 
+            title="Placement, Higher Studies and Entrepreneurship" 
+            marks={30} 
+            actionNavigate="/placement"
+            customMarks={customMarks}
+            setCustomMarks={setCustomMarks}
+          />
+
+          <Card className="border rounded-md overflow-hidden">
+            <div className="border-b p-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-base font-medium text-[#2F4883]">4.5 - Professional Activities</h3>
+                <div className="flex items-center gap-4">
+                  <span className="text-[#2F4883] font-medium">20 marks</span>
+                </div>
               </div>
-            </Card>
-          
+            </div>
+            <div className="p-4 space-y-4">
+              <SubCriteriaCard 
+                id="4.5.1" 
+                title="Professional Societies/Chapters and Organizing Engineering Events" 
+                marks={5}
+                navigateTo="/societies"
+              />
+              <SubCriteriaCard 
+                id="4.5.2" 
+                title="Publication of Technical Magazines and Newsletter" 
+                marks={5}
+                navigateTo="/magazine"
+                customMarks={customMarks}
+                setCustomMarks={setCustomMarks}
+              />
+              <SubCriteriaCard 
+                id="4.5.3" 
+                title="Participation at Inter-Institution Events by Students of Program of Study" 
+                marks={10}
+                navigateTo="/achievements"
+              />
+            </div>
+          </Card>
         </div>
       </div>
     </MainLayout>
   );
 };
 
-// Helper components
 const ActionButtons = ({ navigateTo }: { navigateTo?: string }) => {
   const navigate = useNavigate();
 
@@ -174,16 +158,19 @@ interface CriteriaCardProps {
   id: string;
   title: string;
   marks: number;
-  actionNavigate?: string; // 
+  actionNavigate?: string;
+  customMarks?: { [key: string]: number };
+  setCustomMarks?: React.Dispatch<React.SetStateAction<{ [key: string]: number }>>;
 }
-const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks, actionNavigate }) => (
+
+const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks, actionNavigate, customMarks, setCustomMarks }) => (
   <Card className="border rounded-md overflow-hidden">
     <div className="p-4">
       <div className="flex justify-between items-center">
         <h3 className="text-base font-medium text-[#2F4883]">{id} - {title}</h3>
         <div className="flex items-center gap-4">
           <ActionButtons navigateTo={actionNavigate} />
-          <span className="text-[##2F4883]">{marks} marks</span>
+          <span className="text-[#2F4883]">{marks} marks</span>
         </div>
       </div>
     </div>
@@ -195,6 +182,8 @@ interface SubCriteriaCardProps {
   title: string;
   marks: number;
   navigateTo?: string;
+  customMarks?: { [key: string]: number };
+  setCustomMarks?: React.Dispatch<React.SetStateAction<{ [key: string]: number }>>;
 }
 
 const SubCriteriaCard: React.FC<SubCriteriaCardProps> = ({ id, title, marks, navigateTo }) => (
