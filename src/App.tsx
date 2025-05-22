@@ -72,14 +72,14 @@ const App = () => (
               </ProtectedRoute>
             } />
 
-            {/* Admin Only Routes */}
+            {/* NBA Dashboard - Accessible to all authenticated users */}
             <Route path="/dashboard/nba" element={
-              <ProtectedRoute requireAdmin>
+              <ProtectedRoute>
                 <NBA />
               </ProtectedRoute>
             } />
 
-            {/* Protected Criteria Routes */}
+            {/* Protected Criteria Routes - Accessible to all authenticated users */}
             <Route path="/dashboard/:body/:criteriaId" element={
               <ProtectedRoute>
                 <Criteria />
@@ -91,63 +91,63 @@ const App = () => (
               </ProtectedRoute>
             } />
 
-            {/* Protected Specific Criteria Pages */}
+            {/* Admin Only NBA Criteria Pages */}
             <Route path="/dashboard/nba/criteria4" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <Criteria4NBA />
               </ProtectedRoute>
             } />
             <Route path="dashboard/nba/criteria5" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <Criteria5NBA/>
               </ProtectedRoute>
             } />
             
-            {/* Protected Forms */}
+            {/* Protected Forms - Admin Only */}
             <Route path="/components/forms/StudentDetailsForm" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <StudentDetailsForm />
               </ProtectedRoute>
             } />
 
-            {/* Protected Sub criteria routes */}
+            {/* Protected Sub criteria routes - Admin Only */}
             <Route path="/enrollment" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <EnrollmentPage/>
               </ProtectedRoute>
             }/>
             <Route path="/successrate" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <SuccessRatePage/>
               </ProtectedRoute>
             }/>
             <Route path="/academic2ndyear" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <Academic2ndyearPage/>
               </ProtectedRoute>
             }/>
             <Route path="/placement" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <PlacementPage/>
               </ProtectedRoute>
             }/>
             <Route path="/societies" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <SocietiesPage/>
               </ProtectedRoute>
             }/>
             <Route path="/magazine" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <MagazinePage/>
               </ProtectedRoute>
             }/>
             <Route path="/achievements" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <AchievementsPage/>
               </ProtectedRoute>
             }/>
             <Route path="/studnetfacultyratio" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireAdmin>
                 <StudentFacultyRatioTable/>
               </ProtectedRoute>
             }/>
