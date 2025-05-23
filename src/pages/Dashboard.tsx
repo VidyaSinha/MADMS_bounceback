@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CriteriaChart from '@/components/dashboard/CriteriaChart';
+import CriteriaRadarChart from '@/components/dashboard/CriteriaRadarChart';
 
 const chartData = [
   { name: 'NBA', value: 78 },
@@ -14,8 +15,6 @@ const chartData = [
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  
-
   useEffect(() => {
     const session = localStorage.getItem("session");
     if (!session) {
@@ -25,14 +24,14 @@ const Dashboard = () => {
 
   return (
     <MainLayout>
-
       <DashboardHeader 
         title="Welcome to MADMS" 
         subtitle="Monitor and manage your accreditation criteria across multiple frameworks"
       />
       
-      <div className="mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <CriteriaChart data={chartData} title="Accreditation Bodies Overview" />
+        <CriteriaRadarChart data={chartData} title="Criteria Performance Radar" />
       </div>
       
       <div className="bg-white p-5 rounded-lg border border-border shadow-sm animate-fadeIn animation-delay-200">
