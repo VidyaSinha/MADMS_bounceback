@@ -38,7 +38,7 @@ import AchievementsPage from "./pages/subcriteria/AchievementsPage";
 import StudentFacultyRatioTable from "./pages/subcriteria/StudentFacultyRatioTable";
 import FacultyDetailForm from "./components/forms/FacultyDetailForm";
 import FacultyCadreProportion from "./pages/subcriteria/FacultyCadreProportion";
-import CriteriaRadarChart from "./components/dashboard/CriteriaRadarChart";
+import RadarChart from "./components/dashboard/RadarChart";
 
 const ProtectedRoute = ({ children, requireAdmin = false }: { children: React.ReactNode, requireAdmin?: boolean }) => {
   const { isAuthenticated, isAdmin } = useAuth();
@@ -81,21 +81,7 @@ const App = () => (
                 <NBA />
               </ProtectedRoute>
             } />
-             {/* NBA Dashboard - Accessible to all authenticated users */}
-             <Route path="/dashboard/criteria-radar-chart" element={
-              <ProtectedRoute>
-                <CriteriaRadarChart 
-                  data={[
-                    { name: 'NBA', value: 78 },
-                    { name: 'NIRF', value: 85 },
-                    { name: 'COE', value: 88 },
-                    { name: 'QoS', value: 90 }
-                  ]}
-                  title="Criteria Performance Radar"
-                />
-              </ProtectedRoute>
-            } />
-           
+
             {/* Protected Criteria Routes - Accessible to all authenticated users */}
             <Route path="/dashboard/:body/:criteriaId" element={
               <ProtectedRoute>
