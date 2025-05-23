@@ -1,14 +1,24 @@
-import React, { useEffect, useState } from 'react';
+
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart3 } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CriteriaChart from '@/components/dashboard/CriteriaChart';
-import RadarChart from '@/components/dashboard/RadarChart';
 import CriteriaList from '@/components/dashboard/CriteriaList';
 import StatCard from '@/components/dashboard/StatCard';
-import { useQuery } from '@tanstack/react-query';
-import { getNBACriteriaMarks } from '@/services/api';
+
+const chartData = [
+  { name: 'Criteria 1', value: 12 },
+  { name: 'Criteria 2', value: 9 },
+  { name: 'Criteria 3', value: 15 },
+  { name: 'Criteria 4', value: 8 },
+  { name: 'Criteria 5', value: 14 },
+  { name: 'Criteria 6', value: 10 },
+  { name: 'Criteria 7', value: 11 },
+  { name: 'Criteria 8', value: 7 },
+  { name: 'Criteria 9', value: 6 },
+];
 
 const nbaCriteria = [
   { id: 'criteria1', title: 'Criteria 1: Vision, Mission and Program Educational Objectives', path: '/dashboard/nba/criteria1' },
@@ -25,24 +35,6 @@ const nbaCriteria = [
 const NBA = () => {
   const navigate = useNavigate();
   
-  // Fetch NBA criteria marks
-  const { data: criteriaMarks, isLoading } = useQuery({
-    queryKey: ['nbaCriteriaMarks'],
-    queryFn: getNBACriteriaMarks
-  });
-
-  const chartData = criteriaMarks || [
-    { name: 'Criteria 1', value: 12 },
-    { name: 'Criteria 2', value: 9 },
-    { name: 'Criteria 3', value: 15 },
-    { name: 'Criteria 4', value: 8 },
-    { name: 'Criteria 5', value: 14 },
-    { name: 'Criteria 6', value: 10 },
-    { name: 'Criteria 7', value: 11 },
-    { name: 'Criteria 8', value: 7 },
-    { name: 'Criteria 9', value: 6 },
-  ];
-  
   return (
     <MainLayout>
       <DashboardHeader 
@@ -51,26 +43,32 @@ const NBA = () => {
       />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* <StatCard
+          title="Total Criteria"
+          value="9"
+          icon={<BarChart3 className="h-5 w-5" />}
+          delay={1}
+        /> */}
         <StatCard
           title="Total Score"
           value="92/100"
           description="Last evaluated: March 2024"
           delay={2}
         />
+        {/* <StatCard
+          title="Accreditation Status"
+          value="Active"
+          description="Valid till: December 2025"
+          delay={3}
+        /> */}
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <CriteriaChart data={chartData} title="NBA Criteria Scores" />
         </div>
         <div>
           <CriteriaList criteria={nbaCriteria} title="CRITERIA DETAILS" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <RadarChart data={chartData} title="NBA Criteria Performance Overview" />
         </div>
       </div>
     </MainLayout>
