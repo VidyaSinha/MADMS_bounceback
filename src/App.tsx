@@ -80,7 +80,7 @@ const App = () => (
                 <NBA />
               </ProtectedRoute>
             } />
-
+           
             {/* Protected Criteria Routes - Accessible to all authenticated users */}
             <Route path="/dashboard/:body/:criteriaId" element={
               <ProtectedRoute>
