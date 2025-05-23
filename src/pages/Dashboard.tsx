@@ -21,7 +21,7 @@ const Dashboard = () => {
     if (!session) {
       navigate("/login"); // Redirect to login if session is missing
     }
-  }, []);
+  },);
 
   return (
     <MainLayout>
@@ -39,7 +39,7 @@ const Dashboard = () => {
         <h3 className="text-lg font-medium mb-4 text-madms-charcoal">Recent Updates</h3>
         <div className="space-y-3">
           {[ 
-            "NAAC Criterion 1.3 documentation updated",
+            "NBA Criterion 1.3 documentation updated",
             "NIRF data submission deadline approaching",
             "QoS metrics improved by 8% this quarter"
           ].map((update, index) => (
