@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import FacultyDetailForm from '@/components/forms/FacultyDetailForm';
 import StudentFacultyRatioTable from '../subcriteria/StudentFacultyRatioTable';
+import FacultyCadreProportion from "../subcriteria/FacultyCadreProportion";
 
 const Criteria5NBA = () => {
   const navigate = useNavigate();
@@ -30,12 +31,12 @@ const Criteria5NBA = () => {
               Back to Criteria 5
             </Button>
             <Button 
-                  className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
-                  size="lg"
-                  onClick={() => navigate('/components/forms/StudentDetailsForm')}
-                >
-                  + Add faculty Details
-                </Button>
+              className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
+              size="lg"
+              onClick={() => navigate('/dashboard/nba/criteria5/faculty')}
+            >
+              + Add faculty Details
+            </Button>
 
             <Sheet>
               <SheetTrigger asChild>
@@ -61,7 +62,7 @@ const Criteria5NBA = () => {
               id="5.1" 
               title="Faculty to Student Ratio" 
               marks={20} 
-              actionNavigate="/studnetfacultyratio"
+              actionNavigate="/faculty-cadre-proportion"
             />
             
             <Card className="border rounded-md overflow-hidden">
@@ -69,7 +70,7 @@ const Criteria5NBA = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-base font-medium text-sky-700">5.2 - Faculty Cardre propotion</h3>
                   <div className="flex items-center gap-4">
-                    <ActionButtons navigateTo="/successrate" />
+                    <ActionButtons navigateTo="/faculty-cadre-proportion" />
                     <span className="text-sky-600 font-medium">20 marks</span>
                   </div>
                 </div>

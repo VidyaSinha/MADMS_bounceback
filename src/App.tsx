@@ -36,6 +36,8 @@ import SocietiesPage from "./pages/subcriteria/SocietiesPage";
 import MagazinePage from "./pages/subcriteria/Magazine";
 import AchievementsPage from "./pages/subcriteria/AchievementsPage";
 import StudentFacultyRatioTable from "./pages/subcriteria/StudentFacultyRatioTable";
+import FacultyDetailForm from "./components/forms/FacultyDetailForm";
+import FacultyCadreProportion from "./pages/FacultyCadreProportion";
 
 const ProtectedRoute = ({ children, requireAdmin = false }: { children: React.ReactNode, requireAdmin?: boolean }) => {
   const { isAuthenticated, isAdmin } = useAuth();
@@ -93,13 +95,20 @@ const App = () => (
 
             {/* Admin Only NBA Criteria Pages */}
             <Route path="/dashboard/nba/criteria4" element={
-              <ProtectedRoute requireAdmin>
+              <ProtectedRoute>
                 <Criteria4NBA />
               </ProtectedRoute>
             } />
-            <Route path="dashboard/nba/criteria5" element={
-              <ProtectedRoute requireAdmin>
+            <Route path="/dashboard/nba/criteria5" element={
+              <ProtectedRoute>
                 <Criteria5NBA/>
+              </ProtectedRoute>
+            } />
+            
+            {/* Faculty Form Route */}
+            <Route path="/dashboard/nba/criteria5/faculty" element={
+              <ProtectedRoute>
+                <FacultyDetailForm />
               </ProtectedRoute>
             } />
             
@@ -149,6 +158,13 @@ const App = () => (
             <Route path="/studnetfacultyratio" element={
               <ProtectedRoute requireAdmin>
                 <StudentFacultyRatioTable/>
+              </ProtectedRoute>
+            }/>
+
+            {/* Faculty Cadre Proportion Route */}
+            <Route path="/faculty-cadre-proportion" element={
+              <ProtectedRoute>
+                <FacultyCadreProportion />
               </ProtectedRoute>
             }/>
 
