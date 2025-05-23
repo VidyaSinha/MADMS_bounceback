@@ -94,7 +94,6 @@ const Criteria4NBA = () => {
                 id="4.2.1" 
                 title="Success Rate Without Backlog" 
                 marks={marksData['4.2.1']} 
-                navigateTo="/successrate"
                 onEditMarks={handleEditMarks}
               />
               <SubCriteriaCard 
