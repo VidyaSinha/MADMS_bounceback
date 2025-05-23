@@ -62,7 +62,7 @@ const Criteria5NBA = () => {
               id="5.1" 
               title="Faculty to Student Ratio" 
               marks={20} 
-              actionNavigate="/faculty-cadre-proportion"
+              actionNavigate="/studentfaculty-ratio-table"
             />
             
             <Card className="border rounded-md overflow-hidden">
