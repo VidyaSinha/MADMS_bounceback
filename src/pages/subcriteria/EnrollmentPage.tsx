@@ -6,20 +6,22 @@ import { useApi } from '@/contexts/ApiContext';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import axios from 'axios';
+
 
 interface Student {
-  enrollmentNo: number;
-  registrationform: string;
-  tenthmarksheet: string;
-  twelthmarksheet: string;
-  gujcetmarksheet: string;
+  enrollment_number: string;
+  registration_form: string;
+  tenth_marksheet: string;
+  twelfth_marksheet: string;
+  gujcet_marksheet: string;
 }
 
 const dummyStudents: Student[] = [
-  { enrollmentNo : 1, registrationform: '', tenthmarksheet: '', twelthmarksheet: '', gujcetmarksheet: ''},
-  { enrollmentNo : 2, registrationform: '', tenthmarksheet: '', twelthmarksheet: '', gujcetmarksheet: ''},
-  { enrollmentNo : 3, registrationform: '', tenthmarksheet: '', twelthmarksheet: '', gujcetmarksheet: ''},
-  { enrollmentNo : 4, registrationform: '', tenthmarksheet: '', twelthmarksheet: '', gujcetmarksheet: ''}
+  { enrollment_number: '1', registration_form: '', tenth_marksheet: '', twelfth_marksheet: '', gujcet_marksheet: '' },
+  { enrollment_number: '2', registration_form: '', tenth_marksheet: '', twelfth_marksheet: '', gujcet_marksheet: '' },
+  { enrollment_number: '3', registration_form: '', tenth_marksheet: '', twelfth_marksheet: '', gujcet_marksheet: '' },
+  { enrollment_number: '4', registration_form: '', tenth_marksheet: '', twelfth_marksheet: '', gujcet_marksheet: '' }
 ];
 
 function EnrollmentPage(): JSX.Element {
@@ -41,6 +43,26 @@ function EnrollmentPage(): JSX.Element {
   const [selectedStudents, setSelectedStudents] = useState<Student[]>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const dt = useRef<DataTable<Student[]>>(null);
+
+
+useEffect(() => {
+  const fetchEnrollment = async () => {
+    try {
+      const response = await axios.get(`${apiBaseUrl}/upload-documents`);
+      if (Array.isArray(response.data)) {
+        setStudents(response.data);
+      } else {
+        console.error('Unexpected response format:', response.data);
+        setStudents([]);
+      }
+    } catch (error) {
+      console.error('Error fetching student data:', error);
+      setStudents([]);
+    }
+  };
+
+  fetchEnrollment();
+}, [apiBaseUrl]);
 
 
   const resetForm = () => {
@@ -154,6 +176,32 @@ const handleSubmit = async (e: React.FormEvent) => {
     throw new Error('Function not implemented.');
   }
 
+  // Total students expected
+const TOTAL_STUDENTS = 60;
+
+// Define what counts as 'entered' — here, let's say all 4 documents are uploaded (non-empty URLs)
+const countEnteredStudents = students.filter(student =>
+  student.registration_form &&
+  student.tenth_marksheet &&
+  student.twelfth_marksheet &&
+  student.gujcet_marksheet
+).length;
+
+// Calculate percentage
+const percentage = (countEnteredStudents / TOTAL_STUDENTS) * 100;
+
+// Calculate grade and score based on percentage
+function calculateEnrollmentGrade(percentage: number) {
+  if (percentage >= 90) return { grade: 'A', score: 20 };
+  else if (percentage >= 80) return { grade: 'B', score: 16 };
+  else if (percentage >= 70) return { grade: 'C', score: 12 };
+  else if (percentage >= 60) return { grade: 'D', score: 8 };
+  else return { grade: 'E', score: 4 };
+}
+
+const { grade, score } = calculateEnrollmentGrade(percentage);
+
+
   return (
     <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-4">
@@ -166,48 +214,67 @@ const handleSubmit = async (e: React.FormEvent) => {
         </button>
       </div>
 
-      <DataTable
-                  ref={dt}
-                  value={students}
-                  selection={selectedStudents}
-                  selectionMode="multiple"
-                  onSelectionChange={(e) => setSelectedStudents(e.value)}
-                  dataKey="id"
-                  paginator
-                  rows={10}
-                  rowsPerPageOptions={[5, 10, 25]}
-                  paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} students"
-                  globalFilter={globalFilter}
-                  header={<h3 className="text-xl font-semibold text-[#2f4883]">Student Records</h3>}
-                  className="p-datatable-sm p-datatable-gridlines"
-                >
-                  
-                  <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '14rem' }}></Column>
+      <div className="mb-4 p-4 bg-gray-100 rounded shadow-sm">
+  <p>Total Students Expected: {TOTAL_STUDENTS}</p>
+  <p>Students Entered: {countEnteredStudents}</p>
+  <p>Enrollment Percentage: {percentage.toFixed(2)}%</p>
+  <p>Grade: <strong>{grade}</strong> | Score: <strong>{score}</strong></p>
+</div>
 
-                  <Column field="registrationform" header="Registration Form" body={(rowData) => (
-                    <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
-                  )} style={{ minWidth: '10rem' }}></Column>
 
-                  <Column field="tenthmarksheet" header="10th Marksheet" body={(rowData) => (
-                    <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
-                  )} style={{ minWidth: '10rem' }}></Column>
-
-                  <Column field="twelthmarksheet" header="12thMarksheet " body={(rowData) => (
-                    <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
-                  )} style={{ minWidth: '10rem' }}></Column>
-
-                  <Column field="gujcetmarksheet" header="Gujcet" body={(rowData) => (
-                    <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
-                  )} style={{ minWidth: '10rem' }}></Column>
-
-                  <Column body={(rowData) => (
-                    <div className="flex gap-2 justify-center">
-                      <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
-                      <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteStudent(rowData)} />
-                    </div>
-                  )} exportable={false} style={{ minWidth: '8rem' }}></Column>
-                </DataTable>
+<DataTable
+  value={students}
+  paginator
+  rows={10}
+  rowsPerPageOptions={[5, 10, 25]}
+  paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} students"
+  globalFilter={globalFilter}
+  header={<h3 className="text-xl font-semibold text-[#2f4883]">Student Records</h3>}
+  className="p-datatable-sm p-datatable-gridlines"
+>
+  <Column field="enrollment_number" header="Enrollment No." sortable style={{ minWidth: '14rem' }} />
+  <Column
+    field="registration_form"
+    header="Registration Form"
+    body={(rowData) => (
+      <a href={rowData.registration_form} target="_blank" rel="noopener noreferrer">
+        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" tooltip="View Registration Form" />
+      </a>
+    )}
+    style={{ minWidth: '10rem' }}
+  />
+  <Column
+    field="tenth_marksheet"
+    header="10th Marksheet"
+    body={(rowData) => (
+      <a href={rowData.tenth_marksheet} target="_blank" rel="noopener noreferrer">
+        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" tooltip="View 10th Marksheet" />
+      </a>
+    )}
+    style={{ minWidth: '10rem' }}
+  />
+  <Column
+    field="twelfth_marksheet"
+    header="12th Marksheet"
+    body={(rowData) => (
+      <a href={rowData.twelfth_marksheet} target="_blank" rel="noopener noreferrer">
+        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" tooltip="View 12th Marksheet" />
+      </a>
+    )}
+    style={{ minWidth: '10rem' }}
+  />
+  <Column
+    field="gujcet_marksheet"
+    header="GUJCET Marksheet"
+    body={(rowData) => (
+      <a href={rowData.gujcet_marksheet} target="_blank" rel="noopener noreferrer">
+        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" tooltip="View GUJCET Marksheet" />
+      </a>
+    )}
+    style={{ minWidth: '10rem' }}
+  />
+</DataTable>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
