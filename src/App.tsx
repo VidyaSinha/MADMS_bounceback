@@ -37,7 +37,7 @@ import MagazinePage from "./pages/subcriteria/Magazine";
 import AchievementsPage from "./pages/subcriteria/AchievementsPage";
 import StudentFacultyRatioTable from "./pages/subcriteria/StudentFacultyRatioTable";
 import FacultyDetailForm from "./components/forms/FacultyDetailForm";
-import FacultyCadreProportion from "./pages/FacultyCadreProportion";
+import FacultyCadreProportion from "./pages/subcriteria/FacultyCadreProportion";
 
 const ProtectedRoute = ({ children, requireAdmin = false }: { children: React.ReactNode, requireAdmin?: boolean }) => {
   const { isAuthenticated, isAdmin } = useAuth();
