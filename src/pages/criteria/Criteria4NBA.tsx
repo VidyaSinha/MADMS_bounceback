@@ -82,6 +82,7 @@ const Criteria4NBA = () => {
             <div className="border-b p-4">
               <div className="flex justify-between items-center text-[#2f4883]">
                 <h3 className="text-base font-medium">4.2 - Success Rate in Stipulated Period of the Program</h3>
+                navigateTo="/successrate"
                 <span className="text-[#2f4883] font-medium">20 marks</span>
               </div>
             </div>
@@ -90,7 +91,7 @@ const Criteria4NBA = () => {
                 id="4.2.1" 
                 title="Success Rate Without Backlog" 
                 marks={marksData['4.2.1']} 
-                navigateTo="/successrate"
+                
                 onEditMarks={handleEditMarks}
               />
               <SubCriteriaCard 

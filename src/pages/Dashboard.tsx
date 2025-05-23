@@ -5,7 +5,7 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CriteriaChart from '@/components/dashboard/CriteriaChart';
 
 const chartData = [
-  { name: 'NAAC', value: 78 },
+  { name: 'NBA', value: 78 },
   { name: 'NIRF', value: 85 },
   { name: 'COE', value: 88 },
   { name: 'QoS', value: 90 }
