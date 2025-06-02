@@ -5,8 +5,9 @@ import MainLayout from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
+import FacultyDetailForm from '@/components/forms/FacultyDetailForm';
 import StudentFacultyRatioTable from '../subcriteria/StudentFacultyRatioTable';
+import FacultyCadreProportion from "../subcriteria/FacultyCadreProportion";
 
 const Criteria5NBA = () => {
   const navigate = useNavigate();
@@ -30,19 +31,19 @@ const Criteria5NBA = () => {
               Back to Criteria 5
             </Button>
             <Button 
-                  className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
-                  size="lg"
-                  onClick={() => navigate('/components/forms/StudentDetailsForm')}
-                >
-                  + Add faculty Details
-                </Button>
+              className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
+              size="lg"
+              onClick={() => navigate('/dashboard/nba/criteria5/faculty')}
+            >
+              + Add faculty Details
+            </Button>
 
             <Sheet>
               <SheetTrigger asChild>
                
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:max-w-md">
-                <StudentDetailsForm />
+                <FacultyDetailForm />
               </SheetContent>
             </Sheet>
           </div>
@@ -67,10 +68,10 @@ const Criteria5NBA = () => {
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-sky-700">5.2 - Faculty Cardre propotion</h3>
+                  <h3 className="text-base font-medium text-[#2f4883]">5.2 - Faculty Cardre propotion</h3>
                   <div className="flex items-center gap-4">
-                    <ActionButtons navigateTo="/successrate" />
-                    <span className="text-sky-600 font-medium">20 marks</span>
+                    <ActionButtons navigateTo="/faculty-cadre-proportion" />
+                    <span className="text-[#2f4883] font-medium">20 marks</span>
                   </div>
                 </div>
               </div>
@@ -93,10 +94,10 @@ const Criteria5NBA = () => {
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-sky-700">5.5 - Faculty Completence</h3>
+                  <h3 className="text-base font-medium text-[#2f4883]">5.5 - Faculty Completence</h3>
                   <div className="flex items-center gap-4">
                     
-                    <span className="text-sky-600 font-medium">20 marks</span>
+                    <span className="text-[#2f4883] font-medium">20 marks</span>
                   </div>
                 </div>
               </div>
@@ -138,13 +139,13 @@ const ActionButtons = ({ navigateTo }: { navigateTo?: string }) => {
       <Button
         variant="outline"
         size="sm"
-        className="text-sky-600 hover:bg-sky-50 border-sky-600"
+        className="text-[#2f4883] hover:bg-sky-50 border-[#2f4883]"
         onClick={() => navigateTo && navigate(navigateTo)}
       >
         <Eye className="h-4 w-4 mr-1" />
         See Details
       </Button>
-      <Button variant="outline" size="sm" className="text-sky-600 hover:bg-sky-50 border-sky-600">
+      <Button variant="outline" size="sm" className="text-[#2f4883] hover:bg-sky-50 border-[#2f4883]">
         <Edit2 className="h-4 w-4 mr-1" /> Edit Marks
       </Button>
     </div>
@@ -161,10 +162,10 @@ const CriteriaCard: React.FC<CriteriaCardProps> = ({ id, title, marks, actionNav
   <Card className="border rounded-md overflow-hidden">
     <div className="p-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-base font-medium text-teal-700">{id} - {title}</h3>
+        <h3 className="text-base font-medium text-[#2f4883]">{id} - {title}</h3>
         <div className="flex items-center gap-4">
           <ActionButtons navigateTo={actionNavigate} />
-          <span className="text-teal-600 font-medium">{marks} marks</span>
+          <span className="text-[#2f4883] font-medium">{marks} marks</span>
         </div>
       </div>
     </div>
@@ -184,7 +185,7 @@ const SubCriteriaCard: React.FC<SubCriteriaCardProps> = ({ id, title, marks, nav
       <h4 className="text-sm font-medium text-gray-700">{id} - {title}</h4>
       <div className="flex items-center gap-4">
         <ActionButtons navigateTo={navigateTo} />
-        <span className="text-teal-600 font-medium">{marks} marks</span>
+        <span className="text-[#2f4883] font-medium">{marks} marks</span>
       </div>
     </div>
   </div>

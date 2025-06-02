@@ -1,13 +1,15 @@
 import React from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("session"); // Remove session from localStorage
-    navigate("/login"); // React-router handles navigation safely
+    logout();
+    navigate("/login");
   };
 
   return (

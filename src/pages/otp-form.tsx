@@ -25,7 +25,11 @@ export function OtpForm() {
       );
 
       if (response.data.success) {
-        localStorage.setItem("session", JSON.stringify({ email, token: response.data.token }));
+        localStorage.setItem("session", JSON.stringify({ 
+          email, 
+          token: response.data.token,
+          role: response.data.role 
+        }));
         alert("OTP verified successfully!");
         navigate("/dashboard");
       } else {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import CriteriaChart from '@/components/dashboard/CriteriaChart';
+import RadarChart from '@/components/dashboard/RadarChart';
 
 const chartData = [
   { name: 'NAAC', value: 78 },
@@ -33,6 +34,10 @@ const Dashboard = () => {
       
       <div className="mb-8">
         <CriteriaChart data={chartData} title="Accreditation Bodies Overview" />
+      </div>
+
+      <div className="mb-8">
+        <RadarChart data={chartData} title="Criteria Performance Radar View" />
       </div>
       
       <div className="bg-white p-5 rounded-lg border border-border shadow-sm animate-fadeIn animation-delay-200">
