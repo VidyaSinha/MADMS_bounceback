@@ -19,7 +19,7 @@ const Dashboard = () => {
   useEffect(() => {
     const session = localStorage.getItem("session");
     if (!session) {
-      navigate("/login"); // Redirect to login if session is missing
+      // navigate("/login"); // Redirect to login if session is missing
     }
   }, []);
 

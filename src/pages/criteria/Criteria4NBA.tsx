@@ -8,6 +8,8 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
 import EnrollmentPage from '../subcriteria/EnrollmentPage';
 import Academic2ndyearPage from '../subcriteria/Academic2ndyearPage';
+import { criteria4Data } from '@/data/nbaCriteriaData';
+
 
 const Criteria4NBA = () => {
   const navigate = useNavigate();
