@@ -6,13 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
-<<<<<<< HEAD
 import EnrollmentPage from '../subcriteria/EnrollmentPage';
 import Academic2ndyearPage from '../subcriteria/Academic2ndyearPage';
 import { criteria4Data } from '@/data/nbaCriteriaData';
 
-=======
->>>>>>> 9e53bab07b81514635891ee6d3fd0c21b189a11e
 
 const Criteria4NBA = () => {
   const navigate = useNavigate();
