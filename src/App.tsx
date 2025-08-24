@@ -39,6 +39,7 @@ import StudentFacultyRatioTable from "./pages/subcriteria/StudentFacultyRatioTab
 import FacultyDetailForm from "./components/forms/FacultyDetailForm";
 import FacultyCadreProportion from "./pages/subcriteria/FacultyCadreProportion";
 import RadarChart from "./components/dashboard/RadarChart";
+import AuthCallback from "./pages/AuthCallback";
 
 const ProtectedRoute = ({ children, requireAdmin = false }: { children: React.ReactNode, requireAdmin?: boolean }) => {
   const { isAuthenticated, isAdmin } = useAuth();
@@ -68,7 +69,9 @@ const App = () => (
             <Route path="/login" element={<LoginForm />} />
             <Route path="/otp-form" element={<OtpForm />} />
 
+
             {/* Protected Routes */}
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
