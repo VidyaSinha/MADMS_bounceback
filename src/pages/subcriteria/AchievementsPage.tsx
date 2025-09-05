@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
-import { Button as Shadcnbutton} from '@/components/ui/button';
+import { Button as Shadcnbutton } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
   Dialog,
@@ -24,6 +24,8 @@ import { useForm } from 'react-hook-form';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+
+import { useToast } from '@/components/ui/use-toast';
 
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -53,8 +55,9 @@ const AchievementsPage = () => {
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null);
+  const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null);
 
+  const { toast } = useToast();
 
   const form = useForm<AchievementFormData>({
     defaultValues: {
@@ -68,9 +71,9 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
   });
 
   const [achieve, setachieve] = useState([
-        {name:'rajvi',enroll:'78',eventname:'kkwnkw',organisedBy:'nwkvwk',year:'2025',rank:'1',proof:''},
-        {name:'shyama',enroll:'54',eventname:'mkwn',organisedBy:'uggige',year:'2027',rank:'7',proof:''},
-      ])
+    { name: 'rajvi', enroll: '78', eventname: 'kkwnkw', organisedBy: 'nwkvwk', year: '2025', rank: '1', proof: '' },
+    { name: 'shyama', enroll: '54', eventname: 'mkwn', organisedBy: 'uggige', year: '2027', rank: '7', proof: '' },
+  ]);
 
   const handleBack = () => {
     navigate('/dashboard/nba/criteria4');
@@ -81,7 +84,15 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
       setShowAdditionalFields(true);
       return;
     }
+
     console.log('Form submitted:', data);
+
+    // ✅ Always show notification when submit is clicked
+    toast({
+      title: "Form Submitted",
+      description: "Your achievement details have been processed.",
+    });
+
     setIsDialogOpen(false);
     form.reset();
     setShowAdditionalFields(false);
@@ -103,41 +114,36 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
             </Shadcnbutton>
           </div>
 
-              <div>
-                <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
-                  <h1 className="text-2xl font-bold text-center">
-                    4.5.3 - Participation at Inter-Institution Events
-                  </h1>
-                </div>
-              </div>
+          <div>
+            <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
+              <h1 className="text-2xl font-bold text-center">
+                4.5.3 - Participation at Inter-Institution Events
+              </h1>
+            </div>
+          </div>
 
-              <Card className="p-6">
-                          <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-semibold text-gray-800">Magazine Details</h2>
-              
-                            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                               <DialogTrigger asChild>
-                              <button
-                                onClick={() => setIsDialogOpen(true)}
-                                className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
-                              >
-                                Add Details
-                              </button>
-                              </DialogTrigger>
-                              
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>
-                                  {showAdditionalFields
-                                    ? 'Enter Event Details'
-                                    : 'Enter Student Name'}
-                                </DialogTitle>
-                              </DialogHeader>
+          <Card className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-gray-800">Magazine Details</h2>
+
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <button
+                    onClick={() => setIsDialogOpen(true)}
+                    className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
+                  >
+                    Add Details
+                  </button>
+                </DialogTrigger>
+
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>
+                      {showAdditionalFields ? 'Enter Event Details' : 'Enter Student Name'}
+                    </DialogTitle>
+                  </DialogHeader>
                   <Form {...form}>
-                    <form
-                      onSubmit={form.handleSubmit(onSubmit)}
-                      className="space-y-4"
-                    >
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                       <FormField
                         control={form.control}
                         name="studentName"
@@ -235,58 +241,73 @@ const [studentToDelete, setStudentToDelete] = useState<achievement | null>(null)
               </Dialog>
             </div>
 
-            <DataTable value={achieve} tableStyle={{ minWidth: '50rem' }} dataKey="enrollmentNo">
-                         <Column field="name" header="name" sortable style={{ width: '25%' }}></Column>
-                          <Column field="enrollment" header="enrollment" sortable style={{ width: '25%' }}></Column>
-                          <Column field="eventname" header="eventname" sortable style={{ width: '25%' }}></Column>    
-                          <Column field="organisedBy" header="organisedBy" sortable style={{ width: '25%' }}></Column>
-                          <Column field="date" header="date" sortable style={{ width: '25%' }}></Column>
-                          <Column field="achievement" header="achievement" sortable style={{ width: '25%' }}></Column>
-                          <Column field="documentProof" header="documentProof" body={(rowData) => (
-                                        <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Grade History" />
-                                        )} style={{ minWidth: '10rem' }}></Column>
-                                    
-                          <Column body={(rowData) => (
-                          <div className="flex gap-2 justify-center">
-                         <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
-                         <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => {
-    setStudentToDelete(rowData);
-    setShowDeleteDialog(true);
-  }} />
-                         </div>
-                         )} exportable={false} style={{ minWidth: '8rem' }}></Column>
-                        </DataTable>
+            <DataTable value={achieve} tableStyle={{ minWidth: '50rem' }} dataKey="enroll">
+              <Column field="name" header="name" sortable style={{ width: '25%' }}></Column>
+              <Column field="enroll" header="enroll" sortable style={{ width: '25%' }}></Column>
+              <Column field="eventname" header="eventname" sortable style={{ width: '25%' }}></Column>
+              <Column field="organisedBy" header="organisedBy" sortable style={{ width: '25%' }}></Column>
+              <Column field="date" header="date" sortable style={{ width: '25%' }}></Column>
+              <Column field="achievement" header="achievement" sortable style={{ width: '25%' }}></Column>
+              <Column
+                field="documentProof"
+                header="documentProof"
+                body={(rowData) => (
+                  <Button
+                    icon="pi pi-file-pdf"
+                    className="p-button-rounded p-button-text"
+                    onClick={() => {}}
+                    tooltip="View Grade History"
+                  />
+                )}
+                style={{ minWidth: '10rem' }}
+              ></Column>
 
-                        <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-  <DialogContent className="sm:max-w-[400px] text-center space-y-4">
-    <DialogTitle>Are you sure you want to delete?</DialogTitle>
-    <div className="flex justify-center space-x-4 pt-4">
-      <button
-        onClick={() => {
-          if (studentToDelete) {
-            setachieve(prev => prev.filter(p => p.enroll !== studentToDelete.enroll));
-          }
-          setShowDeleteDialog(false);
-          setStudentToDelete(null);
-        }}
-        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-      >
-        Yes
-      </button>
-      <button
-        onClick={() => setShowDeleteDialog(false)}
-        className="px-4 py-2 border rounded-md hover:bg-gray-100"
-      >
-        No
-      </button>
-    </div>
-  </DialogContent>
-</Dialog>
+              <Column
+                body={(rowData) => (
+                  <div className="flex gap-2 justify-center">
+                    <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+                    <Button
+                      icon="pi pi-trash"
+                      rounded
+                      outlined
+                      severity="danger"
+                      onClick={() => {
+                        setStudentToDelete(rowData);
+                        setShowDeleteDialog(true);
+                      }}
+                    />
+                  </div>
+                )}
+                exportable={false}
+                style={{ minWidth: '8rem' }}
+              ></Column>
+            </DataTable>
 
-
-            <div className="overflow-x-auto">
-            
-            </div>
+            <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+              <DialogContent className="sm:max-w-[400px] text-center space-y-4">
+                <DialogTitle>Are you sure you want to delete?</DialogTitle>
+                <div className="flex justify-center space-x-4 pt-4">
+                  <button
+                    onClick={() => {
+                      if (studentToDelete) {
+                        setachieve((prev) => prev.filter((p) => p.enroll !== studentToDelete.enroll));
+                      }
+                      setShowDeleteDialog(false);
+                      setStudentToDelete(null);
+                    }}
+                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onClick={() => setShowDeleteDialog(false)}
+                    className="px-4 py-2 border rounded-md hover:bg-gray-100"
+                  >
+                    No
+                  </button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </Card>
         </div>
       </div>

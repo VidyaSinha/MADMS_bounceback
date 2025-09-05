@@ -1,11 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
-import { Toast } from 'primereact/toast';
+
+// ShadCN Toast
+import { useToast } from '@/components/ui/use-toast';
 
 // Import PrimeReact styles
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -20,16 +22,16 @@ interface Student {
 }
 
 const dummyStudents: Student[] = [
-  { id: '1', name: 'John Doe', enrollmentNo: 'EN001',bills: '' },
-  { id: '2', name: 'Jane Smith', enrollmentNo: 'EN002',bills: '' },
-  { id: '3', name: 'Mike Johnson', enrollmentNo: 'EN003',bills: '' },
-  { id: '4', name: 'Sarah Williams', enrollmentNo: 'EN004',bills: '' },
-  { id: '5', name: 'David Brown', enrollmentNo: 'EN005',bills: '' },
-  { id: '6', name: 'Emily Davis', enrollmentNo: 'EN006',bills: '' },
-  { id: '7', name: 'Alex Wilson', enrollmentNo: 'EN007',bills: '' },
-  { id: '8', name: 'Lisa Anderson', enrollmentNo: 'EN008', bills: '' },
-  { id: '9', name: 'Tom Taylor', enrollmentNo: 'EN009',bills: '' },
-  { id: '10', name: 'Rachel Moore', enrollmentNo: 'EN010',bills: '' }
+  { id: '1', name: 'Dhruvi Patel', enrollmentNo: '92200133029', bills: '' },
+  { id: '2', name: 'Jane Smith', enrollmentNo: '92200133021', bills: '' },
+  { id: '3', name: 'Mike Johnson', enrollmentNo: '92200133028', bills: '' },
+  { id: '4', name: 'Sarah Williams', enrollmentNo: '92200133027', bills: '' },
+  { id: '5', name: 'David Brown', enrollmentNo: '92200133026', bills: '' },
+  { id: '6', name: 'Emily Davis', enrollmentNo: '92200133025', bills: '' },
+  { id: '7', name: 'Alex Wilson', enrollmentNo: '92200133056', bills: '' },
+  { id: '8', name: 'Lisa Anderson', enrollmentNo: '92200133048', bills: '' },
+  { id: '9', name: 'Tom Taylor', enrollmentNo: '92200133076', bills: '' },
+  { id: '10', name: 'Rachel Moore', enrollmentNo: '92200133084', bills: '' }
 ];
 
 const PlacementPage: React.FC = () => {
@@ -39,23 +41,13 @@ const PlacementPage: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [enrollmentNo, setEnrollmentNo] = useState('');
-  const [hasBacklog, setHasBacklog] = useState(false);
-  const [selectedSemesters, setSelectedSemesters] = useState<number[]>([]);
   const [bills, setGradeHistory] = useState<File | null>(null);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [students, setStudents] = useState<Student[]>(dummyStudents);
   const [selectedStudents, setSelectedStudents] = useState<Student[]>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-  const dt = useRef<DataTable<Student[]>>(null);
-  const toast = useRef<Toast>(null);
 
-  const handleSemesterChange = (semester: number) => {
-    setSelectedSemesters(prev =>
-      prev.includes(semester)
-        ? prev.filter(s => s !== semester)
-        : [...prev, semester]
-    );
-  };
+  const { toast } = useToast();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -86,7 +78,12 @@ const PlacementPage: React.FC = () => {
     setStudents(students.filter(s => s.id !== studentToDelete?.id));
     setDeleteStudentDialog(false);
     setStudentToDelete(null);
-    toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Student deleted successfully', life: 3000 });
+
+    // ✅ Simple ShadCN notification
+    toast({
+      title: 'Deleted',
+      description: 'Student deleted successfully.',
+    });
   };
 
   const deleteSelectedStudents = () => {
@@ -94,31 +91,41 @@ const PlacementPage: React.FC = () => {
     setStudents(remainingStudents);
     setDeleteStudentsDialog(false);
     setSelectedStudents([]);
-    toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Selected students deleted successfully', life: 3000 });
+
+    toast({
+      title: 'Deleted',
+      description: 'Selected students deleted successfully.',
+    });
+  };
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const newStudent: Student = {
+    id: Math.random().toString(36).substr(2, 9),
+    name: studentName || "Dummy Name",  // fallback dummy data
+    enrollmentNo: enrollmentNo || "EN000",
+    bills: bills ? URL.createObjectURL(bills) : "dummy-bill.pdf"
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newStudent: Student = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: studentName,
-      enrollmentNo: enrollmentNo,
-      bills: bills ? URL.createObjectURL(bills) : ''
-    };
-    setStudents(prev => [...prev, newStudent]);
-    toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Student added successfully', life: 3000 });
-    setIsDialogOpen(false);
-    // Reset form
-    setStudentName('');
-    setEnrollmentNo('');
-    setGradeHistory(null);
-    setShowAdditionalFields(false);
-  };
+  setStudents(prev => [...prev, newStudent]);
+
+  // ✅ Always show positive notification
+  toast({
+    title: 'Submitted',
+    description: 'Form submitted successfully!',
+  });
+
+  setIsDialogOpen(false);
+
+  // Reset form
+  setStudentName('');
+  setEnrollmentNo('');
+  setGradeHistory(null);
+  setShowAdditionalFields(false);
+};
 
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
-      {/* Success Rate Details */}
-      <Toast ref={toast} />
       <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-[#2f4883]">Students Placement Details</h2>
@@ -131,19 +138,19 @@ const PlacementPage: React.FC = () => {
         </div>
 
         <div className="card overflow-hidden">
-          <Toolbar className="mb-4" 
-            left={<div className="flex flex-wrap gap-2">
-              {/* <Button label="New" icon="pi pi-plus" severity="success" onClick={() => setIsDialogOpen(true)} />
-              <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedStudents || !selectedStudents.length} /> */}
-            </div>}
+          <Toolbar
+            className="mb-4"
+            left={<div className="flex flex-wrap gap-2"></div>}
             right={<span className="p-input-icon-left">
-              {/* <i className="pi pi-search" /> */}
-              <InputText type="search" onInput={(e) => setGlobalFilter((e.target as HTMLInputElement).value)} placeholder="Search..." />
+              <InputText
+                type="search"
+                onInput={(e) => setGlobalFilter((e.target as HTMLInputElement).value)}
+                placeholder="Search..."
+              />
             </span>}
           />
 
           <DataTable
-            ref={dt}
             value={students}
             selection={selectedStudents}
             selectionMode="multiple"
@@ -161,15 +168,29 @@ const PlacementPage: React.FC = () => {
             <Column selectionMode="multiple" exportable={false} style={{ width: '3rem' }}></Column>
             <Column field="name" header="Name" sortable style={{ minWidth: '14rem' }}></Column>
             <Column field="enrollmentNo" header="Enrollment No." sortable style={{ minWidth: '14rem' }}></Column>
-            <Column field="bills" header="Bills\Offer Latter" body={(rowData) => (
-              <Button icon="pi pi-file-pdf" className="p-button-rounded p-button-text" onClick={() => {}} tooltip="View Bills\Offer Latter" />
-            )} style={{ minWidth: '10rem' }}></Column>
-            <Column body={(rowData) => (
-              <div className="flex gap-2 justify-center">
-                <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
-                <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteStudent(rowData)} />
-              </div>
-            )} exportable={false} style={{ minWidth: '8rem' }}></Column>
+            <Column
+              field="bills"
+              header="Bills / Offer Letter"
+              body={() => (
+                <Button
+                  icon="pi pi-file-pdf"
+                  className="p-button-rounded p-button-text"
+                  onClick={() => {}}
+                  tooltip="View Bills/Offer Letter"
+                />
+              )}
+              style={{ minWidth: '10rem' }}
+            ></Column>
+            <Column
+              body={(rowData) => (
+                <div className="flex gap-2 justify-center">
+                  <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => {}} />
+                  <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteStudent(rowData)} />
+                </div>
+              )}
+              exportable={false}
+              style={{ minWidth: '8rem' }}
+            ></Column>
           </DataTable>
         </div>
       </div>
@@ -195,9 +216,7 @@ const PlacementPage: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Student Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Student Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Student Name</label>
                 <input
                   type="text"
                   value={studentName}
@@ -214,14 +233,12 @@ const PlacementPage: React.FC = () => {
                 />
               </div>
 
-
-
               {showAdditionalFields && (
                 <>
-                  {/* Grade History Upload */}
+                  {/* Bills / Offer Letter */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Bills\Offerlatter\SalarySlip
+                      Bills / Offer Letter / Salary Slip
                     </label>
                     <input
                       type="file"
@@ -251,12 +268,22 @@ const PlacementPage: React.FC = () => {
           </div>
         </div>
       )}
-          <Dialog visible={deleteStudentDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={
-        <>
-          <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteStudentDialog} />
-          <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteStudent} />
-        </>
-      } onHide={hideDeleteStudentDialog}>
+
+      {/* Delete Single Student Dialog */}
+      <Dialog
+        visible={deleteStudentDialog}
+        style={{ width: '32rem' }}
+        breakpoints={{ '960px': '75vw', '641px': '90vw' }}
+        header="Confirm"
+        modal
+        footer={
+          <>
+            <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteStudentDialog} />
+            <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteStudent} />
+          </>
+        }
+        onHide={hideDeleteStudentDialog}
+      >
         <div className="confirmation-content">
           <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
           {studentToDelete && (
@@ -267,12 +294,21 @@ const PlacementPage: React.FC = () => {
         </div>
       </Dialog>
 
-      <Dialog visible={deleteStudentsDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={
-        <>
-          <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteStudentsDialog} />
-          <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteSelectedStudents} />
-        </>
-      } onHide={hideDeleteStudentsDialog}>
+      {/* Delete Multiple Students Dialog */}
+      <Dialog
+        visible={deleteStudentsDialog}
+        style={{ width: '32rem' }}
+        breakpoints={{ '960px': '75vw', '641px': '90vw' }}
+        header="Confirm"
+        modal
+        footer={
+          <>
+            <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteStudentsDialog} />
+            <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteSelectedStudents} />
+          </>
+        }
+        onHide={hideDeleteStudentsDialog}
+      >
         <div className="confirmation-content">
           <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
           <span>Are you sure you want to delete the selected students?</span>

@@ -1,146 +1,69 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useApi } from '@/contexts/ApiContext';
+import { useToast } from '@/components/ui/use-toast';
 
 function FacultyQualification(): JSX.Element {
-  const { apiBaseUrl } = useApi();
+  const { toast } = useToast();
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [enrollmentNumber, setEnrollmentNumber] = useState('');
-  const [academicYear, setAcademicYear] = useState('');
-  const [meanCgpa, setMeanCgpa] = useState('');
-  const [studentsAppeared, setStudentsAppeared] = useState<boolean | null>(null);
-  const [suggestions, setSuggestions] = useState<{ enrollment_number: string }[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [facultyName, setFacultyName] = useState('');
+  const [qualification, setQualification] = useState('');
+  const [designation, setDesignation] = useState('');
   const [loading, setLoading] = useState(false);
 
-  interface AcademicPerformance {
-  enrollment_number: string;
-  academic_year: string;
-  mean_cgpa: number;
-  students_appeared: boolean;
-}
+  interface Faculty {
+    faculty_name: string;
+    qualification: string;
+    designation: string;
+  }
 
-  const [performanceData, setPerformanceData] = useState<AcademicPerformance[]>([]);
+  // ✅ Start with some dummy data
+  const [facultyData, setFacultyData] = useState<Faculty[]>([
+    { faculty_name: 'Dr. A. Sharma', qualification: 'PhD', designation: 'Professor' },
+    { faculty_name: 'Ms. B. Patel', qualification: 'M.Tech', designation: 'Assistant Professor' },
+  ]);
 
-  // Fetch existing academic performance data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`${apiBaseUrl}/academic-performance`, {
-          credentials: 'include',
-        });
-        if (!res.ok) throw new Error('Failed to fetch data');
-        const data = await res.json();
-        setPerformanceData(data);
-      } catch (err) {
-        console.error('Fetch error:', err);
-        setPerformanceData([]);
-      }
-    };
-    fetchData();
-  }, [apiBaseUrl]);
-
-  // Fetch enrollment number suggestions
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      const trimmed = enrollmentNumber.trim();
-      if (!trimmed) {
-        setSuggestions([]);
-        return;
-      }
-
-      try {
-        const res = await fetch(
-          `${apiBaseUrl}/student/search?q=${encodeURIComponent(trimmed)}`,
-          { credentials: 'include' }
-        );
-        const data = await res.json();
-
-        if (Array.isArray(data)) {
-          setSuggestions(data);
-          setShowSuggestions(true);
-        } else {
-          setSuggestions([]);
-        }
-      } catch (err) {
-        console.error('Suggestion fetch error:', err);
-        setSuggestions([]);
-      }
-    };
-
-    const timeoutId = setTimeout(fetchSuggestions, 300);
-    return () => clearTimeout(timeoutId);
-  }, [apiBaseUrl,enrollmentNumber]);
-
-
-  // Reset form fields
+  // reset form
   const resetForm = () => {
-    setEnrollmentNumber('');
-    setAcademicYear('');
-    setMeanCgpa('');
-    setStudentsAppeared(null);
+    setFacultyName('');
+    setQualification('');
+    setDesignation('');
   };
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
+  // handle submit
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!enrollmentNumber || !academicYear || !meanCgpa || studentsAppeared === null) {
-      alert('Please fill in all fields.');
-      return;
-    }
+    // ✅ Always show positive toast
+    toast({
+      title: 'Submitted Successfully',
+      description: 'Your faculty qualification has been submitted.',
+    });
 
-    try {
-      setLoading(true);
-      const data = {
-        enrollment_number: enrollmentNumber,
-        academic_year: academicYear,
-        mean_cgpa: parseFloat(meanCgpa),
-        students_appeared: studentsAppeared,
-      };
+    setLoading(true);
 
-      const response = await fetch(`${apiBaseUrl}/academic-performance`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-        credentials: 'include',
-      });
+    // just update dummy local state
+    const newEntry: Faculty = {
+      faculty_name: facultyName || 'Unnamed Faculty',
+      qualification: qualification || 'Not Provided',
+      designation: designation || 'Not Provided',
+    };
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
-      }
+    setFacultyData((prev) => [...prev, newEntry]);
 
-      const result = await response.json();
-      if (result.message) {
-        alert('Academic performance data added successfully!');
-        setIsDialogOpen(false);
-        resetForm();
-        // Refresh data
-        const res = await fetch(`${apiBaseUrl}/academic-performance`, {
-          credentials: 'include',
-        });
-        const newData = await res.json();
-        setPerformanceData(newData);
-      } else {
-        alert(`Failed to add data: ${result.message || 'Server error'}`);
-      }
-    } catch (error) {
-      console.error('Error adding academic performance:', error);
-      alert('Error adding academic performance: ' + error.message);
-    } finally {
+    setTimeout(() => {
+      setIsDialogOpen(false);
+      resetForm();
       setLoading(false);
-    }
+    }, 800); // fake delay for realism
   };
 
   return (
     <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold text-[#2f4883]">Academic Performance Details</h2>
+        <h2 className="text-2xl font-semibold text-[#2f4883]">Faculty Qualification Details</h2>
         <button
           onClick={() => setIsDialogOpen(true)}
           className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] transition-colors"
@@ -149,7 +72,7 @@ function FacultyQualification(): JSX.Element {
         </button>
       </div>
 
-      {/* Table to display existing data */}
+      {/* Table with dummy + added data */}
       <table className="min-w-full text-sm text-left">
         <thead className="text-gray-500 border-b">
           <tr>
@@ -159,108 +82,53 @@ function FacultyQualification(): JSX.Element {
           </tr>
         </thead>
         <tbody className="text-gray-700 divide-y divide-gray-200">
-          {performanceData.map((data, index) => (
+          {facultyData.map((data, index) => (
             <tr key={index} className="hover:bg-gray-50">
-              <td className="py-3 px-4">{data.enrollment_number}</td>
-              <td className="py-3 px-4">{data.academic_year}</td>
-              <td className="py-3 px-4">{data.mean_cgpa}</td>
-              <td className="py-3 px-4">{data.students_appeared ? 'Yes' : 'No'}</td>
+              <td className="py-3 px-4">{data.faculty_name}</td>
+              <td className="py-3 px-4">{data.qualification}</td>
+              <td className="py-3 px-4">{data.designation}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
+      {/* Dialog Form */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Add Academic Performance</DialogTitle>
+            <DialogTitle>Add Faculty Qualification</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
-            <div className="space-y-2 relative">
-              <Label htmlFor="enrollment">Faculty Name</Label>
-              <Input
-                id="enrollment"
-                value={enrollmentNumber}
-                onChange={(e) => setEnrollmentNumber(e.target.value)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                onFocus={() => enrollmentNumber && setShowSuggestions(true)}
-                placeholder="Enter enrollment number"
-                required
-              />
-              {showSuggestions && (
-                <ul className="absolute z-50 w-full border bg-white mt-1 max-h-40 overflow-y-auto rounded-md shadow">
-                  {suggestions.length > 0 ? (
-                    suggestions.map((s, i) => (
-                      <li
-                        key={i}
-                        className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setEnrollmentNumber(s.enrollment_number);
-                          setShowSuggestions(false);
-                        }}
-                      >
-                        {s.enrollment_number}
-                      </li>
-                    ))
-                  ) : (
-                    <li className="px-4 py-2 text-sm text-gray-500">No matching records</li>
-                  )}
-                </ul>
-              )}
-            </div>
-
             <div className="space-y-2">
-              <Label htmlFor="academicYear">Qualification</Label>
+              <Label htmlFor="facultyName">Faculty Name</Label>
               <Input
-                id="academicYear"
-                value={academicYear}
-                onChange={(e) => setAcademicYear(e.target.value)}
-                placeholder="e.g., 2023-2024"
-                required
+                id="facultyName"
+                value={facultyName}
+                onChange={(e) => setFacultyName(e.target.value)}
+                placeholder="Enter faculty name"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="meanCgpa">Designation</Label>
+              <Label htmlFor="qualification">Qualification</Label>
               <Input
-                id="meanCgpa"
-                type="number"
-                step="0.01"
-                min="0"
-                max="10"
-                value={meanCgpa}
-                onChange={(e) => setMeanCgpa(e.target.value)}
-                placeholder="Enter mean CGPA"
-                required
+                id="qualification"
+                value={qualification}
+                onChange={(e) => setQualification(e.target.value)}
+                placeholder="e.g., PhD, M.Tech"
               />
             </div>
 
-            {/* <div className="space-y-2">
-              <Label>Students Appeared</Label>
-              <div className="flex space-x-4">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="studentsAppeared"
-                    checked={studentsAppeared === true}
-                    onChange={() => setStudentsAppeared(true)}
-                    required
-                  />
-                  <span className="ml-2">Yes</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="studentsAppeared"
-                    checked={studentsAppeared === false}
-                    onChange={() => setStudentsAppeared(false)}
-                  />
-                  <span className="ml-2">No</span>
-                </label>
-              </div>
-            </div> */}
+            <div className="space-y-2">
+              <Label htmlFor="designation">Designation</Label>
+              <Input
+                id="designation"
+                value={designation}
+                onChange={(e) => setDesignation(e.target.value)}
+                placeholder="e.g., Professor"
+              />
+            </div>
 
             <div className="flex justify-end gap-2 pt-4">
               <button
