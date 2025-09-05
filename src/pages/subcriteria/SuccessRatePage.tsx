@@ -22,16 +22,16 @@ interface Student {
 }
 
 const dummyStudents: Student[] = [
-  { id: '1', name: 'John Doe', enrollmentNo: 'EN001', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
-  { id: '2', name: 'Jane Smith', enrollmentNo: 'EN002', hasBacklog: true, backlogSemesters: [3, 4], gradeHistory: '' },
-  { id: '3', name: 'Mike Johnson', enrollmentNo: 'EN003', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
-  { id: '4', name: 'Sarah Williams', enrollmentNo: 'EN004', hasBacklog: true, backlogSemesters: [2], gradeHistory: '' },
-  { id: '5', name: 'David Brown', enrollmentNo: 'EN005', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
-  { id: '6', name: 'Emily Davis', enrollmentNo: 'EN006', hasBacklog: true, backlogSemesters: [1, 2], gradeHistory: '' },
-  { id: '7', name: 'Alex Wilson', enrollmentNo: 'EN007', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
-  { id: '8', name: 'Lisa Anderson', enrollmentNo: 'EN008', hasBacklog: true, backlogSemesters: [5], gradeHistory: '' },
-  { id: '9', name: 'Tom Taylor', enrollmentNo: 'EN009', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
-  { id: '10', name: 'Rachel Moore', enrollmentNo: 'EN010', hasBacklog: true, backlogSemesters: [3], gradeHistory: '' }
+  { id: '1', name: 'Vidya Sinha', enrollmentNo: '92200133029', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
+  { id: '2', name: 'Rishit Rathod', enrollmentNo: '92200133028', hasBacklog: true, backlogSemesters: [3, 4], gradeHistory: '' },
+  { id: '3', name: 'Dhruvi Patel', enrollmentNo: '902200133026', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
+  { id: '4', name: 'Rajvi Dave', enrollmentNo: '92200133001', hasBacklog: true, backlogSemesters: [2], gradeHistory: '' },
+  { id: '5', name: 'Umang Hirani', enrollmentNo: '92200133056', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
+  { id: '6', name: 'Ritesh Sachala', enrollmentNo: '92200133075', hasBacklog: true, backlogSemesters: [1, 2], gradeHistory: '' },
+  { id: '7', name: 'Vivek Chavda', enrollmentNo: '92200133056', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
+  { id: '8', name: 'Krish Mamtora', enrollmentNo: '92200133048', hasBacklog: true, backlogSemesters: [5], gradeHistory: '' },
+  { id: '9', name: 'Riya Visani', enrollmentNo: '92200133038', hasBacklog: false, backlogSemesters: [], gradeHistory: '' },
+  { id: '10', name: 'Palak Aghora', enrollmentNo: '92200133094', hasBacklog: true, backlogSemesters: [3], gradeHistory: '' }
 ];
 
 const SuccessRatePage: React.FC = () => {

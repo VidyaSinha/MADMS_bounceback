@@ -23,15 +23,15 @@ interface Student {
 
 const dummyStudents: Student[] = [
   { id: '1', name: 'Dhruvi Patel', enrollmentNo: '92200133029', bills: '' },
-  { id: '2', name: 'Jane Smith', enrollmentNo: '92200133021', bills: '' },
-  { id: '3', name: 'Mike Johnson', enrollmentNo: '92200133028', bills: '' },
-  { id: '4', name: 'Sarah Williams', enrollmentNo: '92200133027', bills: '' },
-  { id: '5', name: 'David Brown', enrollmentNo: '92200133026', bills: '' },
-  { id: '6', name: 'Emily Davis', enrollmentNo: '92200133025', bills: '' },
-  { id: '7', name: 'Alex Wilson', enrollmentNo: '92200133056', bills: '' },
-  { id: '8', name: 'Lisa Anderson', enrollmentNo: '92200133048', bills: '' },
-  { id: '9', name: 'Tom Taylor', enrollmentNo: '92200133076', bills: '' },
-  { id: '10', name: 'Rachel Moore', enrollmentNo: '92200133084', bills: '' }
+  { id: '2', name: 'Vidya Sinha', enrollmentNo: '92200133021', bills: '' },
+  { id: '3', name: 'Umang Hirani', enrollmentNo: '92200133028', bills: '' },
+  { id: '4', name: 'Harsh Doshi', enrollmentNo: '92200133027', bills: '' },
+  { id: '5', name: 'Vivek Chavda', enrollmentNo: '92200133026', bills: '' },
+  { id: '6', name: 'Rishit Rathod', enrollmentNo: '92200133025', bills: '' },
+  { id: '7', name: 'Krish Mamtora', enrollmentNo: '92200133056', bills: '' },
+  { id: '8', name: 'Aryan Mahida', enrollmentNo: '92200133048', bills: '' },
+  { id: '9', name: 'Abhay Nathwani', enrollmentNo: '92200133076', bills: '' },
+  { id: '10', name: 'Aryan Langhanoja', enrollmentNo: '92200133084', bills: '' }
 ];
 
 const PlacementPage: React.FC = () => {

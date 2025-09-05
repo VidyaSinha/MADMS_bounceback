@@ -158,7 +158,7 @@ export function LoginForm({
                     type="button"
                     onClick={handleGoogleLogin}
                     className="w-3/4 mx-auto"
-                    style={{ backgroundColor: "#DB4437", color: "#ffffff" }}
+                    style={{ backgroundColor: "#ffffff", color: "#2E4054" }}
                   >
                     Continue with Google
                   </Button>

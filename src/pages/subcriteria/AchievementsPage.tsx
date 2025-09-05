@@ -73,6 +73,23 @@ const AchievementsPage = () => {
   const [achieve, setachieve] = useState([
     { name: 'rajvi', enroll: '78', eventname: 'kkwnkw', organisedBy: 'nwkvwk', year: '2025', rank: '1', proof: '' },
     { name: 'shyama', enroll: '54', eventname: 'mkwn', organisedBy: 'uggige', year: '2027', rank: '7', proof: '' },
+    { name: 'Dhruvi', enroll: '78', eventname: 'retyu', organisedBy: 'fgjjjjg', year: '2025', rank: '1', proof: '' },
+    { name: 'Vidya', enroll: '54', eventname: 'iuytr', organisedBy: 'nmvb', year: '2027', rank: '7', proof: '' },
+    { name: 'retyu', enroll: '78', eventname: 'dcvb', organisedBy: 'qwe', year: '2025', rank: '1', proof: '' },
+    { name: 'Shreya', enroll: '54', eventname: 'sdfgh', organisedBy: 'lkjhg', year: '2027', rank: '7', proof: '' },
+    { name: 'Rekha', enroll: '78', eventname: 'zxf', organisedBy: 'vbnm', year: '2025', rank: '1', proof: '' },
+    { name: 'Kajol', enroll: '54', eventname: 'eerty', organisedBy: 'vbn', year: '2027', rank: '7', proof: '' },
+    { name: 'Priya', enroll: '78', eventname: 'kkwnkw', organisedBy: 'nwkvwk', year: '2025', rank: '1', proof: '' },
+    { name: 'Diya', enroll: '54', eventname: 'mkwn', organisedBy: 'uggige', year: '2027', rank: '7', proof: '' },
+    { name: 'Nandini', enroll: '78', eventname: 'kkwnkw', organisedBy: 'nwkvwk', year: '2025', rank: '1', proof: '' },
+    { name: 'Vidhi', enroll: '54', eventname: 'mkwn', organisedBy: 'uggige', year: '2027', rank: '7', proof: '' },
+    { name: 'Nidhi', enroll: '78', eventname: 'kkwnkw', organisedBy: 'nwkvwk', year: '2025', rank: '1', proof: '' },
+    { name: 'Sila', enroll: '54', eventname: 'mkwn', organisedBy: 'uggige', year: '2027', rank: '7', proof: '' },
+    { name: 'Manisha', enroll: '78', eventname: 'kkwnkw', organisedBy: 'nwkvwk', year: '2025', rank: '1', proof: '' },
+    { name: 'Krishna', enroll: '54', eventname: 'mkwn', organisedBy: 'uggige', year: '2027', rank: '7', proof: '' },
+    { name: 'Raghav', enroll: '78', eventname: 'kkwnkw', organisedBy: 'nwkvwk', year: '2025', rank: '1', proof: '' },
+    { name: 'Ramita', enroll: '54', eventname: 'mkwn', organisedBy: 'uggige', year: '2027', rank: '7', proof: '' },
+
   ]);
 
   const handleBack = () => {
