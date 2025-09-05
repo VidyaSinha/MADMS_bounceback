@@ -81,7 +81,7 @@ const Criteria5NBA = () => {
               id="5.3" 
               title="Faculty Qualification" 
               marks={10} 
-              actionNavigate="/academic2ndyear"
+              actionNavigate="/faculty-qualification"
             />
             
             <CriteriaCard 

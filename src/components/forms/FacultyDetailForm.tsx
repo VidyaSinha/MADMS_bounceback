@@ -1,58 +1,45 @@
-import React, { useState } from 'react';
-import * as XLSX from 'xlsx';
-import axios from 'axios';
-import { useApi } from '@/contexts/ApiContext';
+import React, { useState } from "react";
+import axios from "axios";
+import { useApi } from "@/contexts/ApiContext";
 
 const FacultyBulkUpload = () => {
   const { apiBaseUrl } = useApi();
-  const [facultyData, setFacultyData] = useState<any[]>([]);
+  const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const data = evt.target?.result;
-      const workbook = XLSX.read(data, { type: 'binary' });
-
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-
-      const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet);
-
-      const formattedData = jsonData.map(item => ({
-        name: item.name || '',
-        appointment_letter: item.appointment_letter ? new Date(item.appointment_letter).toISOString().split('T')[0] : null,
-        salary_slip: item.salary_slip || '',
-        specialization: item.specialization || '',
-        subject_allocation: item.subject_allocation || '',
-        type: item.type || ''
-      }));
-
-      setFacultyData(formattedData);
-    };
-
-    reader.readAsBinaryString(file);
+  // Handle file input
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
   };
 
+  // Send FormData to backend
   const handleSubmit = async () => {
-    if (facultyData.length === 0) {
-      alert('Please upload a file first.');
+    if (!file) {
+      alert("Please select a file first.");
       return;
     }
 
+    const formData = new FormData();
+    formData.append("file", file); // ✅ backend expects "file"
+
     setUploading(true);
     try {
-      const response = await axios.post(`${apiBaseUrl}/faculty/upload`, facultyData, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      const response = await axios.post(
+        `${apiBaseUrl}/faculty/upload`,
+        formData,
+        {
+          withCredentials: true, // send session cookies if needed
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       alert(response.data.message);
     } catch (error: any) {
       console.error(error);
-      alert(error.response?.data?.error || 'An error occurred');
+      alert(error.response?.data?.error || "An error occurred");
     } finally {
       setUploading(false);
     }
@@ -61,7 +48,7 @@ const FacultyBulkUpload = () => {
   return (
     <div className="p-6 max-w-xl mx-auto bg-white shadow rounded">
       <h2 className="text-2xl font-bold mb-4">Faculty Details Upload</h2>
-      
+
       <div className="mb-4">
         <p className="text-sm text-gray-600 mb-2">
           Upload an Excel file with the following columns:
@@ -78,8 +65,8 @@ const FacultyBulkUpload = () => {
 
       <input
         type="file"
-        accept=".xlsx, .xls, .csv"
-        onChange={handleFileUpload}
+        accept=".xlsx, .xls"
+        onChange={handleFileChange}
         className="mb-4 block w-full text-sm text-gray-500
           file:mr-4 file:py-2 file:px-4
           file:rounded-full file:border-0
@@ -88,9 +75,9 @@ const FacultyBulkUpload = () => {
           hover:file:bg-blue-100"
       />
 
-      {facultyData.length > 0 && (
+      {file && (
         <div className="mb-4 text-green-600">
-          ✅ {facultyData.length} faculty members ready to upload
+          ✅ {file.name} selected and ready to upload
         </div>
       )}
 
@@ -98,10 +85,10 @@ const FacultyBulkUpload = () => {
         onClick={handleSubmit}
         disabled={uploading}
         className={`px-4 py-2 text-white rounded ${
-          uploading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+          uploading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
         }`}
       >
-        {uploading ? 'Uploading...' : 'Submit to Server'}
+        {uploading ? "Uploading..." : "Submit to Server"}
       </button>
     </div>
   );
