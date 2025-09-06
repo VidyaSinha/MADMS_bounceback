@@ -88,7 +88,7 @@ const Criteria5NBA = () => {
               id="5.4" 
               title="Faculty Retention" 
               marks={30} 
-              actionNavigate="/placement"
+              actionNavigate="/faculty-retention"
             />
             
             <Card className="border rounded-md overflow-hidden">

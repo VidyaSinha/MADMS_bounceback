@@ -41,6 +41,7 @@ import FacultyCadreProportion from "./pages/subcriteria/FacultyCadreProportion";
 import RadarChart from "./components/dashboard/RadarChart";
 import AuthCallback from "./pages/AuthCallback";
 import FacultyQualification from "./pages/subcriteria/FacultyQualification";
+import FacultyRetention from "./pages/subcriteria/FacultyRetention";
 
 const ProtectedRoute = ({ children, requireAdmin = false }: { children: React.ReactNode, requireAdmin?: boolean }) => {
   const { isAuthenticated, isAdmin } = useAuth();
@@ -176,6 +177,12 @@ const App = () => (
             <Route path="/faculty-qualification" element={
               <ProtectedRoute requireAdmin>
                 <FacultyQualification/>
+              </ProtectedRoute>
+            }/>
+
+            <Route path="/faculty-retention" element={
+              <ProtectedRoute requireAdmin>
+                <FacultyRetention/>
               </ProtectedRoute>
             }/>
 
