@@ -226,3 +226,4 @@ function FacultyQualification(): JSX.Element {
 }
 
 export default FacultyQualification;
+`   `

@@ -104,22 +104,16 @@ const Criteria5NBA = () => {
               
               <div className="p-4 space-y-4">
                 <SubCriteriaCard 
-                  id="4.5.1" 
-                  title="Professional Societies/Chapters and Organizing Engineering Events" 
+                  id="" 
+                  title="Faculty expertise in diverse fields" 
                   marks={5}
-                  navigateTo="/societies"
+                  navigateTo="/faculty-expertise"
                 />
                 <SubCriteriaCard 
-                  id="4.5.2" 
-                  title="Publication of Technical Magazines and Newsletter" 
+                  id="" 
+                  title="Research Publication " 
                   marks={5}
-                  navigateTo="/magazine"
-                />
-                <SubCriteriaCard 
-                  id="4.5.3" 
-                  title="Participation at Inter-Institution Events by Students of Program of Study" 
-                  marks={10}
-                  navigateTo="/achievements"
+                  navigateTo="/faculty-reasearch-publication"
                 />
               </div>
             </Card>
