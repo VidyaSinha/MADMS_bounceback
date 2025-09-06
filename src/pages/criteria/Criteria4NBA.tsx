@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Eye, Edit2 } from 'lucide-react';
+import { ChevronLeft, Eye, Edit2, Upload } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -9,7 +9,7 @@ import StudentDetailsForm from '@/components/forms/StudentDetailsForm';
 import EnrollmentPage from '../subcriteria/EnrollmentPage';
 import Academic2ndyearPage from '../subcriteria/Academic2ndyearPage';
 import { criteria4Data } from '@/data/nbaCriteriaData';
-
+import { Dialog } from 'primereact/dialog';
 
 const Criteria4NBA = () => {
   const navigate = useNavigate();
@@ -23,6 +23,8 @@ const Criteria4NBA = () => {
     '4.5.2': 5,
     '4.5.3': 10,
   });
+
+  const [isExcelDialogOpen, setIsExcelDialogOpen] = useState(false);
 
   const handleBack = () => {
     navigate('/dashboard/nba');
@@ -50,21 +52,60 @@ const Criteria4NBA = () => {
               <ChevronLeft className="mr-1 h-4 w-4" />
               Back to Criteria 4
             </Button>
-            <Button 
-              className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
-              size="lg"
-              onClick={() => navigate('/components/forms/StudentDetailsForm')}
-            >
-              + Add Student Details
-            </Button>
 
-            <Sheet>
-              <SheetTrigger asChild />
-              <SheetContent side="right" className="w-full sm:max-w-md">
-                <StudentDetailsForm />
-              </SheetContent>
-            </Sheet>
+            <div className="flex gap-3">
+              {/* ✅ Upload Excel Button */}
+              <Button 
+                className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg"
+                size="lg"
+                onClick={() => setIsExcelDialogOpen(true)}
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Upload Excel
+              </Button>
+
+              {/* Existing Add Student Button */}
+              <Button 
+                className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg relative z-10"
+                size="lg"
+                onClick={() => navigate('/components/forms/StudentDetailsForm')}
+              >
+                + Add Student Details
+              </Button>
+
+              <Sheet>
+                <SheetTrigger asChild />
+                <SheetContent side="right" className="w-full sm:max-w-md">
+                  <StudentDetailsForm />
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
+
+          {/* ✅ Excel Upload Dialog */}
+          <Dialog
+            visible={isExcelDialogOpen}
+            onHide={() => setIsExcelDialogOpen(false)}
+            header="Upload Excel Sheet"
+            style={{ width: '30rem' }}
+          >
+            <p className="mb-4 text-gray-700">
+              Upload Excel sheet for uploading the <b>universal data</b>.
+            </p>
+            <input 
+              type="file" 
+              accept=".xlsx,.xls" 
+              className="w-full border p-2 rounded" 
+            />
+            <div className="flex justify-end mt-4">
+              <Button 
+                onClick={() => setIsExcelDialogOpen(false)} 
+                className="bg-[#2F4883] hover:bg-slate-900 text-white"
+              >
+                Submit
+              </Button>
+            </div>
+          </Dialog>
 
           <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
             <h1 className="text-2xl font-bold text-center">
@@ -86,7 +127,7 @@ const Criteria4NBA = () => {
             <div className="border-b p-4">
               <div className="flex justify-between items-center text-[#2f4883]">
                 <h3 className="text-base font-medium">4.2 - Success Rate in Stipulated Period of the Program</h3>
-                 <ActionButtons 
+                <ActionButtons 
                   navigateTo="/successrate" 
                   onEdit={() => handleEditMarks('4.2')} 
                 />
