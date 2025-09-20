@@ -117,6 +117,47 @@ const Criteria5NBA = () => {
                 />
               </div>
             </Card>
+
+
+                        <Card className="border rounded-md overflow-hidden">
+              <div className="border-b p-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-base font-medium text-[#2f4883]">5.8 - Faculty Completence</h3>
+                  <div className="flex items-center gap-4">
+                    
+                    <span className="text-[#2f4883] font-medium">20 marks</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-4 space-y-4">
+                <SubCriteriaCard 
+                  id="5.8.1" 
+                  title="Academic Research" 
+                  marks={5}
+                  navigateTo="/academic-reasearch"
+                />
+                <SubCriteriaCard 
+                  id="5.8.2" 
+                  title="Sponsored Research " 
+                  marks={5}
+                  navigateTo="/sponsored-reasearch"
+                />
+                <SubCriteriaCard 
+                  id="5.8.3" 
+                  title="Development activities" 
+                  marks={5}
+                  navigateTo="/faculty-reasearch-publication"
+                />
+                <SubCriteriaCard 
+                  id="5.8.4" 
+                  title="Consultancy (from Industry) " 
+                  marks={5}
+                  navigateTo="/faculty-reasearch-publication"
+                />
+              </div>
+            </Card>
+
           </div>
         </div>
       </div>
