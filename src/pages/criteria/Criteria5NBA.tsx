@@ -153,7 +153,7 @@ const Criteria5NBA = () => {
                   id="5.8.4" 
                   title="Consultancy (from Industry) " 
                   marks={5}
-                  navigateTo="/faculty-reasearch-publication"
+                  navigateTo="/consultancy"
                 />
               </div>
             </Card>

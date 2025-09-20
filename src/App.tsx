@@ -47,6 +47,7 @@ import FacultyReasearchPublication from "./pages/subcriteria/FacultyReasearchPub
 import AcademicReasearch from "./pages/subcriteria/AcademicReasearch";
 import SponsoredReasearch from "./pages/subcriteria/SponsoredReasearch";
 import DevelopmentActivities from "./pages/subcriteria/DevelopmentActivities";
+import Consultancy from "./pages/subcriteria/Consultancy";
 
 const ProtectedRoute = ({ children, requireAdmin = false }: { children: React.ReactNode, requireAdmin?: boolean }) => {
   const { isAuthenticated, isAdmin } = useAuth();
@@ -206,6 +207,12 @@ const App = () => (
             <Route path="/development-activities" element={
               <ProtectedRoute requireAdmin>
                 <DevelopmentActivities />
+              </ProtectedRoute>
+            }/>
+
+            <Route path="/consultancy" element={
+              <ProtectedRoute requireAdmin>
+                <Consultancy />
               </ProtectedRoute>
             }/>
 
