@@ -147,7 +147,7 @@ const Criteria5NBA = () => {
                   id="5.8.3" 
                   title="Development activities" 
                   marks={5}
-                  navigateTo="/faculty-reasearch-publication"
+                  navigateTo="/development-activities"
                 />
                 <SubCriteriaCard 
                   id="5.8.4" 
