@@ -19,7 +19,7 @@ interface Project {
   grant_sanctioned: number | string;
 }
 
-const BACKEND_URL = "http://localhost:5000"; // your backend URL
+const BACKEND_URL = "http://localhost:5000";
 
 const SponsoredResearch: React.FC = () => {
   const { toast } = useToast();
@@ -48,7 +48,11 @@ const SponsoredResearch: React.FC = () => {
         if (res.ok) {
           setProjects(data);
         } else {
-          toast({ title: "Error", description: data.error || "Failed to fetch projects", variant: "destructive" });
+          toast({
+            title: "Error",
+            description: data.error || "Failed to fetch projects",
+            variant: "destructive",
+          });
         }
       } catch (err) {
         console.error(err);
@@ -108,7 +112,7 @@ const SponsoredResearch: React.FC = () => {
       const data = await res.json();
 
       if (res.ok) {
-        setProjects((prev) => [...prev, payload]);
+        setProjects((prev) => [...prev, data.project]); // ✅ use project returned from backend
         toast({ title: "Success", description: "Project added successfully!", variant: "success" });
 
         setIsDialogOpen(false);
@@ -129,16 +133,17 @@ const SponsoredResearch: React.FC = () => {
       <div className="bg-white p-6 rounded-xl shadow max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-[#2f4883]">Sponsored Research Projects</h2>
-          <button onClick={() => setIsDialogOpen(true)} className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a]">
+          <button
+            onClick={() => setIsDialogOpen(true)}
+            className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a]"
+          >
             Add Project
           </button>
         </div>
 
         <Toolbar
           className="mb-4"
-          right={
-            <InputText placeholder="Search..." value={globalFilterValue} onChange={onGlobalFilterChange} />
-          }
+          right={<InputText placeholder="Search..." value={globalFilterValue} onChange={onGlobalFilterChange} />}
         />
 
         <DataTable
@@ -165,16 +170,59 @@ const SponsoredResearch: React.FC = () => {
           <div className="bg-white rounded-xl p-6 w-full max-w-xl mx-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-[#2f4883]">Add Project</h3>
-              <button onClick={() => setIsDialogOpen(false)} className="text-gray-500 hover:text-gray-700">×</button>
+              <button onClick={() => setIsDialogOpen(false)} className="text-gray-500 hover:text-gray-700">
+                ×
+              </button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input type="text" placeholder="Project ID" value={formData.Proj_id} onChange={(e) => setFormData({ ...formData, Proj_id: e.target.value })} className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]" />
-              <input type="text" placeholder="Title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]" />
-              <input type="text" placeholder="Mentor / Project Manager" value={formData.mentor} onChange={(e) => setFormData({ ...formData, mentor: e.target.value })} className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]" />
-              <input type="number" placeholder="Year" value={formData.year} onChange={(e) => setFormData({ ...formData, year: e.target.value })} className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]" />
-              <input type="date" placeholder="Approval Date" value={formData.approval_date} onChange={(e) => setFormData({ ...formData, approval_date: e.target.value })} className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]" />
-              <input type="number" placeholder="Grant Sanctioned" value={formData.grant_sanctioned} onChange={(e) => setFormData({ ...formData, grant_sanctioned: e.target.value })} className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]" />
-              <button type="submit" className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] float-right">Submit</button>
+              <input
+                type="text"
+                placeholder="Project ID"
+                value={formData.Proj_id}
+                onChange={(e) => setFormData({ ...formData, Proj_id: e.target.value })}
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]"
+              />
+              <input
+                type="text"
+                placeholder="Title"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]"
+              />
+              <input
+                type="text"
+                placeholder="Mentor / Project Manager"
+                value={formData.mentor}
+                onChange={(e) => setFormData({ ...formData, mentor: e.target.value })}
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]"
+              />
+              <input
+                type="number"
+                placeholder="Year"
+                value={formData.year}
+                onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]"
+              />
+              <input
+                type="date"
+                placeholder="Approval Date"
+                value={formData.approval_date}
+                onChange={(e) => setFormData({ ...formData, approval_date: e.target.value })}
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]"
+              />
+              <input
+                type="number"
+                placeholder="Grant Sanctioned"
+                value={formData.grant_sanctioned}
+                onChange={(e) => setFormData({ ...formData, grant_sanctioned: e.target.value })}
+                className="w-full p-2 border rounded focus:ring-2 focus:ring-[#2f4883]"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 bg-[#2f4883] text-white rounded hover:bg-[#25376a] float-right"
+              >
+                Submit
+              </button>
             </form>
           </div>
         </div>
