@@ -123,6 +123,63 @@ const SuccessRatePage: React.FC = () => {
     setShowAdditionalFields(false);
   };
 
+  // ===== 4.2 Success Rate Tables (Frontend-only calculations) =====
+  type TripleRow = {
+    label: string; // CAY, CAYm1, ...
+    entry: string; // N1+N2+N3 string e.g. "60+06+00"
+    y1: string; // I Year as triple string or NA
+    y2: string; // II Year
+    y3: string; // III Year
+    y4: string; // IV Year
+  };
+
+  const [tableWithoutBacklog, setTableWithoutBacklog] = useState<TripleRow[]>([
+    { label: 'CAY (2024-2025)', entry: '60+00+00', y1: '', y2: '', y3: '', y4: '' },
+    { label: 'CAYm1 (2023-2024)', entry: '60+06+00', y1: '60+NA+00', y2: '', y3: '', y4: '' },
+    { label: 'CAYm2 (2022-2023)', entry: '42+16+00', y1: '36+NA+00', y2: '33+14+00', y3: '', y4: '' },
+    { label: 'CAYm3 (2021-2022)', entry: '60+06+00', y1: '59+NA+00', y2: '57+06+00', y3: '57+06+00', y4: '' },
+    { label: 'CAYm4 (2020-2021)', entry: '33+16+00', y1: '18+NA+00', y2: '18+15+00', y3: '18+15+00', y4: '18+15+00' },
+    { label: 'CAYm5 (2019-20)', entry: '48+00+00', y1: '33+NA+00', y2: '30+NA+00', y3: '29+NA+00', y4: '29+NA+00' },
+    { label: 'CAYm6 (2018-19)', entry: '42+00+00', y1: '32+NA+00', y2: '29+NA+00', y3: '28+NA+00', y4: '28+NA+00' },
+  ]);
+
+  const [tableWithBacklog, setTableWithBacklog] = useState<TripleRow[]>([
+    { label: 'CAY (2024-2025)', entry: '60+00+00', y1: '', y2: '', y3: '', y4: '' },
+    { label: 'CAYm1 (2023-2024)', entry: '60+06+00', y1: '60+NA+00', y2: '', y3: '', y4: '' },
+    { label: 'CAYm2 (2022-2023)', entry: '42+16+00', y1: '42+NA+00', y2: '42+16+00', y3: '', y4: '' },
+    { label: 'CAYm3 (2021-2022)', entry: '60+06+00', y1: '60+NA+00', y2: '60+06+00', y3: '60+06+00', y4: '' },
+    { label: 'CAYm4 (2020-2021)', entry: '33+16+00', y1: '33+NA+00', y2: '33+16+00', y3: '33+16+00', y4: '32+16+00' },
+    { label: 'CAYm5 (2019-20)', entry: '48+00+00', y1: '48+NA+00', y2: '48+NA+00', y3: '48+NA+00', y4: '48+NA+00' },
+    { label: 'CAYm6 (2018-19)', entry: '42+00+00', y1: '42+NA+00', y2: '42+NA+00', y3: '42+NA+00', y4: '42+NA+00' },
+  ]);
+
+  const parseTriple = (value: string): number => {
+    if (!value) return 0;
+    return value
+      .split('+')
+      .map((v) => v.trim().toUpperCase())
+      .map((v) => (v === 'NA' || v === '' ? 0 : Number(v) || 0))
+      .reduce((a, b) => a + b, 0);
+  };
+
+  const sumRow = (row: TripleRow) => parseTriple(row.y1) + parseTriple(row.y2) + parseTriple(row.y3) + parseTriple(row.y4);
+  const totalWithout = tableWithoutBacklog.reduce((acc, r) => acc + sumRow(r), 0);
+  const totalWith = tableWithBacklog.reduce((acc, r) => acc + sumRow(r), 0);
+  const totalGraduated = totalWithout + totalWith;
+  const pctWithout = totalGraduated ? (totalWithout / totalGraduated) * 100 : 0;
+  const pctWith = totalGraduated ? (totalWith / totalGraduated) * 100 : 0;
+
+  const marksFromPercentage10 = (p: number) => {
+    if (p >= 90) return 10;
+    if (p >= 80) return 8;
+    if (p >= 70) return 6;
+    if (p >= 60) return 4;
+    return 2;
+  };
+
+  const marksWithout = marksFromPercentage10(pctWithout);
+  const marksWith = marksFromPercentage10(pctWith);
+
   return (
     <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
       <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
@@ -178,6 +235,112 @@ const SuccessRatePage: React.FC = () => {
               </div>
             )} exportable={false}></Column>
           </DataTable>
+        </div>
+      </div>
+
+      {/* 4.2.1 Students Graduated without Backlogs */}
+      <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
+        <h3 className="text-xl font-semibold text-[#2f4883] mb-4">4.2.1 Students Graduated without Backlogs</h3>
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-200 text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="p-2 border">Year of Entry</th>
+                <th className="p-2 border">N1+N2+N3 (As defined)</th>
+                <th className="p-2 border">I Year</th>
+                <th className="p-2 border">II Year</th>
+                <th className="p-2 border">III Year</th>
+                <th className="p-2 border">IV Year</th>
+                <th className="p-2 border">Row Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableWithoutBacklog.map((row, idx) => (
+                <tr key={row.label}>
+                  <td className="p-2 border whitespace-nowrap">{row.label}</td>
+                  <td className="p-2 border">
+                    <input
+                      value={row.entry}
+                      onChange={(e) => setTableWithoutBacklog(prev => prev.map((r, i) => i === idx ? { ...r, entry: e.target.value } : r))}
+                      className="w-full border rounded p-1"
+                      placeholder="e.g. 60+06+00"
+                    />
+                  </td>
+                  {(['y1','y2','y3','y4'] as const).map((key) => (
+                    <td key={key} className="p-2 border">
+                      <input
+                        value={(row as any)[key]}
+                        onChange={(e) => setTableWithoutBacklog(prev => prev.map((r, i) => i === idx ? { ...r, [key]: e.target.value } as TripleRow : r))}
+                        className="w-full border rounded p-1"
+                        placeholder="e.g. 60+NA+00"
+                      />
+                    </td>
+                  ))}
+                  <td className="p-2 border text-right font-medium">{sumRow(row)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-4 p-3 bg-gray-100 rounded">
+          <p>Total without backlogs: <b>{totalWithout}</b></p>
+          <p>Percentage of total graduated: <b>{pctWithout.toFixed(2)}%</b></p>
+          <p>Marks (out of 10): <b>{marksWithout}</b></p>
+        </div>
+      </div>
+
+      {/* 4.2.2 Students Graduated with Backlogs */}
+      <div className="bg-white rounded-xl shadow p-6 max-w-5xl mx-auto">
+        <h3 className="text-xl font-semibold text-[#2f4883] mb-4">4.2.2 Students Graduated with Backlogs</h3>
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-200 text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="p-2 border">Year of Entry</th>
+                <th className="p-2 border">N1+N2+N3 (As defined)</th>
+                <th className="p-2 border">I Year</th>
+                <th className="p-2 border">II Year</th>
+                <th className="p-2 border">III Year</th>
+                <th className="p-2 border">IV Year</th>
+                <th className="p-2 border">Row Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableWithBacklog.map((row, idx) => (
+                <tr key={row.label}>
+                  <td className="p-2 border whitespace-nowrap">{row.label}</td>
+                  <td className="p-2 border">
+                    <input
+                      value={row.entry}
+                      onChange={(e) => setTableWithBacklog(prev => prev.map((r, i) => i === idx ? { ...r, entry: e.target.value } : r))}
+                      className="w-full border rounded p-1"
+                      placeholder="e.g. 60+06+00"
+                    />
+                  </td>
+                  {(['y1','y2','y3','y4'] as const).map((key) => (
+                    <td key={key} className="p-2 border">
+                      <input
+                        value={(row as any)[key]}
+                        onChange={(e) => setTableWithBacklog(prev => prev.map((r, i) => i === idx ? { ...r, [key]: e.target.value } as TripleRow : r))}
+                        className="w-full border rounded p-1"
+                        placeholder="e.g. 60+NA+00"
+                      />
+                    </td>
+                  ))}
+                  <td className="p-2 border text-right font-medium">{sumRow(row)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-4 p-3 bg-gray-100 rounded">
+          <p>Total with backlogs: <b>{totalWith}</b></p>
+          <p>Percentage of total graduated: <b>{pctWith.toFixed(2)}%</b></p>
+          <p>Marks (out of 10): <b>{marksWith}</b></p>
+        </div>
+        <div className="mt-4 p-3 rounded bg-blue-50 border border-blue-200">
+          <p><b>Combined 4.2 Score (out of 20):</b> {marksWithout + marksWith}</p>
+          
         </div>
       </div>
 
