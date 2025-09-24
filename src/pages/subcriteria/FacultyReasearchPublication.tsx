@@ -31,6 +31,7 @@ interface FacultyPublication {
   hIndex: number;
   coursesDevelopment: string;
   mappingToPSO: string;
+  documents?: { name: string; url: string }[];
 }
 
 const FacultyResearchPublication = () => {
@@ -38,23 +39,160 @@ const FacultyResearchPublication = () => {
   const { apiBaseUrl } = useApi();
 
   // --- Dummy Data ---
-  const dummyData: FacultyPublication[] = [
-    { facultyName: "Dr. A. Sharma", academicSpecialization: "Computer Science", researchSpecialization: "AI & ML", publications: 25, hIndex: 12, coursesDevelopment: "Machine Learning", mappingToPSO: "PSO1, PSO2" },
-    { facultyName: "Dr. B. Patel", academicSpecialization: "Information Technology", researchSpecialization: "Cybersecurity", publications: 18, hIndex: 9, coursesDevelopment: "Network Security", mappingToPSO: "PSO2, PSO3" },
-    { facultyName: "Dr. C. Mehta", academicSpecialization: "Electronics", researchSpecialization: "VLSI Design", publications: 30, hIndex: 15, coursesDevelopment: "VLSI Circuits", mappingToPSO: "PSO1" },
-    { facultyName: "Dr. D. Singh", academicSpecialization: "Mechanical Engg.", researchSpecialization: "Robotics", publications: 22, hIndex: 10, coursesDevelopment: "Automation & Robotics", mappingToPSO: "PSO3" },
-    { facultyName: "Dr. E. Reddy", academicSpecialization: "Civil Engg.", researchSpecialization: "Structural Engineering", publications: 12, hIndex: 7, coursesDevelopment: "Bridge Design", mappingToPSO: "PSO1, PSO4" },
-    { facultyName: "Dr. F. Khan", academicSpecialization: "Computer Science", researchSpecialization: "Data Science", publications: 28, hIndex: 14, coursesDevelopment: "Big Data Analytics", mappingToPSO: "PSO2" },
-    { facultyName: "Dr. G. Iyer", academicSpecialization: "Electrical Engg.", researchSpecialization: "Power Systems", publications: 20, hIndex: 11, coursesDevelopment: "Smart Grids", mappingToPSO: "PSO1, PSO2" },
-    { facultyName: "Dr. H. Verma", academicSpecialization: "Information Technology", researchSpecialization: "Cloud Computing", publications: 26, hIndex: 13, coursesDevelopment: "Cloud Applications", mappingToPSO: "PSO2, PSO3" },
-    { facultyName: "Dr. I. Joshi", academicSpecialization: "Electronics", researchSpecialization: "Embedded Systems", publications: 19, hIndex: 8, coursesDevelopment: "IoT Systems", mappingToPSO: "PSO3" },
-    { facultyName: "Dr. J. Rao", academicSpecialization: "Computer Science", researchSpecialization: "Software Engineering", publications: 23, hIndex: 12, coursesDevelopment: "Agile Development", mappingToPSO: "PSO1, PSO2" },
-    { facultyName: "Dr. K. Desai", academicSpecialization: "Mechanical Engg.", researchSpecialization: "Thermal Engineering", publications: 15, hIndex: 6, coursesDevelopment: "Heat Transfer", mappingToPSO: "PSO4" },
-    { facultyName: "Dr. L. Nair", academicSpecialization: "Civil Engg.", researchSpecialization: "Environmental Engg.", publications: 10, hIndex: 5, coursesDevelopment: "Water Management", mappingToPSO: "PSO2" },
-    { facultyName: "Dr. M. Shah", academicSpecialization: "Computer Science", researchSpecialization: "Artificial Intelligence", publications: 35, hIndex: 16, coursesDevelopment: "AI Applications", mappingToPSO: "PSO1, PSO2, PSO3" },
-    { facultyName: "Dr. N. Gupta", academicSpecialization: "Electronics", researchSpecialization: "Signal Processing", publications: 17, hIndex: 9, coursesDevelopment: "DSP Algorithms", mappingToPSO: "PSO2" },
-    { facultyName: "Dr. O. Choudhary", academicSpecialization: "Electrical Engg.", researchSpecialization: "Renewable Energy", publications: 21, hIndex: 10, coursesDevelopment: "Solar Power Systems", mappingToPSO: "PSO1, PSO3" },
-  ];
+// --- Dummy Data ---
+// --- Dummy Data ---
+const dummyData: FacultyPublication[] = [
+  {
+    facultyName: "Dr. A. Sharma",
+    academicSpecialization: "Computer Science",
+    researchSpecialization: "AI & ML",
+    publications: 25,
+    hIndex: 12,
+    coursesDevelopment: "Machine Learning",
+    mappingToPSO: "PSO1, PSO2",
+    documents: [{ name: "Proof_AI.pdf", url: "https://example.com/ai-proof.pdf" }],
+  },
+  {
+    facultyName: "Dr. B. Patel",
+    academicSpecialization: "Electrical Engineering",
+    researchSpecialization: "Power Systems",
+    publications: 18,
+    hIndex: 9,
+    coursesDevelopment: "Renewable Energy Systems",
+    mappingToPSO: "PSO3, PSO4",
+    documents: [{ name: "PowerSystems_Proof.pdf", url: "https://example.com/power.pdf" }],
+  },
+  {
+    facultyName: "Dr. C. Rao",
+    academicSpecialization: "Mechanical Engineering",
+    researchSpecialization: "Thermal Engineering",
+    publications: 32,
+    hIndex: 15,
+    coursesDevelopment: "Heat Transfer",
+    mappingToPSO: "PSO2, PSO5",
+    documents: [{ name: "ThermalResearch.pdf", url: "https://example.com/thermal.pdf" }],
+  },
+  {
+    facultyName: "Dr. D. Kapoor",
+    academicSpecialization: "Civil Engineering",
+    researchSpecialization: "Structural Analysis",
+    publications: 22,
+    hIndex: 11,
+    coursesDevelopment: "Advanced Structural Design",
+    mappingToPSO: "PSO1, PSO3",
+    documents: [{ name: "Structures.pdf", url: "https://example.com/structures.pdf" }],
+  },
+  {
+    facultyName: "Dr. E. Mehta",
+    academicSpecialization: "Information Technology",
+    researchSpecialization: "Cybersecurity",
+    publications: 27,
+    hIndex: 13,
+    coursesDevelopment: "Network Security",
+    mappingToPSO: "PSO2, PSO4",
+    documents: [{ name: "CyberProof.pdf", url: "https://example.com/cyber.pdf" }],
+  },
+  {
+    facultyName: "Dr. F. Khan",
+    academicSpecialization: "Electronics & Communication",
+    researchSpecialization: "VLSI Design",
+    publications: 19,
+    hIndex: 8,
+    coursesDevelopment: "Digital System Design",
+    mappingToPSO: "PSO1, PSO5",
+    documents: [{ name: "VLSI_Proof.pdf", url: "https://example.com/vlsi.pdf" }],
+  },
+  {
+    facultyName: "Dr. G. Nair",
+    academicSpecialization: "Biotechnology",
+    researchSpecialization: "Genomics",
+    publications: 40,
+    hIndex: 17,
+    coursesDevelopment: "Bioinformatics",
+    mappingToPSO: "PSO2, PSO6",
+    documents: [{ name: "GenomicsResearch.pdf", url: "https://example.com/genomics.pdf" }],
+  },
+  {
+    facultyName: "Dr. H. Verma",
+    academicSpecialization: "Mathematics",
+    researchSpecialization: "Applied Statistics",
+    publications: 14,
+    hIndex: 6,
+    coursesDevelopment: "Statistical Modeling",
+    mappingToPSO: "PSO3, PSO5",
+    documents: [{ name: "Statistics.pdf", url: "https://example.com/stats.pdf" }],
+  },
+  {
+    facultyName: "Dr. I. Gupta",
+    academicSpecialization: "Physics",
+    researchSpecialization: "Quantum Mechanics",
+    publications: 35,
+    hIndex: 18,
+    coursesDevelopment: "Quantum Computing",
+    mappingToPSO: "PSO1, PSO6",
+    documents: [{ name: "QuantumProof.pdf", url: "https://example.com/quantum.pdf" }],
+  },
+  {
+    facultyName: "Dr. J. Singh",
+    academicSpecialization: "Chemistry",
+    researchSpecialization: "Organic Synthesis",
+    publications: 20,
+    hIndex: 10,
+    coursesDevelopment: "Advanced Organic Chemistry",
+    mappingToPSO: "PSO2, PSO4",
+    documents: [{ name: "OrganicResearch.pdf", url: "https://example.com/organic.pdf" }],
+  },
+  {
+    facultyName: "Dr. K. Das",
+    academicSpecialization: "Management",
+    researchSpecialization: "Operations Research",
+    publications: 28,
+    hIndex: 14,
+    coursesDevelopment: "Operations Management",
+    mappingToPSO: "PSO3, PSO5",
+    documents: [{ name: "OR_Proof.pdf", url: "https://example.com/or.pdf" }],
+  },
+  {
+    facultyName: "Dr. L. Mukherjee",
+    academicSpecialization: "Economics",
+    researchSpecialization: "Development Economics",
+    publications: 16,
+    hIndex: 7,
+    coursesDevelopment: "Economic Policy",
+    mappingToPSO: "PSO2, PSO4",
+    documents: [{ name: "EconResearch.pdf", url: "https://example.com/econ.pdf" }],
+  },
+  {
+    facultyName: "Dr. M. Reddy",
+    academicSpecialization: "Environmental Science",
+    researchSpecialization: "Climate Change",
+    publications: 30,
+    hIndex: 16,
+    coursesDevelopment: "Sustainable Development",
+    mappingToPSO: "PSO1, PSO6",
+    documents: [{ name: "Climate.pdf", url: "https://example.com/climate.pdf" }],
+  },
+  {
+    facultyName: "Dr. N. Iyer",
+    academicSpecialization: "Philosophy",
+    researchSpecialization: "Ethics",
+    publications: 12,
+    hIndex: 5,
+    coursesDevelopment: "Professional Ethics",
+    mappingToPSO: "PSO4, PSO5",
+    documents: [{ name: "EthicsProof.pdf", url: "https://example.com/ethics.pdf" }],
+  },
+  {
+    facultyName: "Dr. O. Banerjee",
+    academicSpecialization: "Linguistics",
+    researchSpecialization: "Computational Linguistics",
+    publications: 21,
+    hIndex: 9,
+    coursesDevelopment: "Natural Language Processing",
+    mappingToPSO: "PSO2, PSO3",
+    documents: [{ name: "NLP.pdf", url: "https://example.com/nlp.pdf" }],
+  },
+];
 
   const [table, setTable] = useState<FacultyPublication[]>(dummyData);
 
@@ -66,9 +204,16 @@ const FacultyResearchPublication = () => {
   const [hIndex, setHIndex] = useState<number | ''>('');
   const [coursesDevelopment, setCoursesDevelopment] = useState('');
   const [mappingToPSO, setMappingToPSO] = useState('');
+  const [documents, setDocuments] = useState<{ name: string; url: string }[]>([]);
 
   const handleBack = () => {
     navigate('/dashboard/nba/criteria4');
+  };
+
+  const handleFileChange = (file: File | null) => {
+    if (!file) return;
+    const url = URL.createObjectURL(file); // simulate backend file upload
+    setDocuments([{ name: file.name, url }]);
   };
 
   const handleSubmit = async () => {
@@ -85,6 +230,7 @@ const FacultyResearchPublication = () => {
       hIndex: Number(hIndex),
       coursesDevelopment,
       mappingToPSO,
+      documents,
     };
 
     setTable((prev) => [...prev, newFaculty]);
@@ -97,8 +243,28 @@ const FacultyResearchPublication = () => {
     setHIndex('');
     setCoursesDevelopment('');
     setMappingToPSO('');
+    setDocuments([]);
 
     alert('Faculty publication record added successfully!');
+  };
+
+  // Custom document template for table
+  const documentTemplate = (rowData: FacultyPublication) => {
+    return (
+      <div className="flex flex-wrap gap-2">
+        {rowData.documents?.map((doc, idx) => (
+          <a
+            key={idx}
+            href={doc.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded hover:underline"
+          >
+            {doc.name}
+          </a>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -209,6 +375,14 @@ const FacultyResearchPublication = () => {
                         onChange={(e) => setMappingToPSO(e.target.value)}
                       />
                     </div>
+                    <div>
+                      <Label htmlFor="documentUpload">Upload Proof Document</Label>
+                      <Input
+                        id="documentUpload"
+                        type="file"
+                        onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+                      />
+                    </div>
                   </div>
 
                   <div className="flex justify-end">
@@ -225,7 +399,7 @@ const FacultyResearchPublication = () => {
             </div>
 
             {/* Data Table */}
-            <DataTable value={table} tableStyle={{ minWidth: '70rem' }} responsiveLayout="scroll">
+            <DataTable value={table} tableStyle={{ minWidth: '80rem' }} responsiveLayout="scroll">
               <Column field="facultyName" header="Name of Faculty" sortable />
               <Column field="academicSpecialization" header="Academic Specialization" sortable />
               <Column field="researchSpecialization" header="Research Specialization" sortable />
@@ -233,6 +407,7 @@ const FacultyResearchPublication = () => {
               <Column field="hIndex" header="H-Index" sortable />
               <Column field="coursesDevelopment" header="Courses Development" sortable />
               <Column field="mappingToPSO" header="Mapping of Capabilities to PSO" sortable />
+              <Column header="Documents" body={documentTemplate} />
             </DataTable>
           </Card>
         </div>
