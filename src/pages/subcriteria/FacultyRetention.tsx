@@ -76,7 +76,7 @@ const FacultyRetention: React.FC = () => {
     // Save locally (dummy backend)
     setFaculty((prev) => [...prev, newFaculty]);
 
-    // o Always show positive toast
+    // Always show positive toast
     toast({
       title: "Submitted",
       description: "Faculty retention record submitted successfully!",
@@ -135,6 +135,47 @@ const FacultyRetention: React.FC = () => {
             <Column field="CAYm1" header="CAYm1" sortable style={{ minWidth: "8rem" }}></Column>
             <Column field="CAYm2" header="CAYm2" sortable style={{ minWidth: "8rem" }}></Column>
           </DataTable>
+
+          {/* Faculty Retention Calculation Table */}
+          <div className="mt-8 overflow-x-auto">
+            <h3 className="text-xl font-semibold text-[#2f4883] mb-4">Faculty Retention Calculation</h3>
+            <table className="min-w-full border border-gray-300 text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-4 py-2"></th>
+                  <th className="border border-gray-300 px-4 py-2">CAY</th>
+                  <th className="border border-gray-300 px-4 py-2">CAYm1</th>
+                  <th className="border border-gray-300 px-4 py-2">CAYm2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Number of Faculties</td>
+                  <td className="border border-gray-300 px-4 py-2">18</td>
+                  <td className="border border-gray-300 px-4 py-2">14</td>
+                  <td className="border border-gray-300 px-4 py-2">12</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Number of faculties retained as per CAYm2</td>
+                  <td className="border border-gray-300 px-4 py-2">10</td>
+                  <td className="border border-gray-300 px-4 py-2">10</td>
+                  <td className="border border-gray-300 px-4 py-2">NA</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">Percentage of faculties retained</td>
+                  <td className="border border-gray-300 px-4 py-2">110%</td>
+                  <td className="border border-gray-300 px-4 py-2">110%</td>
+                  <td className="border border-gray-300 px-4 py-2">NA</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-semibold">Average Retention Percentage</td>
+                  <td className="border border-gray-300 px-4 py-2" colSpan={3}>
+                    110%
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
