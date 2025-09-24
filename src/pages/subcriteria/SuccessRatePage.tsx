@@ -5,7 +5,7 @@ import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
-import { useToast } from "@/components/ui/use-toast"; // ✅ ShadCN toast
+import { useToast } from "@/components/ui/use-toast"; // o ShadCN toast
 
 // Import PrimeReact styles
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -50,7 +50,7 @@ const SuccessRatePage: React.FC = () => {
   const [globalFilter, setGlobalFilter] = useState('');
   const dt = useRef<DataTable<Student[]>>(null);
 
-  const { toast } = useToast(); // ✅ ShadCN toast hook
+  const { toast } = useToast(); // o ShadCN toast hook
 
   const handleSemesterChange = (semester: number) => {
     setSelectedSemesters(prev =>

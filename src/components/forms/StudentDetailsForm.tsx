@@ -77,7 +77,7 @@ const StudentBulkUpload = () => {
 
       {studentsData.length > 0 && (
         <div className="mb-4 text-green-600">
-          ✅ {studentsData.length} students ready to upload
+          o {studentsData.length} students ready to upload
         </div>
       )}
 

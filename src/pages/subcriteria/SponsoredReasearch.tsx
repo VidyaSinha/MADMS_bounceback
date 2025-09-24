@@ -112,7 +112,7 @@ const SponsoredResearch: React.FC = () => {
       const data = await res.json();
 
       if (res.ok) {
-        setProjects((prev) => [...prev, data.project]); // ✅ use project returned from backend
+        setProjects((prev) => [...prev, data.project]); // o use project returned from backend
         toast({ title: "Success", description: "Project added successfully!", variant: "success" });
 
         setIsDialogOpen(false);

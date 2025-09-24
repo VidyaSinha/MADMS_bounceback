@@ -31,6 +31,21 @@ const FacultyExpertise = () => {
   const [table, setTable] = useState<FacultyTable[]>([
     { facultyName: "Dr. Smith", expertise: ["AI", "ML"] },
     { facultyName: "Prof. Johnson", expertise: ["Networks", "Security"] },
+    { facultyName: "Prof. Sinha", expertise: ["DSA", "DAA"] },
+    { facultyName: "Prof. Patel", expertise: ["Networks", "Cloud"] },
+    { facultyName: "Prof. Parmar", expertise: ["Cloud", "Security"] },
+    { facultyName: "Prof. Solanki", expertise: ["AI", "DS"] },
+    { facultyName: "Prof. Nadiyar", expertise: ["ML", "DA"] },
+    { facultyName: "Prof. Shrinivastav", expertise: ["DAA", "Coding"] },
+    { facultyName: "Prof. John", expertise: ["SDE", "MERN Stack"] },
+    { facultyName: "Dr. Johnson", expertise: [".Net", "SDE"] },
+    { facultyName: "DR. sinha", expertise: ["Networks", "Security"] },
+    { facultyName: "Prof. Lunagariya", expertise: ["AI", "<ML>"] },
+    { facultyName: "Prof. SHreya", expertise: ["Commerece", "Security"] },
+    { facultyName: "Prof. Shraddha", expertise: ["Arts", "Sci"] },
+    { facultyName: "Prof. Johnson", expertise: ["DAA", "SDE"] },
+    { facultyName: "Prof. Johnson", expertise: ["Networks", "Security"] },
+
   ]);
 
   const [facultyName, setFacultyName] = useState('');

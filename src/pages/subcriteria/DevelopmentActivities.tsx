@@ -32,6 +32,79 @@ const dummyProjects: Project[] = [
     productTitle: "AI Health App",
     prototypeImage: "https://via.placeholder.com/100",
   },
+    {
+    id: "2",
+    studentName: "Vidya Sharma",
+    productTitle: "Smart Sensor",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Dhruvi Patel",
+    productTitle: "Job Portal",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Nandini Patel",
+    productTitle: "Health center",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Shreya Ghosal",
+    productTitle: "Medical App",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Amit Trivedi",
+    productTitle: "Job Portal",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Arjun Sharma",
+    productTitle: "AI Health App",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Lucky Singh",
+    productTitle: "Smart Water Bottle",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Parth Trivedi",
+    productTitle: "Smart shoes",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Vidhi Gondaliya",
+    productTitle: "Samrt Chair",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Arjun Sharma",
+    productTitle: "AI Health App",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Arjun Sharma",
+    productTitle: "AI Health App",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+  {
+    id: "2",
+    studentName: "Arjun Sharma",
+    productTitle: "AI Health App",
+    prototypeImage: "https://via.placeholder.com/100",
+  },
+
 ];
 
 const DevelopmentActivities: React.FC = () => {

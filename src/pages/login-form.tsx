@@ -13,7 +13,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import axios from "axios";
 import { useApi } from "@/contexts/ApiContext";
-import { supabase } from "./supabaseClient"; // ✅ cleaner relative import
+import { supabase } from "./supabaseClient"; // o cleaner relative import
 
 export function LoginForm({
   className,
@@ -28,7 +28,7 @@ export function LoginForm({
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Google login handler
+  // o Google login handler
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -43,7 +43,7 @@ export function LoginForm({
     }
   };
 
-  // ✅ Email/password submit handler
+  // o Email/password submit handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -153,7 +153,7 @@ export function LoginForm({
                     {loading ? "Processing..." : "Login"}
                   </Button>
 
-                  {/* ✅ Google Login Button */}
+                  {/* o Google Login Button */}
                   <Button
                     type="button"
                     onClick={handleGoogleLogin}

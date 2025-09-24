@@ -22,7 +22,7 @@ const FacultyBulkUpload = () => {
     }
 
     const formData = new FormData();
-    formData.append("file", file); // ✅ backend expects "file"
+    formData.append("file", file); // o backend expects "file"
 
     setUploading(true);
     try {
@@ -77,7 +77,7 @@ const FacultyBulkUpload = () => {
 
       {file && (
         <div className="mb-4 text-green-600">
-          ✅ {file.name} selected and ready to upload
+          o {file.name} selected and ready to upload
         </div>
       )}
 

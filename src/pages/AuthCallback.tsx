@@ -24,7 +24,7 @@ export default function AuthCallback() {
       }
 
       if (session) {
-        console.log("✅ Logged in as:", session.user.email);
+        console.log("o Logged in as:", session.user.email);
         navigate("/dashboard", { replace: true });
       } else {
         console.warn("⚠️ No session found yet after redirect");
@@ -40,7 +40,7 @@ export default function AuthCallback() {
       console.log("📡 Auth event received:", event, { session });
 
       if (event === "SIGNED_IN" && session) {
-        console.log("✅ Session restored:", session.user.email);
+        console.log("o Session restored:", session.user.email);
         navigate("/dashboard", { replace: true });
       } else if (event === "SIGNED_OUT") {
         console.warn("🚪 Signed out, redirecting to login...");

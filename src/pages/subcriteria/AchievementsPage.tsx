@@ -104,7 +104,7 @@ const AchievementsPage = () => {
 
     console.log('Form submitted:', data);
 
-    // ✅ Always show notification when submit is clicked
+    // o Always show notification when submit is clicked
     toast({
       title: "Form Submitted",
       description: "Your achievement details have been processed.",

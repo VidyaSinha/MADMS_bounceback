@@ -76,7 +76,7 @@ const FacultyRetention: React.FC = () => {
     // Save locally (dummy backend)
     setFaculty((prev) => [...prev, newFaculty]);
 
-    // ✅ Always show positive toast
+    // o Always show positive toast
     toast({
       title: "Submitted",
       description: "Faculty retention record submitted successfully!",

@@ -54,7 +54,7 @@ const Criteria4NBA = () => {
             </Button>
 
             <div className="flex gap-3">
-              {/* ✅ Upload Excel Button */}
+              {/* o Upload Excel Button */}
               <Button 
                 className="bg-[#2F4883] hover:bg-slate-900 text-white font-semibold px-6 py-3 text-lg shadow-lg"
                 size="lg"
@@ -82,7 +82,7 @@ const Criteria4NBA = () => {
             </div>
           </div>
 
-          {/* ✅ Excel Upload Dialog */}
+          {/* o Excel Upload Dialog */}
           <Dialog
             visible={isExcelDialogOpen}
             onHide={() => setIsExcelDialogOpen(false)}

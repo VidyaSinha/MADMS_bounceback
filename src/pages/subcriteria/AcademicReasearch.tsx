@@ -109,7 +109,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     if (res.ok) {
       setPapers((prev) => [...prev, newPaper]);
-      toast({ title: "Success", description: "Research paper added successfully!", variant: "success" }); // ✅ Success variant
+      toast({ title: "Success", description: "Research paper added successfully!", variant: "success" }); // o Success variant
 
       setIsDialogOpen(false);
       setTitle(""); setAuthors(""); setJournal(""); setYear("");

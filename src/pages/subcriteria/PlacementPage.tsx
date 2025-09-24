@@ -79,7 +79,7 @@ const PlacementPage: React.FC = () => {
     setDeleteStudentDialog(false);
     setStudentToDelete(null);
 
-    // ✅ Simple ShadCN notification
+    // o Simple ShadCN notification
     toast({
       title: 'Deleted',
       description: 'Student deleted successfully.',
@@ -109,7 +109,7 @@ const handleSubmit = (e: React.FormEvent) => {
 
   setStudents(prev => [...prev, newStudent]);
 
-  // ✅ Always show positive notification
+  // o Always show positive notification
   toast({
     title: 'Submitted',
     description: 'Form submitted successfully!',

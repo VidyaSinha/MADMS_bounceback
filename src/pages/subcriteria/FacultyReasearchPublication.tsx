@@ -37,8 +37,28 @@ const FacultyResearchPublication = () => {
   const navigate = useNavigate();
   const { apiBaseUrl } = useApi();
 
-  const [table, setTable] = useState<FacultyPublication[]>([]);
+  // --- Dummy Data ---
+  const dummyData: FacultyPublication[] = [
+    { facultyName: "Dr. A. Sharma", academicSpecialization: "Computer Science", researchSpecialization: "AI & ML", publications: 25, hIndex: 12, coursesDevelopment: "Machine Learning", mappingToPSO: "PSO1, PSO2" },
+    { facultyName: "Dr. B. Patel", academicSpecialization: "Information Technology", researchSpecialization: "Cybersecurity", publications: 18, hIndex: 9, coursesDevelopment: "Network Security", mappingToPSO: "PSO2, PSO3" },
+    { facultyName: "Dr. C. Mehta", academicSpecialization: "Electronics", researchSpecialization: "VLSI Design", publications: 30, hIndex: 15, coursesDevelopment: "VLSI Circuits", mappingToPSO: "PSO1" },
+    { facultyName: "Dr. D. Singh", academicSpecialization: "Mechanical Engg.", researchSpecialization: "Robotics", publications: 22, hIndex: 10, coursesDevelopment: "Automation & Robotics", mappingToPSO: "PSO3" },
+    { facultyName: "Dr. E. Reddy", academicSpecialization: "Civil Engg.", researchSpecialization: "Structural Engineering", publications: 12, hIndex: 7, coursesDevelopment: "Bridge Design", mappingToPSO: "PSO1, PSO4" },
+    { facultyName: "Dr. F. Khan", academicSpecialization: "Computer Science", researchSpecialization: "Data Science", publications: 28, hIndex: 14, coursesDevelopment: "Big Data Analytics", mappingToPSO: "PSO2" },
+    { facultyName: "Dr. G. Iyer", academicSpecialization: "Electrical Engg.", researchSpecialization: "Power Systems", publications: 20, hIndex: 11, coursesDevelopment: "Smart Grids", mappingToPSO: "PSO1, PSO2" },
+    { facultyName: "Dr. H. Verma", academicSpecialization: "Information Technology", researchSpecialization: "Cloud Computing", publications: 26, hIndex: 13, coursesDevelopment: "Cloud Applications", mappingToPSO: "PSO2, PSO3" },
+    { facultyName: "Dr. I. Joshi", academicSpecialization: "Electronics", researchSpecialization: "Embedded Systems", publications: 19, hIndex: 8, coursesDevelopment: "IoT Systems", mappingToPSO: "PSO3" },
+    { facultyName: "Dr. J. Rao", academicSpecialization: "Computer Science", researchSpecialization: "Software Engineering", publications: 23, hIndex: 12, coursesDevelopment: "Agile Development", mappingToPSO: "PSO1, PSO2" },
+    { facultyName: "Dr. K. Desai", academicSpecialization: "Mechanical Engg.", researchSpecialization: "Thermal Engineering", publications: 15, hIndex: 6, coursesDevelopment: "Heat Transfer", mappingToPSO: "PSO4" },
+    { facultyName: "Dr. L. Nair", academicSpecialization: "Civil Engg.", researchSpecialization: "Environmental Engg.", publications: 10, hIndex: 5, coursesDevelopment: "Water Management", mappingToPSO: "PSO2" },
+    { facultyName: "Dr. M. Shah", academicSpecialization: "Computer Science", researchSpecialization: "Artificial Intelligence", publications: 35, hIndex: 16, coursesDevelopment: "AI Applications", mappingToPSO: "PSO1, PSO2, PSO3" },
+    { facultyName: "Dr. N. Gupta", academicSpecialization: "Electronics", researchSpecialization: "Signal Processing", publications: 17, hIndex: 9, coursesDevelopment: "DSP Algorithms", mappingToPSO: "PSO2" },
+    { facultyName: "Dr. O. Choudhary", academicSpecialization: "Electrical Engg.", researchSpecialization: "Renewable Energy", publications: 21, hIndex: 10, coursesDevelopment: "Solar Power Systems", mappingToPSO: "PSO1, PSO3" },
+  ];
 
+  const [table, setTable] = useState<FacultyPublication[]>(dummyData);
+
+  // --- Form states ---
   const [facultyName, setFacultyName] = useState('');
   const [academicSpecialization, setAcademicSpecialization] = useState('');
   const [researchSpecialization, setResearchSpecialization] = useState('');
