@@ -94,7 +94,7 @@ const Criteria5NBA = () => {
             <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-base font-medium text-[#2f4883]">5.5 - Faculty Completence</h3>
+                  <h3 className="text-base font-medium text-[#2f4883]">5.5 - Faculty Competence</h3>
                   <div className="flex items-center gap-4">
                     
                     <span className="text-[#2f4883] font-medium">20 marks</span>
@@ -118,8 +118,15 @@ const Criteria5NBA = () => {
               </div>
             </Card>
 
+            <CriteriaCard 
+              id="5.6" 
+              title="Innovations by faculties in teaching and learning" 
+              marks={30} 
+              actionNavigate="/faculty-innovation"
+            />
 
-                        <Card className="border rounded-md overflow-hidden">
+
+            <Card className="border rounded-md overflow-hidden">
               <div className="border-b p-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-base font-medium text-[#2f4883]">5.8 - Faculty Completence</h3>
