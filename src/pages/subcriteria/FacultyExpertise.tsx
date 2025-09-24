@@ -28,32 +28,34 @@ const FacultyExpertise = () => {
   const navigate = useNavigate();
   const { apiBaseUrl } = useApi();
 
-  const [table, setTable] = useState<FacultyTable[]>([
-    { facultyName: "Dr. Smith", expertise: ["AI", "ML"] },
-    { facultyName: "Prof. Johnson", expertise: ["Networks", "Security"] },
-    { facultyName: "Prof. Sinha", expertise: ["DSA", "DAA"] },
-    { facultyName: "Prof. Patel", expertise: ["Networks", "Cloud"] },
-    { facultyName: "Prof. Parmar", expertise: ["Cloud", "Security"] },
-    { facultyName: "Prof. Solanki", expertise: ["AI", "DS"] },
-    { facultyName: "Prof. Nadiyar", expertise: ["ML", "DA"] },
-    { facultyName: "Prof. Shrinivastav", expertise: ["DAA", "Coding"] },
-    { facultyName: "Prof. John", expertise: ["SDE", "MERN Stack"] },
-    { facultyName: "Dr. Johnson", expertise: [".Net", "SDE"] },
-    { facultyName: "DR. sinha", expertise: ["Networks", "Security"] },
-    { facultyName: "Prof. Lunagariya", expertise: ["AI", "<ML>"] },
-    { facultyName: "Prof. SHreya", expertise: ["Commerece", "Security"] },
-    { facultyName: "Prof. Shraddha", expertise: ["Arts", "Sci"] },
-    { facultyName: "Prof. Johnson", expertise: ["DAA", "SDE"] },
-    { facultyName: "Prof. Johnson", expertise: ["Networks", "Security"] },
+  const expertiseOptions = [
+    "Embedded and VLSI Design",
+    "Cloud Computing and Security",
+    "Software Development",
+    "Artificial Intelligence / Machine Learning",
+    "Communication engineering"
+  ];
 
+  const [table, setTable] = useState<FacultyTable[]>([
+    { facultyName: "Dr. Shobhikumar Kiritkumar Patel", expertise: ["Embedded and VLSI Design", "Artificial Intelligence / Machine Learning", "Communication engineering"] },
+    { facultyName: "Dr. Arjav Ambara Bavrva", expertise: ["Cloud Computing and Security", "Artificial Intelligence / Machine Learning", "Communication engineering"] },
+    { facultyName: "Dr. Sunil Prabhatbhai Lavadiya", expertise: ["Embedded and VLSI Design", "Communication engineering"] },
+    { facultyName: "Dr. Dharmendrasinh Zala", expertise: ["Embedded and VLSI Design", "Cloud Computing and Security", "Software Development"] },
+    { facultyName: "Mr. Chandrasinh Dhirubha Parmar", expertise: ["Artificial Intelligence / Machine Learning", "Communication engineering"] },
+    { facultyName: "Dr. Miteshbhai Sureshbhai Solanki", expertise: ["Embedded and VLSI Design", "Software Development", "Communication engineering"] },
+    { facultyName: "Dr. Tapan Nahar", expertise: ["Embedded and VLSI Design", "Communication engineering"] },
+    { facultyName: "Dr. Praveen Kumar Sharma", expertise: ["Software Development", "Artificial Intelligence / Machine Learning"] },
+    { facultyName: "Miss. Sunera Gafarbahi Kargathara", expertise: ["Embedded and VLSI Design", "Artificial Intelligence / Machine Learning", "Communication engineering"] },
+    { facultyName: "Prof. Sneha Raval", expertise: ["Cloud Computing and Security", "Software Development"] },
+    { facultyName: "Prof. Mehul Joshi", expertise: ["Artificial Intelligence / Machine Learning", "Cloud Computing and Security"] },
+    { facultyName: "Dr. Kavita Shah", expertise: ["Communication engineering", "Software Development"] },
+    { facultyName: "Dr. Anil Kumar", expertise: ["Embedded and VLSI Design", "Cloud Computing and Security"] },
+    { facultyName: "Prof. Riya Patel", expertise: ["Artificial Intelligence / Machine Learning", "Software Development", "Communication engineering"] },
+    { facultyName: "Prof. Jayesh Trivedi", expertise: ["Cloud Computing and Security", "Communication engineering"] }
   ]);
 
   const [facultyName, setFacultyName] = useState('');
   const [selectedExpertise, setSelectedExpertise] = useState<string[]>([]);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [facultyToDelete, setFacultyToDelete] = useState<FacultyTable | null>(null);
-
-  const expertiseOptions = ["Embedded and VLSI Design", "Cloud Computing and Security", "Software Development", "Artificial Intelligence / Machine Learning", "Communication engineering"];
 
   const handleBack = () => {
     navigate('/dashboard/nba/criteria4');
@@ -76,12 +78,15 @@ const FacultyExpertise = () => {
       expertise: selectedExpertise,
     };
 
-    // TODO: call backend API here (apiBaseUrl) if needed
-
     setTable((prev) => [...prev, newFaculty]);
     setFacultyName('');
     setSelectedExpertise([]);
     alert('Faculty expertise added successfully!');
+  };
+
+  // ✅ Function to render checkmarks
+  const renderCheck = (rowData: FacultyTable, col: string) => {
+    return rowData.expertise.includes(col) ? "✓" : "";
   };
 
   return (
@@ -105,8 +110,11 @@ const FacultyExpertise = () => {
           <div>
             <div className="bg-[#2F4883] text-white py-4 px-6 rounded-t-md">
               <h1 className="text-2xl font-bold text-center">
-                Faculty Expertise
+                Faculty competencies in correlation to Program Specific Criteria
               </h1>
+              {/* <p className="text-center text-sm mt-2">
+                A. Specialization: Faculty expertise in diverse fields
+              </p> */}
             </div>
           </div>
 
@@ -168,28 +176,17 @@ const FacultyExpertise = () => {
               </Dialog>
             </div>
 
-            {/* Data Table */}
-            <DataTable value={table} tableStyle={{ minWidth: '40rem' }} responsiveLayout="scroll">
-              <Column field="facultyName" header="Faculty Name" sortable></Column>
-              <Column
-                field="expertise"
-                header="Expertise"
-                body={(rowData: FacultyTable) => rowData.expertise.join(", ")}
-              ></Column>
-              <Column
-                header="Actions"
-                body={(rowData: FacultyTable) => (
-                  <Button
-                    icon="pi pi-trash"
-                    className="p-button-rounded p-button-danger p-button-text"
-                    onClick={() => {
-                      setFacultyToDelete(rowData);
-                      setShowDeleteDialog(true);
-                    }}
-                    tooltip="Delete"
-                  />
-                )}
-              ></Column>
+            {/* ✅ Matrix Style Table */}
+            <DataTable value={table} tableStyle={{ minWidth: '60rem' }} responsiveLayout="scroll">
+              <Column field="facultyName" header="Name of the Faculty" frozen></Column>
+              {expertiseOptions.map((exp) => (
+                <Column
+                  key={exp}
+                  header={exp}
+                  body={(rowData) => renderCheck(rowData, exp)}
+                  style={{ textAlign: "center" }}
+                />
+              ))}
             </DataTable>
           </Card>
         </div>
